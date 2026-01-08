@@ -13,4 +13,3 @@ class Position:
         assert(isinstance(other, float))
         self.start += other
         self.end += other
-
