@@ -11,7 +11,7 @@ class Block(PositionalAgent):
         super().__init__(model, position)
         self.rails = rails
 
-    def signal(self):
+    def get_signal(self):
         """
         Returns signal colour based on train positions:
         - RED if train is in this block
@@ -20,7 +20,7 @@ class Block(PositionalAgent):
         """
         if self.rails.block_contains_train(self):
             return Colour.RED
-        elif self.rails.next_block_occupied(self):
+        elif self.rails.next_block_contains_train(self):
             return Colour.ORANGE
         else:
             return Colour.GREEN
