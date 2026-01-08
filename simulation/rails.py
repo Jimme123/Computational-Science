@@ -17,10 +17,13 @@ class Rails:
         self.model = model
         self.length = length
         self.trains = []
-        self.blocks = blocks
+        self.blocks = []
     
     def add_train(self, train):
         self.train.append(train)
+
+    def add_block(self, block):
+        self.train.append(block)
 
     def blocks_occupied_train(self, train):
         """
