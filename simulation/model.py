@@ -9,10 +9,10 @@ class Railroad(mesa.Model):
 
     def __init__(self, length):
         super().__init__()
-        self.rails = Rails(10000)
-        Trains = Train.create_agents(self, 2, rails, [Position(0, 100), Position(3000, 3100)], [200, 100])
+        self.rails = Rails(self, 10000)
+        Trains = Train.create_agents(self, 2, self.rails, [Position(0, 100), Position(3000, 3100)], [200, 100])
         n = 20
-        Blocks = Block.create_agents(self, n, rails, [Position(x * length / n, x + length / n) for i in range(n)])
+        Blocks = Block.create_agents(self, n, self.rails, [Position(x * length / n, x + length / n) for i in range(n)])
         
 
     def step(self):

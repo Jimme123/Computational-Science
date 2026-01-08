@@ -12,6 +12,7 @@ class Block(PositionalAgent):
         self.rails = rails
         self.rails.add_block(self)
 
+    @property
     def signal(self):
         """
         Returns signal colour based on train positions:

@@ -13,7 +13,7 @@ def overlap(position_a , position_b):
     return False
 
 class Rails:
-    def __init__(self, model, length, blocks):
+    def __init__(self, model, length):
         self.model = model
         self.length = length
         self.trains = []
