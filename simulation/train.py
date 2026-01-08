@@ -4,7 +4,9 @@ class Train(PositionalAgent):
     def __init__(self, model, position, rails, speed):
         super().__init__(model, position)
         self.speed = speed
+        self.rails = rails
         self.rails.add_train(self)
+        self.position = position
 
     def move(self, direction):
         next_position = self.position + self.speed * direction

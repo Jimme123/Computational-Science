@@ -1,6 +1,8 @@
 import mesa
 from enum import Enum
 
+from positionalAgent import *
+
 class Colour(Enum):
     GREEN = 1
     ORANGE = 2

@@ -20,10 +20,10 @@ class Rails:
         self.blocks = []
     
     def add_train(self, train):
-        self.train.append(train)
+        self.trains.append(train)
 
     def add_block(self, block):
-        self.block.append(block)
+        self.blocks.append(block)
 
     def blocks_occupied_train(self, train):
         """

@@ -9,6 +9,6 @@ class Position:
         self.end = end
 
     def __add__(self, other):
-        assert(isinstance(other, float))
+        assert(isinstance(other, float) or isinstance(other, int))
         self.start += other
         self.end += other
