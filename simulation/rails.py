@@ -44,8 +44,8 @@ class Rails:
         blocks_occupied = self.blocks_occupied_train(train)
         last_block = blocks_occupied[-1]
         next_block = self.blocks[self.blocks.index(last_block) + 1]
-        signal = next_block.get_signal
-        return signal   
+        signal = next_block.signal
+        return signal 
 
     def block_contains_train(self, block):
         """
