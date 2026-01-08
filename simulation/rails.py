@@ -2,6 +2,7 @@ import mesa
 
 from positionalAgent import *
 from position import *
+from block import *
 
 class Rails:
     def __init__(self, model, length):
@@ -18,9 +19,9 @@ class Rails:
 
     def get_next_block(self, block):
         index = self.blocks.index(block) + 1
-        if index > len(self.len):
-            return self
-        return self.blocks[self.blocks.index(block) + 1]
+        if index >= len(self.blocks):
+            return None
+        return self.blocks[index]
 
     def blocks_occupied_train(self, train):
         """
@@ -41,7 +42,10 @@ class Rails:
         blocks_occupied = self.blocks_occupied_train(train)
         last_block = blocks_occupied[-1]
         next_block = self.get_next_block(last_block)
-        signal = next_block.signal
+        if next_block is None:
+            return Color.GREEN
+        else:
+            signal = next_block.signal
         return signal
 
     def block_contains_train(self, block):

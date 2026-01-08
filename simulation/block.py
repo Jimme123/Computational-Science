@@ -23,10 +23,10 @@ class Block(PositionalAgent):
         - GREEN otherwise
         """
         next_block = self.rails.get_next_block(self)
-        if next_block == self:
-            return Colour.GREEN
+        if next_block is None:
+            return Color.GREEN
         elif self.rails.block_contains_train(self):
-            return Colour.RED
+            return Color.RED
         elif self.rails.block_contains_train(next_block):
             return Color.ORANGE
         else:

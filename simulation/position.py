@@ -13,6 +13,9 @@ class Position:
         self.start += other
         self.end += other
         return self
+
+    def __str__(self):
+        return f"{self.start} - {self.end}"
     
     @property
     def bounds(self):
