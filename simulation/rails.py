@@ -23,7 +23,7 @@ class Rails:
         self.train.append(train)
 
     def add_block(self, block):
-        self.train.append(block)
+        self.block.append(block)
 
     def blocks_occupied_train(self, train):
         """
