@@ -20,9 +20,10 @@ class Block(PositionalAgent):
         - ORANGE if next block is occupied
         - GREEN otherwise
         """
+        next_block = self.rails.get_next_block(self)
         if self.rails.block_contains_train(self):
             return Colour.RED
-        elif self.rails.next_block_occupied(self):
+        elif self.rails.block_contains_train(next_block):
             return Colour.ORANGE
         else:
             return Colour.GREEN

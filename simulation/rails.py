@@ -24,6 +24,9 @@ class Rails:
 
     def add_block(self, block):
         self.block.append(block)
+    
+    def get_next_block(self, block):
+        next_block = self.blocks[self.blocks.index(block) + 1]
 
     def blocks_occupied_train(self, train):
         """
@@ -43,9 +46,9 @@ class Rails:
         """
         blocks_occupied = self.blocks_occupied_train(train)
         last_block = blocks_occupied[-1]
-        next_block = self.blocks[self.blocks.index(last_block) + 1]
+        next_block = self.get_next_block(last_block)
         signal = next_block.signal
-        return signal 
+        return signal
 
     def block_contains_train(self, block):
         """
