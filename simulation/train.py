@@ -1,5 +1,22 @@
-import mesa
+from positionalAgent import PositionalAgent
 
-class Train(mesa.Agent):
-    def __init__(self, model, rails):
-        super().__init__(model)
+class Train(PositionalAgent):
+    def __init__(self, model, start, end, speed):
+        super().__init__(model, start, end)
+        self.speed = speed
+
+    def move(self, direction):
+        next_position = self.position + self.speed * direction
+
+        signal = self.model.rails.next_signal(next_position)
+
+        if signal == "RED":
+            self.speed = 0
+        elif signal == "ORANGE":
+            self.speed = max(self.speed / 2, 1)
+            self.position += self.speed * direction
+        else:
+            self.position = next_position
+
+    def step(self):
+        self.move(direction = 1)
