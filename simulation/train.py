@@ -11,7 +11,8 @@ class Train(PositionalAgent):
     def move(self, direction):
         next_position = self.position + self.speed * direction
 
-        signal = self.model.rails.next_signal(next_position)
+        signal = self.model.rails.next_signal(self)
+        # signal = self.model.rails.next_signal(next_position)
 
         if signal == "RED":
             self.speed = 0

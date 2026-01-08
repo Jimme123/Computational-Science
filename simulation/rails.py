@@ -1,16 +1,7 @@
 import mesa
 
 from positionalAgent import *
-
-
-def overlap(position_a , position_b):
-    start_a, end_a = position_a.get_positions
-    start_b, end_b = position_b.get_positions
-    if start_a <= start_b <= end_a or\
-                start_a <= end_b <= end_a or \
-                (start_b <= start_a and end_a <= end_b):
-        return True
-    return False
+from position import *
 
 class Rails:
     def __init__(self, model, length):
