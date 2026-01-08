@@ -10,6 +10,7 @@ class Railroad(mesa.Model):
     def __init__(self):
         super().__init__()
         self.num_agents = n
+        print("hi")
 
     def step(self):
         """Advance the model by one step."""
