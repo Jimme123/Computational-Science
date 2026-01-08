@@ -10,6 +10,7 @@ class Block(PositionalAgent):
     def __init__(self, model, position, rails):
         super().__init__(model, position)
         self.rails = rails
+        self.rails.add_block(self)
 
     def signal(self):
         """
