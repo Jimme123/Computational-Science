@@ -53,3 +53,16 @@ class Rails:
             if overlap(train.position, block.position):
                 return True
         return False
+    
+    def next_block_contains_train(self, block):
+        """
+        input: block
+        output: true if a train is in the next block, false otherwise
+        """
+        block_index = self.blocks.index(block)
+
+        if block_index == len(self.blocks) - 1:
+            return False
+
+        next_block_index = block_index + 1
+        return self.block_contains_train(self.blocks[next_block_index])
