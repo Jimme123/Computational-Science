@@ -1,8 +1,8 @@
 from positionalAgent import PositionalAgent
 
 class Train(PositionalAgent):
-    def __init__(self, model, start, end, speed):
-        super().__init__(model, start, end)
+    def __init__(self, model, position, speed):
+        super().__init__(model, position)
         self.speed = speed
 
     def move(self, direction):
