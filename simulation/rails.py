@@ -21,9 +21,9 @@ class Rails:
         blocks_occupied = []
         for block in self.blocks:
             start_block, end_block = block.get_position
-            if start_train <= start_block <= end_train or start_train <= end_block <= end_train:
-                blocks_occupied.append(block)
-            elif start_block <= start_train and end_train <= end_block:
+            if  start_train <= start_block <= end_train or\
+                start_train <= end_block <= end_train or \
+                (start_block <= start_train and end_train <= end_block):
                 blocks_occupied.append(block)
         return blocks_occupied
 
