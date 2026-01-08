@@ -12,14 +12,15 @@ class Position:
         assert(isinstance(other, float) or isinstance(other, int))
         self.start += other
         self.end += other
+        return self
     
     @property
-    def positions(self):
+    def bounds(self):
         return (self.start, self.end)
 
 def overlap(position_a , position_b):
-    start_a, end_a = position_a.positions
-    start_b, end_b = position_b.positions
+    start_a, end_a = position_a.bounds
+    start_b, end_b = position_b.bounds
     if start_a <= start_b <= end_a or\
                 start_a <= end_b <= end_a or \
                 (start_b <= start_a and end_a <= end_b):

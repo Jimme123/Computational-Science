@@ -17,5 +17,6 @@ class Railroad(mesa.Model):
 
     def step(self):
         """Advance the model by one step."""
+        print("step")
         self.trains.shuffle_do("step")
  

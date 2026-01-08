@@ -17,7 +17,7 @@ class Rails:
         self.blocks.append(block)
 
     def get_next_block(self, block):
-        next_block = self.blocks[self.blocks.index(block) + 1]
+        return self.blocks[self.blocks.index(block) + 1]
 
     def blocks_occupied_train(self, train):
         """
