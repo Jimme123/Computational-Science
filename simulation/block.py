@@ -3,7 +3,7 @@ from enum import Enum
 
 from positionalAgent import *
 
-class Colour(Enum):
+class Color(Enum):
     GREEN = 1
     ORANGE = 2
     RED = 3
@@ -28,6 +28,6 @@ class Block(PositionalAgent):
         elif self.rails.block_contains_train(self):
             return Colour.RED
         elif self.rails.block_contains_train(next_block):
-            return Colour.ORANGE
+            return Color.ORANGE
         else:
-            return Colour.GREEN
+            return Color.GREEN

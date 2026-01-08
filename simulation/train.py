@@ -1,4 +1,5 @@
 from positionalAgent import *
+from block import *
 
 class Train(PositionalAgent):
     def __init__(self, model, position, rails, speed):
@@ -14,9 +15,9 @@ class Train(PositionalAgent):
         signal = self.model.rails.next_signal(self)
         # signal = self.model.rails.next_signal(next_position)
 
-        if signal == "RED":
+        if signal == Color.RED:
             self.speed = 0
-        elif signal == "ORANGE":
+        elif signal == Color.ORANGE:
             self.speed = max(self.speed / 2, 1)
             self.position += self.speed * direction
         else:
