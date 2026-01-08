@@ -1,6 +1,6 @@
 import mesa
 
-import positionalAgent
+from positionalAgent import *
 
 
 def overlap(position_a , position_b):

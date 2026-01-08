@@ -1,8 +1,8 @@
 import mesa
 
-import signal
-import rails
-import train
+from signal import *
+from rails import *
+from train import *
 
 class Railroad(mesa.Model):
     """The model containing the trains and signals."""

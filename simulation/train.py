@@ -1,4 +1,4 @@
-from positionalAgent import PositionalAgent
+from positionalAgent import *
 
 class Train(PositionalAgent):
     def __init__(self, model, position, speed):
