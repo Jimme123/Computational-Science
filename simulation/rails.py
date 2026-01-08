@@ -1,6 +1,14 @@
 import mesa
 
-import positionalAgent.py
+import positionalAgent
+
+
+def overlap(start_a, end_a, start_b, end_b):
+    if start_a <= start_b <= end_a or\
+                start_a <= end_b <= end_a or \
+                (start_b <= start_a and end_a <= end_b):
+        return True
+    return False
 
 class Rails:
     def __init__(self, model, length, blocks):
@@ -21,9 +29,7 @@ class Rails:
         blocks_occupied = []
         for block in self.blocks:
             start_block, end_block = block.get_position
-            if  start_train <= start_block <= end_train or\
-                start_train <= end_block <= end_train or \
-                (start_block <= start_train and end_train <= end_block):
+            if overlap(start_train, end_train, start_block, end_block):
                 blocks_occupied.append(block)
         return blocks_occupied
 
@@ -46,8 +52,6 @@ class Rails:
         start_block, end_block = block.get_position
         for train in self.trains:
             start_train, end_train = train.get_position
-            if start_block <= start_train <= end_block or start_block <= end_train <= end_block:
-                return True
-            elif start_train <= start_block and end_block <= end_train:
+            if overlap(start_train, end_train, start_block, end_block):
                 return True
         return False
