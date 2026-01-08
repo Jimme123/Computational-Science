@@ -1,6 +1,8 @@
+from positionalAgent import PositionalAgent
+
 class Train(PositionalAgent):
-    def __init__(self, model, position, speed):
-        super().__init__(model, position)
+    def __init__(self, model, start, end, speed):
+        super().__init__(model, start, end)
         self.speed = speed
 
     def move(self, direction):
@@ -10,6 +12,9 @@ class Train(PositionalAgent):
 
         if signal == "RED":
             self.speed = 0
+        elif signal == "ORANGE":
+            self.speed = max(self.speed / 2, 1)
+            self.position += self.speed * direction
         else:
             self.position = next_position
 
