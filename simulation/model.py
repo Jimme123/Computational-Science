@@ -19,6 +19,6 @@ class Railroad(mesa.Model):
         """Advance the model by one step."""
         print("step")
         self.trains.shuffle_do("step")
-        print(self.trains[0].position)
-        print(self.trains[1].position)
+        for train in self.trains:
+            print(train.position)
  

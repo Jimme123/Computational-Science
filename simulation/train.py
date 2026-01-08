@@ -24,7 +24,7 @@ class Train(PositionalAgent):
         else:
             self.position = next_position
 
-        if self.position.start > self.rails.length:
+        if self.position.start >= self.rails.length:
             self.rails.remove_train(self)
             super().remove()
 
