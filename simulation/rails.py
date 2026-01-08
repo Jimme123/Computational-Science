@@ -14,6 +14,9 @@ class Rails:
     def add_train(self, train):
         self.trains.append(train)
 
+    def remove_train(self, train):
+        self.trains.remove(train)
+
     def add_block(self, block):
         self.blocks.append(block)
 
