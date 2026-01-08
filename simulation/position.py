@@ -5,7 +5,7 @@ class Position:
         Oriented from the start of the line to the end of the line. (So the start of a train is at the back.)
     """
     def __init__(self, start, end):
-        assert(begin < end)
+        assert(start < end)
         self.start = start
         self.end = end
     
