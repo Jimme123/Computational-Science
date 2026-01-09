@@ -5,11 +5,11 @@ dt = 1
 rho = 1.05  # rotating mass-factor (for now)
 
 class Train(PositionalAgent):
-    def __init__(self, model, mass, position, rails, speed, fmax, fmin):
+    def __init__(self, model, position, rails, speed, acceleration, braking):
         super().__init__(model, position)
-        self.mass = mass
-        self.fmax = fmax
-        self.fmin = fmin
+        # self.mass = mass
+        self.braking = braking
+        self.acceleration = acceleration
         self.max_speed = speed
         self.speed = speed
         self.rails = rails
@@ -17,38 +17,39 @@ class Train(PositionalAgent):
         self.position = position
 
     def step(self):
-        acceleration = self.get_acceleration()
-        self.speed += acceleration * dt
-
-        signal = self.model.rails.next_signal(self)
-        # signal = self.model.rails.next_signal(next_position)
+        signal, distance = self.rails.next_signal(self)
 
         if signal == Color.RED:
-            acceleration = self.get_acceleration(self.fmin)
+            acceleration = self.braking if (self.brake_distance(0) > distance - 20) else 0
         elif signal == Color.ORANGE:
-            acceleration = self.get_acceleration(self.fmin)
+            acceleration = self.braking if self.brake_distance(self.max_speed / 2) > distance - 20 else (self.acceleration if self.speed < self.max_speed else 0)
         else:
-            acceleration = self.get_acceleration(self.fmax)
+            acceleration = self.acceleration if self.speed < self.max_speed else 0
 
         self.speed += acceleration * dt
-        self.position += self.postion + self.speed * dt
+        self.position += self.speed * dt
 
         if self.position.start >= self.rails.length:
             self.rails.remove_train(self)
             super().remove()
 
-    def get_acceleration(self, tractive_force):
-        if self.speed == self.max_speed:
-            return 0
+    def brake_distance(self, speed):
+        return (self.speed - speed)**2 / 2*-self.braking
 
-        resistance = self.get_resistance()
-        acceleration = (tractive_force - resistance) / (self.mass * rho)
+    def __str__(self):
+        return f"{self.position}, speed: {self.speed}"
 
-        if self.speed <= 0 & acceleration <= 0:
-            return 0
-        
-        return acceleration
+#    def get_acceleration(self, tractive_force):
+#        if self.speed == self.max_speed:
+#            return 0
+#
+#        resistance = self.get_resistance()
+#        acceleration = (tractive_force - resistance) / (self.mass * rho)
+#
+#        if self.speed <= 0 & acceleration <= 0:
+#            return 0
+#        
+#        return acceleration
     
     def get_resistance(self):
         return 0
-    

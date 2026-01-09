@@ -46,10 +46,10 @@ class Rails:
         last_block = blocks_occupied[-1]
         next_block = self.get_next_block(last_block)
         if next_block is None:
-            return Color.GREEN
+            return (Color.GREEN, 1000000)
         else:
             signal = next_block.signal
-        distance = distance(train.position, next_block.position)
+        distance = get_distance(train.position, next_block.position)
         return (signal, distance)
 
     def block_contains_train(self, block):

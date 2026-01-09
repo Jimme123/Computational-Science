@@ -10,7 +10,7 @@ class Railroad(mesa.Model):
     def __init__(self, length):
         super().__init__()
         self.rails = Rails(self, 10000)
-        self.trains = Train.create_agents(self, 2, [Position(0, 100), Position(3000, 3100)], self.rails, [200, 100])
+        self.trains = Train.create_agents(self, 2, [Position(0, 100), Position(3000, 3100)], self.rails, [55, 25], 1.1, -1.3)
         n = 20
         self.blocks = Block.create_agents(self, n, [Position(i * length / n, (i + 1) * length / n) for i in range(n)], self.rails)
         
@@ -20,5 +20,5 @@ class Railroad(mesa.Model):
         print("step")
         self.trains.shuffle_do("step")
         for train in self.trains:
-            print(train.position)
+            print(train)
  

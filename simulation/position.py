@@ -32,7 +32,7 @@ def overlap(position_a, position_b):
     return False
 
 
-def distance(position_a, position_b):
+def get_distance(position_a, position_b):
     if overlap(position_a, position_b):
         return 0
     start_a, end_a = position_a.bounds
