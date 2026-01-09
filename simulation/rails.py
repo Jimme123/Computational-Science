@@ -49,7 +49,8 @@ class Rails:
             return Color.GREEN
         else:
             signal = next_block.signal
-        return signal
+        distance = distance(train.position, next_block.position)
+        return (signal, distance)
 
     def block_contains_train(self, block):
         """

@@ -7,5 +7,3 @@ class PositionalAgent(mesa.Agent):
         super().__init__(model)
         self.position = position
 
-    def get_position(self):
-        return (self.position.start, self.position.end)
