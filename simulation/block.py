@@ -1,7 +1,9 @@
 import mesa
 from enum import Enum
 
-class Colour(Enum):
+from positionalAgent import *
+
+class Color(Enum):
     GREEN = 1
     ORANGE = 2
     RED = 3
@@ -10,7 +12,9 @@ class Block(PositionalAgent):
     def __init__(self, model, position, rails):
         super().__init__(model, position)
         self.rails = rails
+        self.rails.add_block(self)
 
+    @property
     def signal(self):
         """
         Returns signal colour based on train positions:
@@ -18,9 +22,12 @@ class Block(PositionalAgent):
         - ORANGE if next block is occupied
         - GREEN otherwise
         """
-        if self.rails.block_contains_train(self):
-            return Colour.RED
-        elif self.rails.next_block_occupied(self):
-            return Colour.ORANGE
+        next_block = self.rails.get_next_block(self)
+        if next_block is None:
+            return Color.GREEN
+        elif self.rails.block_contains_train(self):
+            return Color.RED
+        elif self.rails.block_contains_train(next_block):
+            return Color.ORANGE
         else:
-            return Colour.GREEN
+            return Color.GREEN

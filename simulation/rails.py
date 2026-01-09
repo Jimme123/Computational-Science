@@ -1,26 +1,30 @@
 import mesa
 
-import positionalAgent
-
-
-def overlap(position_a , position_b):
-    start_a, end_a = position_a.get_positions
-    start_b, end_b = position_b.get_positions
-    if start_a <= start_b <= end_a or\
-                start_a <= end_b <= end_a or \
-                (start_b <= start_a and end_a <= end_b):
-        return True
-    return False
+from positionalAgent import *
+from position import *
+from block import *
 
 class Rails:
-    def __init__(self, model, length, blocks):
+    def __init__(self, model, length):
         self.model = model
         self.length = length
         self.trains = []
-        self.blocks = blocks
+        self.blocks = []
     
     def add_train(self, train):
-        self.train.append(train)
+        self.trains.append(train)
+
+    def remove_train(self, train):
+        self.trains.remove(train)
+
+    def add_block(self, block):
+        self.blocks.append(block)
+
+    def get_next_block(self, block):
+        index = self.blocks.index(block) + 1
+        if index >= len(self.blocks):
+            return None
+        return self.blocks[index]
 
     def blocks_occupied_train(self, train):
         """
@@ -40,9 +44,12 @@ class Rails:
         """
         blocks_occupied = self.blocks_occupied_train(train)
         last_block = blocks_occupied[-1]
-        next_block = self.blocks[self.blocks.index(last_block) + 1]
-        signal = next_block.get_signal
-        return signal   
+        next_block = self.get_next_block(last_block)
+        if next_block is None:
+            return Color.GREEN
+        else:
+            signal = next_block.signal
+        return signal
 
     def block_contains_train(self, block):
         """

@@ -1,8 +1,8 @@
 import mesa
 
-import position
+from position import *
 
-class PositionalAgent(mesa.agents):
+class PositionalAgent(mesa.Agent):
     def __init__(self, model, position):
         super().__init__(model)
         self.position = position
