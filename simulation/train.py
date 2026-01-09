@@ -16,7 +16,7 @@ class Train(PositionalAgent):
         self.rails.add_train(self)
         self.position = position
 
-    def move(self, direction):
+    def step(self):
         acceleration = self.get_acceleration()
         self.speed += acceleration * dt
 
@@ -37,15 +37,12 @@ class Train(PositionalAgent):
             self.rails.remove_train(self)
             super().remove()
 
-    def step(self):
-        self.move(direction = 1)
-
     def get_acceleration(self, tractive_force):
         if self.speed == self.max_speed:
             return 0
 
         resistance = self.get_resistance()
-        acceleration =  (tractive_force - resistance) / (self.mass * rho)
+        acceleration = (tractive_force - resistance) / (self.mass * rho)
 
         if self.speed <= 0 & acceleration <= 0:
             return 0
@@ -53,5 +50,5 @@ class Train(PositionalAgent):
         return acceleration
     
     def get_resistance(self):
-        pass
+        return 0
     
