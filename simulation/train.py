@@ -37,7 +37,7 @@ class Train(PositionalAgent):
         return (self.speed - speed)**2 / 2*-self.braking
 
     def __str__(self):
-        return f"{self.position}, speed: {self.speed}"
+        return f"{self.position}, speed: {self.speed:.1f}"
 
 #    def get_acceleration(self, tractive_force):
 #        if self.speed == self.max_speed:
