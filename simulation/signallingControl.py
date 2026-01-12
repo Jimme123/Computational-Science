@@ -4,7 +4,7 @@ from positionalAgent import *
 from position import *
 from block import *
 
-class Rails:
+class SignallingControl:
     def __init__(self, model, length):
         self.model = model
         self.length = length

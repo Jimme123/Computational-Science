@@ -5,19 +5,19 @@ dt = 1
 rho = 1.05  # rotating mass-factor (for now)
 
 class Train(PositionalAgent):
-    def __init__(self, model, position, rails, speed, acceleration, braking):
+    def __init__(self, model, position, signalling_control, speed, acceleration, braking):
         super().__init__(model, position)
         # self.mass = mass
         self.braking = braking
         self.acceleration = acceleration
         self.max_speed = speed
         self.speed = speed
-        self.rails = rails
-        self.rails.add_train(self)
+        self.signalling_control = signalling_control
+        self.signalling_control.add_train(self)
         self.position = position
 
     def step(self):
-        signal, distance = self.rails.next_signal(self)
+        signal, distance = self.signalling_control.next_signal(self)
 
         if signal == Color.RED:
             acceleration = self.braking if (self.brake_distance(0) > distance - 20) else 0
@@ -29,8 +29,8 @@ class Train(PositionalAgent):
         self.speed += acceleration * dt
         self.position += self.speed * dt
 
-        if self.position.start >= self.rails.length:
-            self.rails.remove_train(self)
+        if self.position.start >= self.signalling_control.length:
+            self.signalling_control.remove_train(self)
             super().remove()
 
     def brake_distance(self, speed):
