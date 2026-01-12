@@ -10,6 +10,7 @@ class Railroad(mesa.Model):
         super().__init__()
         self.signalling_control = signalling_control_class(self, 10000)
         self._step = 0
+        self.trains = Train.create_agents(self, 0)
         
 
     def step(self):
@@ -20,9 +21,9 @@ class Railroad(mesa.Model):
         for train in self.trains:
             print(train)
     
-    def add_train(*args):
-        Train.create_agents(self, 1, self.signalling_control, *args)
+    def add_train(self, *args):
+        self.trains.add(Train(self, *args))
 
-    def add_block(*args):
-        Block.create_agents(self, 1, self.signalling_control, *args)
+    def add_block(self, *args):
+        Block(self, *args)
  

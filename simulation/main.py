@@ -1,9 +1,9 @@
 from model import *
-from blockSignalling import *
+from staticBlockSignalling import *
 from position import *
 
 length = 10000
-railroad = Railroad(length, BlockSignalling)
+railroad = Railroad(length, StaticBlockSignalling)
 railroad.add_train(Position(0, 100), 55, 1.3, -1.1)
 railroad.add_train(Position(3000, 3100), 25, 1.3, -1.1)
 n = 20

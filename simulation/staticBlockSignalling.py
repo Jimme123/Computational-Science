@@ -3,8 +3,9 @@ import mesa
 from positionalAgent import *
 from position import *
 from block import *
+from signallingControl import *
 
-class SignallingControl:
+class StaticBlockSignalling(SignallingControl):
     def __init__(self, model, length):
         super().__init__(model, length)
         self.blocks = []
