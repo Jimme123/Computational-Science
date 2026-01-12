@@ -9,9 +9,9 @@ class Color(Enum):
     RED = 3
 
 class Block(PositionalAgent):
-    def __init__(self, model, position, signalling_control):
+    def __init__(self, model, position):
         super().__init__(model, position)
-        self.signalling_control = signalling_control
+        self.signalling_control = self.model.signalling_control
         self.signalling_control.add_block(self)
 
     @property

@@ -5,14 +5,14 @@ dt = 1
 rho = 1.05  # rotating mass-factor (for now)
 
 class Train(PositionalAgent):
-    def __init__(self, model, position, signalling_control, speed, acceleration, braking):
+    def __init__(self, model, position, speed, acceleration, braking):
         super().__init__(model, position)
         # self.mass = mass
         self.braking = braking
         self.acceleration = acceleration
         self.max_speed = speed
         self.speed = speed
-        self.signalling_control = signalling_control
+        self.signalling_control = self.model.signalling_control
         self.signalling_control.add_train(self)
         self.position = position
 
