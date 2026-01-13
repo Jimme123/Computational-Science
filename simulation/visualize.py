@@ -9,11 +9,11 @@ from staticBlockSignalling import *
 
 rail_length = 10500
 model = Railroad(rail_length, StaticBlockSignalling)
-model.add_train(Position(0, 100), 55, 1.3, -1.1)
-model.add_train(Position(3000, 3100), 25, 1.3, -1.1)
+model.add_train(Position(0, 100, rail_length), 55, 1.3, 1.1)
+model.add_train(Position(3000, 3100, rail_length), 25, 1.3, 1.1)
 n = 7
 for i in range(n):
-    model.add_block(Position(i * rail_length / n, (i + 1) * rail_length / n))
+    model.add_block(Position(i * rail_length / n, (i + 1) * rail_length / n, rail_length))
 
 R = 5
 fig, ax = plt.subplots(figsize=(6,6))
