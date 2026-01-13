@@ -51,7 +51,4 @@ def get_distance(position_a, position_b, rail_length):
         return 0
     start_a, end_a = position_a.bounds
     start_b, end_b = position_b.bounds
-    if end_a > start_b:
-        start_b = start_b + rail_length
-
-    return start_b - end_a
+    return (start_b - end_a) % rail_length
