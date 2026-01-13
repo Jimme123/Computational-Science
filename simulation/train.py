@@ -36,10 +36,10 @@ class Train(PositionalAgent):
             super().remove()
 
     def brake_distance(self, speed):
-        return (self.speed - speed)**2 / 2*-self.braking
+        return (self.speed - speed)**2 / 2*-self.braking if self.speed > speed else 0
 
     def __str__(self):
-        return f"{self.position}, speed: {self.speed:.1f}"
+        return f"{self.position}, speed: {self.speed:.1f}, next signal: {self.signalling_control.next_signal(self)}"
 
 #    def get_acceleration(self, tractive_force):
 #        if self.speed == self.max_speed:
