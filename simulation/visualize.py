@@ -5,9 +5,15 @@ import numpy as np
 
 from model import Railroad
 from block import Color
+from staticBlockSignalling import *
 
-rail_length = 10000
-model = Railroad(rail_length)
+rail_length = 10500
+model = Railroad(rail_length, StaticBlockSignalling)
+model.add_train(Position(0, 100), 55, 1.3, -1.1)
+model.add_train(Position(3000, 3100), 25, 1.3, -1.1)
+n = 7
+for i in range(n):
+    model.add_block(Position(i * rail_length / n, (i + 1) * rail_length / n))
 
 R = 5
 fig, ax = plt.subplots(figsize=(6,6))
@@ -20,7 +26,7 @@ ax.set_title("Circular Railway Simulation")
 train_patches = []
 block_patches = []
 
-for block in model.blocks:
+for block in model.signalling_control.blocks:
     start_angle = (block.position.start / rail_length) * 360
     end_angle = (block.position.end / rail_length) * 360
     wedge = patches.Wedge(center=(0,0), r=R, theta1=start_angle, theta2=end_angle, width=0.5, facecolor="green")
@@ -53,3 +59,4 @@ def update(frame):
 
 ani = FuncAnimation(fig, update, frames=500, interval=50)
 plt.show()
+ani.save("test.mp4")
