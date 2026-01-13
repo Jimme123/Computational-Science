@@ -23,8 +23,19 @@ class Position:
 
 
 def overlap(position_a, position_b):
+    """
+    Determines if the positions a and b have overlap when in a circle track
+    """
     start_a, end_a = position_a.bounds
     start_b, end_b = position_b.bounds
+    if start_a > end_a and start_b > end_b:
+        return True
+    if start_a > end_a and \
+            (end_b <= end_a <= start_b or start_b <= start_a <= end_b):
+        return True
+    if start_b > end_b and \
+            (end_a <= end_b <= start_a or start_a <= start_b <= end_a):
+        return True
     if start_a <= start_b <= end_a or\
         start_a <= end_b <= end_a or \
         (start_b <= start_a and end_a <= end_b):
