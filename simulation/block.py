@@ -9,10 +9,10 @@ class Color(Enum):
     RED = 3
 
 class Block(PositionalAgent):
-    def __init__(self, model, position):
+    def __init__(self, model, position, rails):
         super().__init__(model, position)
-        self.signalling_control = self.model.signalling_control
-        self.signalling_control.add_block(self)
+        self.rails = rails
+        self.rails.add_block(self)
 
     @property
     def signal(self):
@@ -22,12 +22,12 @@ class Block(PositionalAgent):
         - ORANGE if next block is occupied
         - GREEN otherwise
         """
-        next_block = self.signalling_control.get_next_block(self)
+        next_block = self.rails.get_next_block(self)
         if next_block is None:
             return Color.GREEN
-        elif self.signalling_control.block_contains_train(self):
+        elif self.rails.block_contains_train(self):
             return Color.RED
-        elif self.signalling_control.block_contains_train(next_block):
+        elif self.rails.block_contains_train(next_block):
             return Color.ORANGE
         else:
             return Color.GREEN

@@ -3,12 +3,19 @@ import mesa
 from positionalAgent import *
 from position import *
 from block import *
-from signallingControl import *
 
-class StaticBlockSignalling(SignallingControl):
+class Rails:
     def __init__(self, model, length):
-        super().__init__(model, length)
+        self.model = model
+        self.length = length
+        self.trains = []
         self.blocks = []
+    
+    def add_train(self, train):
+        self.trains.append(train)
+
+    def remove_train(self, train):
+        self.trains.remove(train)
 
     def add_block(self, block):
         self.blocks.append(block)
@@ -39,11 +46,10 @@ class StaticBlockSignalling(SignallingControl):
         last_block = blocks_occupied[-1]
         next_block = self.get_next_block(last_block)
         if next_block is None:
-            return (Color.GREEN, 1000000)
+            return Color.GREEN
         else:
             signal = next_block.signal
-        distance = get_distance(train.position, next_block.position)
-        return (signal, distance)
+        return signal
 
     def block_contains_train(self, block):
         """

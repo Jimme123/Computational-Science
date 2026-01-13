@@ -1,29 +1,29 @@
 import mesa
 
 from block import *
+from rails import *
 from train import *
 
 class Railroad(mesa.Model):
     """The model containing the trains and signals."""
 
-    def __init__(self, length, signalling_control_class):
+    def __init__(self, length):
         super().__init__()
-        self.signalling_control = signalling_control_class(self, 10000)
-        self._step = 0
-        self.trains = Train.create_agents(self, 0)
-        
+        self.rails = Rails(self, 10000)
+        self.trains = [
+            Train(model=self, position=Position(0,100), rails=self.rails, max_speed=50),
+            Train(model=self, position=Position(3000,3100), rails=self.rails, max_speed=30)
+        ]
+        n = 20
+        self.blocks = []
+        for i in range(n):
+            pos = Position(i * length / n, (i + 1) * length / n)
+            block = Block(self, pos, self.rails)
+            self.blocks.append(block)
 
     def step(self):
         """Advance the model by one step."""
-        self._step += 1
-        print(f"step {self._step}")
-        self.trains.shuffle_do("step")
+        print("step")
         for train in self.trains:
-            print(train)
-    
-    def add_train(self, *args):
-        self.trains.add(Train(self, *args))
+            train.step()
 
-    def add_block(self, *args):
-        Block(self, *args)
- 
