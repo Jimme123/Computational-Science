@@ -14,9 +14,7 @@ class StaticBlockSignalling(SignallingControl):
         self.blocks.append(block)
 
     def get_next_block(self, block):
-        index = self.blocks.index(block) + 1
-        if index >= len(self.blocks):
-            return None
+        index = (self.blocks.index(block) + 1) % len(self.blocks)
         return self.blocks[index]
 
     def blocks_occupied_train(self, train):
