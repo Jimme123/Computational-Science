@@ -15,6 +15,4 @@ class MovingBlockSignalling(SignallingControl):
 
     def get_train_before(self, train):
         index = self.trains.index(train)
-        if index == 0:
-            return None
         return self.trains[index - 1]

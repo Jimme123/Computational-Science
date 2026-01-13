@@ -3,15 +3,17 @@ class Position:
         Contains the position of an object with length.
         Oriented from the start of the line to the end of the line. (So the start of a train is at the back.)
     """
-    def __init__(self, start, end):
-        assert(start < end)
+    def __init__(self, start, end, rail_length):
+        assert(start < rail_length)
+        assert(end < rail_length)
         self.start = start
         self.end = end
+        self.rail_length = rail_length
 
     def __add__(self, other):
         assert(isinstance(other, float) or isinstance(other, int))
-        self.start += other
-        self.end += other
+        self.start = (self.start + other) % self.rail_length
+        self.end = (self.end + other) % self.rail_length
         return self
 
     def __str__(self):
