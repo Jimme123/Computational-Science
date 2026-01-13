@@ -7,13 +7,19 @@ from model import Railroad
 from block import Color
 from staticBlockSignalling import *
 
-rail_length = 10500
+rail_length = 12000
 model = Railroad(rail_length, StaticBlockSignalling)
-model.add_train(Position(0, 100), 55, 1.3, -1.1)
-model.add_train(Position(3000, 3100), 25, 1.3, -1.1)
-n = 7
+model.add_train(Position(0, 100), 55, 1.3, 1.1)
+model.add_train(Position(3000, 3100), 25, 1.3, 1.1)
+n = 8
+positions = np.linspace(0, rail_length, n + 1)
+stations = [2, 4]
 for i in range(n):
-    model.add_block(Position(i * rail_length / n, (i + 1) * rail_length / n))
+    if i in stations:
+        model.add_station(Position(positions[i], positions[i]+10))
+        model.add_block(Position(positions[i]+10, positions[i+1]))
+    else:
+        model.add_block(Position(positions[i], positions[i+1]))
 
 R = 5
 fig, ax = plt.subplots(figsize=(6,6))
@@ -48,6 +54,8 @@ def update(frame):
             wedge.set_facecolor("orange")
         elif block.signal == Color.RED:
             wedge.set_facecolor("red")
+        elif block.signal == Color.STATION:
+            wedge.set_facecolor("cyan")
 
     for train, circle in train_patches:
         theta = (train.position.start / rail_length) * 2 * np.pi
