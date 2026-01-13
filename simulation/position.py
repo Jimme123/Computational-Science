@@ -46,7 +46,7 @@ def overlap(position_a, position_b):
 
 
 def get_distance(self, position_a, position_b):
-    """Gets distance from end a to start b"""
+    """Gets distance from end a to start b, so b is infront of a!!!"""
     if overlap(position_a, position_b):
         return 0
     start_a, end_a = position_a.bounds
