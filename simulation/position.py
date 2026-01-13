@@ -45,12 +45,13 @@ def overlap(position_a, position_b):
     return False
 
 
-def get_distance(position_a, position_b):
+def get_distance(self, position_a, position_b):
+    """Gets distance from end a to start b"""
     if overlap(position_a, position_b):
         return 0
     start_a, end_a = position_a.bounds
     start_b, end_b = position_b.bounds
-    if end_a < start_b:
-        return start_b - end_a
-    else:
-        return start_a - end_b
+    if end_a > start_b:
+        start_b = start_b + self.rail_length
+
+    return start_b - end_a
