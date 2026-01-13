@@ -27,6 +27,8 @@ class Train(PositionalAgent):
             acceleration = self.acceleration if self.speed < self.max_speed else 0
 
         self.speed += acceleration * dt
+        if self.speed < 0:
+            self.speed = 0
         self.position += self.speed * dt
 
         if self.position.start >= self.signalling_control.length:

@@ -10,5 +10,5 @@ n = 7
 for i in range(n):
     railroad.add_block(Position(i * length / n, (i + 1) * length / n))
 
-for i in range(500):
+for i in range(400):
     railroad.step()
