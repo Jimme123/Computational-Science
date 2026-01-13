@@ -4,8 +4,8 @@ class Position:
         Oriented from the start of the line to the end of the line. (So the start of a train is at the back.)
     """
     def __init__(self, start, end, rail_length):
-        assert(start < rail_length)
-        assert(end < rail_length)
+        assert(start <= rail_length)
+        assert(end <= rail_length)
         self.start = start
         self.end = end
         self.rail_length = rail_length
@@ -45,13 +45,13 @@ def overlap(position_a, position_b):
     return False
 
 
-def get_distance(self, position_a, position_b):
+def get_distance(position_a, position_b, rail_length):
     """Gets distance from end a to start b, so b is infront of a!!!"""
     if overlap(position_a, position_b):
         return 0
     start_a, end_a = position_a.bounds
     start_b, end_b = position_b.bounds
     if end_a > start_b:
-        start_b = start_b + self.rail_length
+        start_b = start_b + rail_length
 
     return start_b - end_a

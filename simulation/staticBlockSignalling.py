@@ -42,7 +42,7 @@ class StaticBlockSignalling(SignallingControl):
             return (Color.GREEN, 1000000)
         else:
             signal = next_block.signal
-        distance = get_distance(train.position, next_block.position)
+        distance = get_distance(train.position, next_block.position, self.length)
         return (signal, distance)
 
     def block_contains_train(self, block):

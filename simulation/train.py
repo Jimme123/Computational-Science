@@ -31,9 +31,9 @@ class Train(PositionalAgent):
             self.speed = 0
         self.position += self.speed * dt
 
-        if self.position.start >= self.signalling_control.length:
-            self.signalling_control.remove_train(self)
-            super().remove()
+        # if self.position.start >= self.signalling_control.length:
+        #    self.signalling_control.remove_train(self)
+        #    super().remove()
 
     def brake_distance(self, speed):
         return (self.speed - speed)**2 / 2*-self.braking if self.speed > speed else 0
