@@ -7,6 +7,7 @@ class Color(Enum):
     GREEN = 1
     ORANGE = 2
     RED = 3
+    STATION = 4
 
 class Block(PositionalAgent):
     def __init__(self, model, position):
