@@ -54,7 +54,7 @@ class StaticBlockSignalling(SignallingControl):
             return (Color.GREEN, 1000000)
         else:
             signal = next_block.signal
-        
+
         distance = get_distance(train.position, next_block.position, self.length)
 
         if distance > self.model.sight:

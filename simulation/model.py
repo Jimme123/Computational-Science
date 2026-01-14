@@ -29,4 +29,7 @@ class Railroad(mesa.Model):
 
     def add_block(self, *args):
         Block(self, *args)
+
+    def add_station(self, *args):
+        Station(self, *args)
  
