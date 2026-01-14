@@ -43,11 +43,10 @@ class StaticBlockSignalling(SignallingControl):
         output: next signal for the train
         """
         blocks_occupied = self.blocks_occupied_train(train)
-        if self.blocks[0] in blocks_occupied and self.blocks[1]:
+        if self.blocks[0] in blocks_occupied and self.blocks[1] not in blocks_occupied:
             last_block = self.blocks[0]
         else:
             last_block = blocks_occupied[-1]
-
         next_block = self.get_next_block(last_block)
         if next_block is None:
             return (Color.GREEN, 1000000)
