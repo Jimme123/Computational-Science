@@ -4,6 +4,7 @@ from enum import Enum
 from positionalAgent import *
 
 class Color(Enum):
+    UNKNOWN = 0
     GREEN = 1
     ORANGE = 2
     RED = 3

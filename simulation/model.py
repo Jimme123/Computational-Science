@@ -6,11 +6,14 @@ from train import *
 class Railroad(mesa.Model):
     """The model containing the trains and signals."""
 
-    def __init__(self, length, signalling_control_class):
+    def __init__(self, length, signalling_control_class, sight, dt, wait_time):
         super().__init__()
         self.signalling_control = signalling_control_class(self, length)
         self._step = 0
         self.trains = Train.create_agents(self, 0)
+        self.sight = sight
+        self.dt = dt
+        self.wait_time = wait_time
         
 
     def step(self):

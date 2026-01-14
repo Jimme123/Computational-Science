@@ -4,7 +4,7 @@ from movingBlockSignalling import *
 from position import *
 
 length = 10500
-railroad = Railroad(length, MovingBlockSignalling)
+railroad = Railroad(length, MovingBlockSignalling, 300, 1)
 railroad.add_train(Position(3000, 3100, length), 25, 1.3, 1.1)
 railroad.add_train(Position(0, 100, length), 55, 1.3, 1.1)
 # n = 7
