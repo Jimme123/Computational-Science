@@ -14,9 +14,7 @@ class StaticBlockSignalling(SignallingControl):
         self.blocks.append(block)
 
     def get_next_block(self, block):
-        index = self.blocks.index(block) + 1
-        if index >= len(self.blocks):
-            return None
+        index = (self.blocks.index(block) + 1) % len(self.blocks)
         return self.blocks[index]
 
     def blocks_occupied_train(self, train):
@@ -30,20 +28,39 @@ class StaticBlockSignalling(SignallingControl):
                 blocks_occupied.append(block)
         return blocks_occupied
 
+    def block_head_train(self, train):
+        start, end = train.position.bounds
+        head = Position(end, end, self.length)
+
+        for block in self.blocks:
+            if overlap(block.position, head):
+                return block
+        return None
+
     def next_signal(self, train):
         """
         input: train
-        output: next signal for the train
+        output: next signal for the train with the distance. If the signal is to far to see, it is unknown.
+                (The driver still gets the distance, because they have to memorize the signal positions.)
         """
         blocks_occupied = self.blocks_occupied_train(train)
-        last_block = blocks_occupied[-1]
+        if self.blocks[0] in blocks_occupied and self.blocks[1] not in blocks_occupied:
+            last_block = self.blocks[0]
+        else:
+            last_block = blocks_occupied[-1]
         next_block = self.get_next_block(last_block)
+
         if next_block is None:
             return (Color.GREEN, 1000000)
         else:
             signal = next_block.signal
-        distance = get_distance(train.position, next_block.position)
-        return (signal, distance)
+
+        distance = get_distance(train.position, next_block.position, self.length)
+
+        if distance > self.model.sight:
+            return (Color.UNKNOWN, distance)
+        else:
+            return (signal, distance)
 
     def block_contains_train(self, block):
         """
