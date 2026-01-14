@@ -1,7 +1,7 @@
 import mesa
 from enum import Enum
 
-from positionalAgent import *
+from simulation.positionalAgent import *
 
 class Color(Enum):
     GREEN = 1

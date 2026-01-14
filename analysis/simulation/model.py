@@ -1,7 +1,7 @@
 import mesa
 
-from block import *
-from train import *
+from simulation.block import *
+from simulation.train import *
 
 class Railroad(mesa.Model):
     """The model containing the trains and signals."""
@@ -11,7 +11,7 @@ class Railroad(mesa.Model):
         self.signalling_control = signalling_control_class(self, 10000)
         self._step = 0
         self.trains = Train.create_agents(self, 0)
-        
+
 
     def step(self):
         """Advance the model by one step."""
@@ -20,10 +20,10 @@ class Railroad(mesa.Model):
         self.trains.shuffle_do("step")
         for train in self.trains:
             print(train)
-    
+
     def add_train(self, *args):
         self.trains.add(Train(self, *args))
 
     def add_block(self, *args):
         Block(self, *args)
- 
+

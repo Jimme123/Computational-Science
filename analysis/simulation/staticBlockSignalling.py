@@ -1,9 +1,9 @@
 import mesa
 
-from positionalAgent import *
-from position import *
-from block import *
-from signallingControl import *
+from simulation.positionalAgent import *
+from simulation.position import *
+from simulation.block import *
+from simulation.signallingControl import *
 
 class StaticBlockSignalling(SignallingControl):
     def __init__(self, model, length):

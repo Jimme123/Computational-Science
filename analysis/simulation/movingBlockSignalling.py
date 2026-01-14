@@ -1,4 +1,4 @@
-from signallingControl import *
+from simulation.signallingControl import *
 
 
 class MovingBlockSignalling(SignallingControl):

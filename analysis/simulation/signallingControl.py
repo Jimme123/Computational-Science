@@ -1,8 +1,8 @@
 import mesa
 
-from positionalAgent import *
-from position import *
-from block import *
+from simulation.positionalAgent import *
+from simulation.position import *
+from simulation.block import *
 
 class SignallingControl:
     def __init__(self, model, length):
@@ -10,7 +10,7 @@ class SignallingControl:
         self.length = length
         self.trains = []
         self.blocks = []
-    
+
     def add_train(self, train):
         self.trains.append(train)
 

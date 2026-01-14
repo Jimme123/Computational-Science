@@ -1,6 +1,6 @@
 import mesa
 
-from position import *
+from simulation.position import *
 
 class PositionalAgent(mesa.Agent):
     def __init__(self, model, position):

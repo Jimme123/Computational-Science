@@ -1,5 +1,5 @@
-from positionalAgent import *
-from block import *
+from simulation.positionalAgent import *
+from simulation.block import *
 
 dt = 1
 rho = 1.05  # rotating mass-factor (for now)
@@ -50,8 +50,8 @@ class Train(PositionalAgent):
 #
 #        if self.speed <= 0 & acceleration <= 0:
 #            return 0
-#        
+#
 #        return acceleration
-    
+
     def get_resistance(self):
         return 0
