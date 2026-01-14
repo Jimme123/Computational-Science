@@ -14,7 +14,7 @@ class Railroad(mesa.Model):
         self.sight = sight
         self.dt = dt
         self.wait_time = wait_time
-        
+
 
     def step(self):
         """Advance the model by one step."""
@@ -23,7 +23,7 @@ class Railroad(mesa.Model):
         self.trains.shuffle_do("step")
         for train in self.trains:
             print(train)
-    
+
     def add_train(self, *args):
         self.trains.add(Train(self, *args))
 

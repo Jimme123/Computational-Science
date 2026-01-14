@@ -27,7 +27,7 @@ class StaticBlockSignalling(SignallingControl):
             if overlap(train.position, block.position):
                 blocks_occupied.append(block)
         return blocks_occupied
-    
+
     def block_head_train(self, train):
         start, end = train.position.bounds
         head = Position(end, end, self.length)
