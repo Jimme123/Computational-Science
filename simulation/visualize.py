@@ -9,25 +9,25 @@ from staticBlockSignalling import *
 from movingBlockSignalling import *
 
 rail_length = 12000
-model = Railroad(rail_length, MovingBlockSignalling, sight=300, dt=1, wait_time=10)
+model = Railroad(rail_length, StaticBlockSignalling, sight=300, dt=1, wait_time=10)
 model.add_train(Position(3000, 3100, rail_length), 25, 1.3, 1.1)
 model.add_train(Position(0, 100, rail_length), 55, 1.3, 1.1)
 
-# n = 8
-# positions = np.linspace(0, rail_length, n + 1)
-# stations = [2, 4]
-# for i in range(n):
-#     if i in stations:
-#         model.add_station(Position(positions[i], positions[i]+10, rail_length))
-#         model.add_block(Position(positions[i]+10, positions[i+1], rail_length))
-#     else:
-#         model.add_block(Position(positions[i], positions[i+1], rail_length))
-
-n = 4
+n = 8
 positions = np.linspace(0, rail_length, n + 1)
-print(positions)
+stations = [2, 4]
 for i in range(n):
-    model.add_station(Position(positions[i], positions[i] + 10, rail_length))
+    if i in stations:
+        model.add_station(Position(positions[i], positions[i]+10, rail_length))
+        model.add_block(Position(positions[i]+10, positions[i+1], rail_length))
+    else:
+        model.add_block(Position(positions[i], positions[i+1], rail_length))
+
+# n = 4
+# positions = np.linspace(0, rail_length, n + 1)
+# print(positions)
+# for i in range(n):
+#     model.add_station(Position(positions[i], positions[i] + 10, rail_length))
 
 R = 5
 fig, ax = plt.subplots(figsize=(6,6))

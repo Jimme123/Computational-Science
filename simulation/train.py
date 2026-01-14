@@ -22,7 +22,7 @@ class Train(PositionalAgent):
         self.braking = braking
         self.acceleration = acceleration
         self.max_speed = speed
-        self.speed = speed
+        self.speed = 0
         self.signalling_control = self.model.signalling_control
         self.signalling_control.add_train(self)
         self.position = position
@@ -54,6 +54,8 @@ class Train(PositionalAgent):
         elif self.state == State.STOP or self.state == State.STATION:
             if self.brake_distance(0) > distance - 20:
                 self.go_to_speed(0)
+            else:
+                self.go_to_speed(self.max_speed)
             if self.brake_distance(0, 1) > distance:
                 raise Exception(f"Unable to brake in time. {self}")
         elif self.state == State.PASS_STATION:
