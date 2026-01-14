@@ -29,17 +29,6 @@ class Train(PositionalAgent):
             else:
                 signal = Color.RED
 
-        if signal != Color.STATION:
-            self._wait = None
-        else:
-            if self.speed == 0:
-                self._wait = self._wait - dt if self._wait is not None else 10
-            
-            if self._wait is not None and self._wait <= 0:
-                signal = Color.ORANGE
-            else:
-                signal = Color.RED
-
         if signal == Color.RED:
             # Go half speed and stop 20m before the signal
             if distance > 1500:
