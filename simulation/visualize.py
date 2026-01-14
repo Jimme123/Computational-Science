@@ -59,4 +59,4 @@ def update(frame):
 
 ani = FuncAnimation(fig, update, frames=500, interval=50)
 plt.show()
-ani.save("test.avi")
+ani.save("test.mp4")
