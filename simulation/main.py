@@ -2,6 +2,7 @@ import numpy as np
 
 from model import *
 from staticBlockSignalling import *
+from movingBlockSignalling import *
 from position import *
 
 rail_length = 12000

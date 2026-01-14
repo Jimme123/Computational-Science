@@ -8,7 +8,7 @@ class Railroad(mesa.Model):
 
     def __init__(self, length, signalling_control_class):
         super().__init__()
-        self.signalling_control = signalling_control_class(self, 10000)
+        self.signalling_control = signalling_control_class(self, length)
         self._step = 0
         self.trains = Train.create_agents(self, 0)
         
