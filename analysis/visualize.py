@@ -3,6 +3,8 @@ import matplotlib.patches as patches
 from matplotlib.animation import FuncAnimation
 import numpy as np
 
+from simulation.block import Color
+
 
 def visualize(model, steps):
     R = 5
