@@ -7,6 +7,7 @@ class Train(PositionalAgent):
     def __init__(self, model, position, speed, acceleration, braking):
         super().__init__(model, position)
         # self.mass = mass
+        self._wait = None
         self.braking = braking
         self.acceleration = acceleration
         self.max_speed = speed
