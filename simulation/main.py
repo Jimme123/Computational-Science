@@ -6,7 +6,7 @@ from movingBlockSignalling import *
 from position import *
 
 rail_length = 12000
-model = Railroad(rail_length, StaticBlockSignalling)
+model = Railroad(rail_length, StaticBlockSignalling, 300, 1, 10)
 model.add_train(Position(0, 100), 55, 1.3, 1.1)
 model.add_train(Position(3000, 3100), 25, 1.3, 1.1)
 n = 8

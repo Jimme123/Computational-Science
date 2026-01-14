@@ -4,6 +4,7 @@ from enum import Enum
 from positionalAgent import *
 
 class Color(Enum):
+    UNKNOWN = 0
     GREEN = 1
     ORANGE = 2
     RED = 3
@@ -46,6 +47,6 @@ class Station(Block):
     @property
     def signal(self):
         return Color.STATION
-    
+
     def is_stop(self):
         return True

@@ -27,7 +27,7 @@ class StaticBlockSignalling(SignallingControl):
             if overlap(train.position, block.position):
                 blocks_occupied.append(block)
         return blocks_occupied
-    
+
     def block_head_train(self, train):
         start, end = train.position.bounds
         head = Position(end, end, self.length)
@@ -40,7 +40,8 @@ class StaticBlockSignalling(SignallingControl):
     def next_signal(self, train):
         """
         input: train
-        output: next signal for the train
+        output: next signal for the train with the distance. If the signal is to far to see, it is unknown.
+                (The driver still gets the distance, because they have to memorize the signal positions.)
         """
         blocks_occupied = self.blocks_occupied_train(train)
         if self.blocks[0] in blocks_occupied and self.blocks[1] not in blocks_occupied:
@@ -48,9 +49,18 @@ class StaticBlockSignalling(SignallingControl):
         else:
             last_block = blocks_occupied[-1]
         next_block = self.get_next_block(last_block)
-        signal = next_block.signal
+
+        if next_block is None:
+            return (Color.GREEN, 1000000)
+        else:
+            signal = next_block.signal
+
         distance = get_distance(train.position, next_block.position, self.length)
-        return (signal, distance)
+
+        if distance > self.model.sight:
+            return (Color.UNKNOWN, distance)
+        else:
+            return (signal, distance)
 
     def block_contains_train(self, block):
         """
