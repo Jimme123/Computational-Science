@@ -31,7 +31,9 @@ class Train(PositionalAgent):
 
         if signal == Color.RED:
             # Go half speed and stop 20m before the signal
-            if self.brake_distance(0) > distance - 20:
+            if distance > 1500:
+                signal = Color.GREEN
+            elif self.brake_distance(0) > distance - 20:
                 self.speed = max(0, self.speed - self.braking * dt)
             elif self.speed > self.max_speed / 2:
                 self.speed = max(self.max_speed / 2, self.speed - self.braking * dt)
