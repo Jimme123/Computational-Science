@@ -10,6 +10,15 @@ class StaticBlockSignalling(SignallingControl):
         super().__init__(model, length)
         self.blocks = []
 
+    def add_train(self, train):
+        occupied_blocks = self.blocks_occupied_train(train)
+        for block in occupied_blocks:
+            if self.block_contains_train(block):
+                raise Exception("Block already contains train")
+            
+        super().add_train(self, train)
+
+
     def add_block(self, block):
         self.blocks.append(block)
 
