@@ -40,19 +40,7 @@ def overlap(position_a, position_b):
     #start_b, end_b = position_b.bounds
     segments_a = get_segments(position_a)
     segments_b = get_segments(position_b)
-    """
-    if start_a > end_a and start_b > end_b:
-        return True
-    if start_a > end_a or start_b > end_b:
-        if start_a > end_a and \
-                (end_b <= end_a <= start_b or end_b <= start_a <= start_b):
-            return True
-        elif start_b > end_b and \
-                (end_a <= end_b <= start_a or end_a <= start_b <= start_a):
-            return True
-        else:
-            return False
-    """
+    
     for start_a, end_a in segments_a:
         for start_b, end_b in segments_b:
             if start_a <= start_b <= end_a or\

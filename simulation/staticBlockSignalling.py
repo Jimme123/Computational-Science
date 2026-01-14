@@ -48,10 +48,7 @@ class StaticBlockSignalling(SignallingControl):
         else:
             last_block = blocks_occupied[-1]
         next_block = self.get_next_block(last_block)
-        if next_block is None:
-            return (Color.GREEN, 1000000)
-        else:
-            signal = next_block.signal
+        signal = next_block.signal
         distance = get_distance(train.position, next_block.position, self.length)
         return (signal, distance)
 
