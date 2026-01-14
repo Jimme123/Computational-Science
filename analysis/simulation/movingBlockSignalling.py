@@ -10,7 +10,10 @@ class MovingBlockSignalling(StaticBlockSignalling):
         train_before = self.get_train_before(train)
         train_distance = get_distance(train.position, train_before.position, self.length)
         station = self.get_nearest_station(train)
-        station_distance = get_distance(train.position, station.position, self.length)
+        if station is not None:
+            station_distance = get_distance(train.position, station.position, self.length)
+        else:
+            return (Color.RED, train_distance)
 
         if train_distance <= station_distance:
             return (Color.RED, train_distance)

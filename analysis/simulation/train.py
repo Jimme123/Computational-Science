@@ -51,7 +51,7 @@ class Train(PositionalAgent):
             else:
                 self.go_to_speed(self.max_speed)
         elif self.state == State.STOP or self.state == State.STATION:
-            if self.brake_distance(0) > distance - 20:
+            if self.brake_distance(0) > distance - self.speed * self.dt - 20:
                 self.go_to_speed(0)
             else:
                 self.go_to_speed(self.max_speed)

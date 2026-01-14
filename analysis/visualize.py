@@ -7,6 +7,8 @@ from simulation.block import Color
 
 
 def visualize(model, steps):
+    rail_length = model.signalling_control.length
+
     R = 5
     fig, ax = plt.subplots(figsize=(6,6))
     ax.set_xlim(-R-1, R+1)
@@ -51,6 +53,6 @@ def visualize(model, steps):
 
         return [w for _, w in block_patches] + [c for _, c in train_patches]
 
-    ani = FuncAnimation(fig, update, frames=steps, interval=0)
+    ani = FuncAnimation(fig, update, frames=steps, interval=50)
     plt.show()
     ani.save("test.mp4")
