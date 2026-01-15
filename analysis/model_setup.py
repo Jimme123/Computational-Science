@@ -27,6 +27,8 @@ def blocks_from_distances(model, rail_length, distances, station_size, block_siz
             distance = distances[i] - station_size
             quotient = distance // block_size
             current_distance = positions[i] + station_size
+            if quotient == 0:
+                model.add_block(Position(current_distance, current_distance + distance, rail_length))
             # get spacing for the blocks with minimum block_size
             block_spacing = np.linspace(current_distance, current_distance + distance, quotient + 1)
             #add the blocks
