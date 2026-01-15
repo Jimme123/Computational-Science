@@ -48,10 +48,10 @@ signalling_type = "static"
 #signalling_type = "moving"
 
 rail_length = 9600
-sight = 50
+sight = 300
 dt = 1
 wait_time = 40
-model = Railroad(rail_length, signalling_class, sight=sight, dt=dt, wait_time=wait_time, verbose=True)
+model = Railroad(rail_length, signalling_class, sight=sight, dt=dt, wait_time=wait_time, verbose=False)
 metro_length = 108.68
 metro_specifications = (19.4444444, 1.27, 1.35, 1.68*2*10**6, 141.5*1000)
 block_size = 500  # 156
@@ -67,10 +67,10 @@ for block in model.signalling_control.blocks:
 
 
 
-add_trains(model, rail_length, 12, metro_length, metro_specifications)
+#add_trains(model, rail_length, 12, metro_length, metro_specifications)
 
 # model.add_train(Position(rail_length - 300, rail_length - 300+metro_length, rail_length), *metro_specifications)
 
-# print(test_capacity(model, metro_length, metro_specifications, max_trains=30, verbose=True))
+print(test_capacity(model, metro_length, metro_specifications, max_trains=30, verbose=True))
 
-visualize(model, 1000)
+
