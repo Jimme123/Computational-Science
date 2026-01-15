@@ -63,7 +63,7 @@ class Station(Block):
     """
 
     def __init__(self, model, position):
-        assert(position.length <= 10)
+        assert(position.length <= 20)
         super().__init__(model, position)
 
     @property

@@ -29,7 +29,7 @@ class Train(PositionalAgent):
         self.power = max_power
         self.weight = weight
 
-        self.state = State.GO
+        self.state = State.CAUTION
         self.wait = None
 
     def step(self):
