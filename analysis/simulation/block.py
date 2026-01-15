@@ -50,6 +50,9 @@ class Block(PositionalAgent):
             Block call this is to prevent a recursion loop where each block ask the next block for it's signal.
         """
         return self.signalling_control.block_contains_train(self)
+    
+    def __str__(self):
+        return f'{self.position}'
 
 class Station(Block):
     """
