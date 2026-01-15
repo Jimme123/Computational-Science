@@ -1,7 +1,6 @@
 class Position:
     """
-        Contains the position of an object with length.
-        Oriented from the start of the line to the end of the line. (So the start of a train is at the back.)
+        Contains the position of an object with length in a circle.
     """
     def __init__(self, start, end, rail_length):
         assert(start <= rail_length)
@@ -23,6 +22,11 @@ class Position:
     def bounds(self):
         return (self.start, self.end)
 
+    @property
+    def length(self):
+        return (self.end - self.start + self.rail_length) % self.rail_length
+
+
 
 def get_segments(position):
     start, end = position.bounds
@@ -40,7 +44,7 @@ def overlap(position_a, position_b):
     #start_b, end_b = position_b.bounds
     segments_a = get_segments(position_a)
     segments_b = get_segments(position_b)
-    
+
     for start_a, end_a in segments_a:
         for start_b, end_b in segments_b:
             if start_a <= start_b <= end_a or\
@@ -51,7 +55,7 @@ def overlap(position_a, position_b):
 
 
 def get_distance(position_a, position_b, rail_length):
-    """Gets distance from end a to start b, so b is infront of a!!!"""
+    """Gets distance from end a to start b, so b is in front of a!"""
     if overlap(position_a, position_b):
         return 0
     start_a, end_a = position_a.bounds

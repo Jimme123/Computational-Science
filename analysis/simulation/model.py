@@ -1,13 +1,14 @@
 import mesa
+import math
 
 from simulation.block import *
 from simulation.train import *
 from simulation.position import *
 
 class Railroad(mesa.Model):
-    """The model containing the trains and signals."""
+    """The model containing the trains signal, stations, etc."""
 
-    def __init__(self, length, signalling_control_class, sight, dt, wait_time, verbose=False):
+    def __init__(self, length, signalling_control_class, dt, wait_time, sight=math.inf, verbose=False):
         super().__init__()
         self.signalling_control = signalling_control_class(self, length)
         self._step = 0

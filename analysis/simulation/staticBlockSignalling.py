@@ -1,4 +1,5 @@
 import mesa
+import math
 
 from simulation.positionalAgent import *
 from simulation.position import *
@@ -15,36 +16,24 @@ class StaticBlockSignalling(SignallingControl):
         for block in occupied_blocks:
             if self.block_contains_train(block):
                 raise Exception("Block already contains train")
-            
-        super().add_train(self, train)
+
+        super().add_train(train)
 
 
     def add_block(self, block):
         self.blocks.append(block)
 
-    def get_next_block(self, block):
-        index = (self.blocks.index(block) + 1) % len(self.blocks)
-        return self.blocks[index]
-
-    def blocks_occupied_train(self, train):
+    def get_next_block(self, train):
         """
-        input: train
-        output: list of blocks where the train is
+            Gets the next block from the train. Returns the distance and block.
         """
-        blocks_occupied = []
+        min_distance = math.inf
+        min_block = None
         for block in self.blocks:
-            if overlap(train.position, block.position):
-                blocks_occupied.append(block)
-        return blocks_occupied
-
-    def block_head_train(self, train):
-        start, end = train.position.bounds
-        head = Position(end, end, self.length)
-
-        for block in self.blocks:
-            if overlap(block.position, head):
-                return block
-        return None
+            if get_distance(train, block) < min_distance:
+                min_block = block
+                min_distance = get_distance(train, block)
+        return min_distance, min_block
 
     def next_signal(self, train):
         """
@@ -52,19 +41,12 @@ class StaticBlockSignalling(SignallingControl):
         output: next signal for the train with the distance. If the signal is to far to see, it is unknown.
                 (The driver still gets the distance, because they have to memorize the signal positions.)
         """
-        blocks_occupied = self.blocks_occupied_train(train)
-        if self.blocks[0] in blocks_occupied and self.blocks[1] not in blocks_occupied:
-            last_block = self.blocks[0]
-        else:
-            last_block = blocks_occupied[-1]
-        next_block = self.get_next_block(last_block)
+        distance, block = self.get_next_block(train)
 
         if next_block is None:
-            return (Color.GREEN, 1000000)
+            return (Color.GREEN, math.inf)
         else:
             signal = next_block.signal
-
-        distance = get_distance(train.position, next_block.position, self.length)
 
         if distance > self.model.sight:
             return (Color.UNKNOWN, distance)
