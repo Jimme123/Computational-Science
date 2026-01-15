@@ -52,6 +52,8 @@ def test_capacity(trainless_model: Railroad, train_length, train_args, wind_up=6
                 passes += 1
             was_occupied = occupied
 
-        capacity = passes / test_length * 60**2
+        capacity = float(passes) / float(test_length) * 60**2
         result.append([n, capacity])
+        if verbose:
+            print(f"for {n}, capacity is {capacity:.1f}")
     return np.array(result)

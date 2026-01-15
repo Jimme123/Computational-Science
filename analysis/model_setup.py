@@ -5,6 +5,9 @@ from simulation.staticBlockSignalling import *
 from simulation.movingBlockSignalling import *
 from simulation.position import *
 
+from tools import *
+from visualize import *
+
 
 def blocks_from_distances(model, rail_length, distances, station_size, block_size, signalling_type = "static"):
     """
@@ -45,8 +48,8 @@ signalling_type = "moving"
 rail_length = 9600
 sight = 300
 dt = 1
-wait_time = 10
-model = Railroad(rail_length, signalling_class, sight, dt, wait_time)
+wait_time = 40
+model = Railroad(rail_length, signalling_class, sight=sight, dt=dt, wait_time=wait_time, verbose=False)
 metro_length = 108.68
 metro_specifications = (19.4444444, 1.27, 1.35)
 block_size = 200  # 156
@@ -60,3 +63,8 @@ blocks_from_distances(model, rail_length, distances, station_size, block_size, s
 
 
 
+# add_trains(model, rail_length, 20, metro_length, metro_specifications)
+
+print(test_capacity(model, metro_length, metro_specifications, max_trains=30, verbose=True))
+
+visualize(model, 500)
