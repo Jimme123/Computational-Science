@@ -39,6 +39,9 @@ class Block(PositionalAgent):
 
     def is_stop(self):
         return self.signalling_control.block_contains_train(self)
+    
+    def __str__(self):
+        return f'{self.position}'
 
 class Station(Block):
     def __init__(self, model, position):
