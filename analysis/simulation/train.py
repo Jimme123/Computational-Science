@@ -25,7 +25,7 @@ class Train(PositionalAgent):
         self.signalling_control = self.model.signalling_control
         self.signalling_control.add_train(self)
         self.position = position
-        self.state = State.GO
+        self.state = State.CAUTION
         self.dt = model.dt
         self.wait = None
 

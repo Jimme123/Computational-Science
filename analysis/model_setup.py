@@ -39,27 +39,29 @@ def blocks_from_distances(model, rail_length, distances, station_size, block_siz
 
 
 
-# signalling_class = StaticBlockSignalling
-# signalling_type = "static"
+signalling_class = StaticBlockSignalling
+signalling_type = "static"
 
-signalling_class = MovingBlockSignalling
-signalling_type = "moving"
+#signalling_class = MovingBlockSignalling
+#signalling_type = "moving"
 
 rail_length = 9600
-sight = 300
+sight = 50
 dt = 1
 wait_time = 40
 model = Railroad(rail_length, signalling_class, sight=sight, dt=dt, wait_time=wait_time, verbose=False)
 metro_length = 108.68
 metro_specifications = (19.4444444, 1.27, 1.35)
-block_size = 200  # 156
-station_size = 10
+block_size = 500  # 156
+station_size = 15
 distances_east = [2000, 700, 500, 500, 1100]
 distances_west = distances_east[::-1]
 
 distances = distances_east + distances_west
 
 blocks_from_distances(model, rail_length, distances, station_size, block_size, signalling_type)
+for block in model.signalling_control.blocks:
+    print(block)
 
 
 
@@ -67,4 +69,3 @@ blocks_from_distances(model, rail_length, distances, station_size, block_size, s
 
 print(test_capacity(model, metro_length, metro_specifications, max_trains=30, verbose=True))
 
-visualize(model, 500)
