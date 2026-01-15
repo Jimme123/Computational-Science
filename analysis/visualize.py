@@ -43,7 +43,7 @@ def visualize(model, steps):
             elif block.signal == Color.RED:
                 wedge.set_facecolor("red")
             elif block.signal == Color.STATION:
-                wedge.set_facecolor("cyan")
+                wedge.set_facecolor("black")
 
         for train, circle in train_patches:
             theta = (train.position.bounds[1] / rail_length) * 2 * np.pi

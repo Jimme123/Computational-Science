@@ -5,6 +5,9 @@ from simulation.staticBlockSignalling import *
 from simulation.movingBlockSignalling import *
 from simulation.position import *
 
+from tools import *
+from visualize import *
+
 
 def blocks_from_distances(model, rail_length, distances, station_size, block_size):
     """
@@ -27,21 +30,21 @@ def blocks_from_distances(model, rail_length, distances, station_size, block_siz
         block_spacing = np.linspace(current_distance, current_distance + distance, quotient + 1)
         #add the blocks
         for j in range(quotient):
-            if block_spacing[j + 1] == rail_length:  # alter last block 
+            if block_spacing[j + 1] == rail_length:  # alter last block
                 model.add_block(Position(block_spacing[j], 0, rail_length))
             else:
                 model.add_block(Position(block_spacing[j], block_spacing[j + 1], rail_length))
-                
+
 
 
 rail_length = 9600
 signalling_class = StaticBlockSignalling
 sight = 300
 dt = 1
-wait_time = 10
-model = Railroad(rail_length, signalling_class, sight, dt, wait_time)
+wait_time = 40
+model = Railroad(rail_length, signalling_class, sight=sight, dt=dt, wait_time=wait_time, verbose=False)
 metro_length = 108.68
-metro_specifications = (19.4444444, 1.27, 1.35)
+metro_specifications = (19.4444444, 1.27, 1.35, 1.68*10**6*2, 141.5)
 block_size = 200  # 156
 station_size = 10
 distances_east = [2000, 700, 500, 500, 1100]
@@ -51,3 +54,8 @@ distances = distances_east + distances_west
 
 blocks_from_distances(model, rail_length, distances, station_size, block_size)
 
+# add_trains(model, rail_length, 20, metro_length, metro_specifications)
+
+print(test_capacity(model, metro_length, metro_specifications, max_trains=30, verbose=True))
+
+visualize(model, 500)
