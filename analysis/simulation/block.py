@@ -34,7 +34,7 @@ class Block(PositionalAgent):
         """
             Returns signal color.
         """
-        next_block = self.signalling_control.get_next_block(self)
+        _, next_block = self.signalling_control.get_next_block(self)
         if next_block is None:
             return Color.GREEN
         elif self.is_stop():

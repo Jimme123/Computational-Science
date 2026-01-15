@@ -46,7 +46,7 @@ def visualize(model, steps):
                 wedge.set_facecolor("cyan")
 
         for train, circle in train_patches:
-            theta = (train.position.start / rail_length) * 2 * np.pi
+            theta = (train.position.bounds[1] / rail_length) * 2 * np.pi
             x = R * np.cos(theta)
             y = R * np.sin(theta)
             circle.center = (x, y)

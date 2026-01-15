@@ -3,8 +3,8 @@ class Position:
         Contains the position of an object with length in a circle.
     """
     def __init__(self, start, end, rail_length):
-        assert(start <= rail_length)
-        assert(end <= rail_length)
+        assert(start < rail_length)
+        assert(end < rail_length)
         self.start = start
         self.end = end
         self.rail_length = rail_length
@@ -54,10 +54,16 @@ def overlap(position_a, position_b):
     return False
 
 
-def get_distance(position_a, position_b, rail_length):
-    """Gets distance from end a to start b, so b is in front of a!"""
-    if overlap(position_a, position_b):
+def get_distance(position_a, position_b, overlap_is_zero=True):
+    """
+        Gets distance from end a to start b, so b is in front of a!
+    """
+    assert(position_a.rail_length == position_b.rail_length)
+    if overlap(position_a, position_b) and overlap_is_zero:
         return 0
+
+    rail_length = position_a.rail_length
+
     start_a, end_a = position_a.bounds
     start_b, end_b = position_b.bounds
     return (start_b - end_a) % rail_length

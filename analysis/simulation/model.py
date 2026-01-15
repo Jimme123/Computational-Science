@@ -4,6 +4,8 @@ import math
 from simulation.block import *
 from simulation.train import *
 from simulation.position import *
+from simulation.staticBlockSignalling import *
+from simulation.movingBlockSignalling import *
 
 class Railroad(mesa.Model):
     """The model containing the trains signal, stations, etc."""
@@ -17,6 +19,7 @@ class Railroad(mesa.Model):
         self.dt = dt
         self.wait_time = wait_time
         self.verbose = verbose
+        self.type = "static" if signalling_control_class == StaticBlockSignalling else "moving"
 
 
     def step(self):
@@ -37,8 +40,3 @@ class Railroad(mesa.Model):
 
     def add_station(self, *args):
         Station(self, *args)
-
-    def train_in_area(self, area: Position):
-        for train in self.trains:
-            if overlap(area, train.position):
-                return True

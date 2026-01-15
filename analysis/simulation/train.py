@@ -58,7 +58,7 @@ class Train(PositionalAgent):
             if self.brake_distance(0, 1) > distance:
                 raise Exception(f"Unable to brake in time. {self}")
         elif self.state == State.PASS_STATION:
-            self.go_to_speed(10)
+            self.go_to_speed(5)
 
         if self.state == State.STATION and self.speed == 0:
             self.wait = self.wait - self.dt if self.wait is not None else self.model.wait_time

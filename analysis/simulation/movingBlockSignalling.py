@@ -8,10 +8,10 @@ class MovingBlockSignalling(StaticBlockSignalling):
 
     def next_signal(self, train):
         train_before = self.get_train_before(train)
-        train_distance = get_distance(train.position, train_before.position, self.length)
+        train_distance = get_distance(train.position, train_before.position)
         station = self.get_nearest_station(train)
         if station is not None:
-            station_distance = get_distance(train.position, station.position, self.length)
+            station_distance = get_distance(train.position, station.position)
         else:
             return (Color.RED, train_distance)
 
@@ -32,7 +32,7 @@ class MovingBlockSignalling(StaticBlockSignalling):
         current_best_distance = self.length
         current_best_block = None
         for block in self.blocks:
-            if get_distance(train.position, block.position, self.length) < current_best_distance:
-                current_best_distance = get_distance(train.position, block.position, self.length)
+            if get_distance(train.position, block.position) < current_best_distance:
+                current_best_distance = get_distance(train.position, block.position)
                 current_best_block = block
         return current_best_block
