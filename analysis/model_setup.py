@@ -42,7 +42,7 @@ signalling_class = StaticBlockSignalling
 sight = 300
 dt = 1
 wait_time = 40
-model = Railroad(rail_length, signalling_class, sight=sight, dt=dt, wait_time=wait_time, verbose=False)
+model = Railroad(rail_length, signalling_class, sight=sight, dt=dt, wait_time=wait_time, verbose=True)
 metro_length = 108.68
 metro_specifications = (19.4444444, 1.27, 1.35, 1.68*10**6*2, 141.5)
 block_size = 200  # 156
@@ -54,8 +54,10 @@ distances = distances_east + distances_west
 
 blocks_from_distances(model, rail_length, distances, station_size, block_size)
 
-# add_trains(model, rail_length, 20, metro_length, metro_specifications)
+# add_trains(model, rail_length, 1, metro_length, metro_specifications)
 
-print(test_capacity(model, metro_length, metro_specifications, max_trains=30, verbose=True))
+model.add_train(Position(rail_length - 300, rail_length - 300+metro_length, rail_length), *metro_specifications)
 
-visualize(model, 500)
+# print(test_capacity(model, metro_length, metro_specifications, max_trains=30, verbose=True))
+
+visualize(model, 1000)
