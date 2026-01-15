@@ -51,7 +51,7 @@ dt = 1
 wait_time = 40
 model = Railroad(rail_length, signalling_class, sight=sight, dt=dt, wait_time=wait_time, verbose=True)
 metro_length = 108.68
-metro_specifications = (19.4444444, 1.27, 1.35)
+metro_specifications = (19.4444444, 1.27, 1.35, 1.68*2*10**6, 141.5*1000)
 block_size = 500  # 156
 station_size = 15
 distances_east = [2000, 700, 500, 500, 1100]
@@ -65,9 +65,9 @@ for block in model.signalling_control.blocks:
 
 
 
-# add_trains(model, rail_length, 1, metro_length, metro_specifications)
+add_trains(model, rail_length, 12, metro_length, metro_specifications)
 
-model.add_train(Position(rail_length - 300, rail_length - 300+metro_length, rail_length), *metro_specifications)
+# model.add_train(Position(rail_length - 300, rail_length - 300+metro_length, rail_length), *metro_specifications)
 
 # print(test_capacity(model, metro_length, metro_specifications, max_trains=30, verbose=True))
 

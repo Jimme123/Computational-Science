@@ -92,7 +92,9 @@ class Train(PositionalAgent):
     def acceleration_bounds(self):
         if self.power is not None and self.weight is not None:
             power_limit = float(self.power) / float(self.speed * self.weight) if self.speed != 0 else math.inf
-        return self.max_braking, min(power_limit, self.max_acceleration)
+            return self.max_braking, min(power_limit, self.max_acceleration)
+        else:
+            return self.max_braking, self.max_acceleration
 
 
     def __str__(self):
