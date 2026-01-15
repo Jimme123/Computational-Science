@@ -6,7 +6,7 @@ from simulation.movingBlockSignalling import *
 from simulation.position import *
 
 
-def blocks_from_distances(model, rail_length, distances, station_size, block_size):
+def blocks_from_distances(model, rail_length, distances, station_size, block_size, signalling_type = "static"):
     """
     Takes the distances between stations and other variables to get stations and blocks in model
     """
@@ -19,23 +19,30 @@ def blocks_from_distances(model, rail_length, distances, station_size, block_siz
     # loop over all positions
     for i in range(len(positions) - 1):
         model.add_station(Position(positions[i], positions[i] + station_size, rail_length))
-        # calculate distance between this station and next station
-        distance = distances[i] - station_size
-        quotient = distance // block_size
-        current_distance = positions[i] + station_size
-        # get spacing for the blocks with minimum block_size
-        block_spacing = np.linspace(current_distance, current_distance + distance, quotient + 1)
-        #add the blocks
-        for j in range(quotient):
-            if block_spacing[j + 1] == rail_length:  # alter last block 
-                model.add_block(Position(block_spacing[j], 0, rail_length))
-            else:
-                model.add_block(Position(block_spacing[j], block_spacing[j + 1], rail_length))
+        if signalling_type == "static":
+            # calculate distance between this station and next station
+            distance = distances[i] - station_size
+            quotient = distance // block_size
+            current_distance = positions[i] + station_size
+            # get spacing for the blocks with minimum block_size
+            block_spacing = np.linspace(current_distance, current_distance + distance, quotient + 1)
+            #add the blocks
+            for j in range(quotient):
+                if block_spacing[j + 1] == rail_length:  # alter last block 
+                    model.add_block(Position(block_spacing[j], 0, rail_length))
+                else:
+                    model.add_block(Position(block_spacing[j], block_spacing[j + 1], rail_length))
                 
 
 
+
+# signalling_class = StaticBlockSignalling
+# signalling_type = "static"
+
+signalling_class = MovingBlockSignalling
+signalling_type = "moving"
+
 rail_length = 9600
-signalling_class = StaticBlockSignalling
 sight = 300
 dt = 1
 wait_time = 10
@@ -49,5 +56,7 @@ distances_west = distances_east[::-1]
 
 distances = distances_east + distances_west
 
-blocks_from_distances(model, rail_length, distances, station_size, block_size)
+blocks_from_distances(model, rail_length, distances, station_size, block_size, signalling_type)
+
+
 
