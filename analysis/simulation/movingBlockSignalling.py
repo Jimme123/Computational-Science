@@ -17,8 +17,6 @@ class MovingBlockSignalling(StaticBlockSignalling):
 
         if train_distance <= station_distance:
             return (Color.RED, train_distance)
-        elif station_distance > 1500:
-            return (Color.GREEN, station_distance)
         else:
             return (Color.STATION, station_distance)
 
