@@ -38,6 +38,6 @@ def generate_model(signalling_type="static",
     blocks_from_distances(model, rail_length, distances, station_size, block_size, signalling_type)
     
     trains = get_trains(num_trains, train_specifications, dif_acc, dif_braking, acc_dist, braking_dist)
-    add_trains(trains)
+    add_trains(model, trains)
 
     return model

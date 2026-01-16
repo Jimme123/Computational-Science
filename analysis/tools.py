@@ -105,7 +105,7 @@ def blocks_from_distances(model, rail_length, distances, station_size, block_siz
         if signalling_type == "static":
             # calculate distance between this station and next station
             distance = distances[i] - station_size
-            quotient = distance // block_size
+            quotient = int(distance // block_size)
             current_distance = positions[i] + station_size
             if quotient == 0:
                 model.add_block(Position(current_distance, current_distance + distance, rail_length))
