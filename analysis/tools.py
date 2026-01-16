@@ -79,7 +79,7 @@ def get_distances(number_stations, station_size, block_size, rail_length, min_di
     rand_distances = dirichlet.rvs(np.ones(number_stations), size=1) * remaining_length
 
     # total random distances
-    total_rand_distances = min_distances + rand_distances
+    total_rand_distances = min_distances + rand_distances[0]
 
     # distances is weighted average between equal distances and random distances
     distances = (1 - variation) * equal_distances + variation * total_rand_distances

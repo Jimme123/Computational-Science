@@ -4,6 +4,7 @@ from simulation.model import Railroad
 from simulation.staticBlockSignalling import *
 from simulation.movingBlockSignalling import *
 from tools import *
+from trainSpecifications import *
 
 
 def generate_model(signalling_type="static",
@@ -16,7 +17,14 @@ def generate_model(signalling_type="static",
                     num_stations=10,
                     station_size=15,
                     min_station_distance=515,
-                    distances_variation=0):
+                    distances_variation=0,
+                    num_trains=10,
+                    train_specifications=sng_specifications,
+                    dif_acc=0.5,
+                    dif_braking=0.5,
+                    acc_dist=[0, 1, 0],
+                    braking_dist=[0, 1, 0]
+                    ):
                     
     if signalling_type == "static":
         signalling_class = StaticBlockSignalling
@@ -28,6 +36,8 @@ def generate_model(signalling_type="static",
     model = Railroad(rail_length, signalling_class, sight=sight, dt=dt, wait_time=wait_time, verbose=False)
     distances = get_distances(num_stations, station_size, block_size, rail_length, min_station_distance, distances_variation)
     blocks_from_distances(model, rail_length, distances, station_size, block_size, signalling_type)
-    #add trains
+    
+    trains = get_trains(num_trains, train_specifications, dif_acc, dif_braking, acc_dist, braking_dist)
+    add_trains(trains)
 
     return model
