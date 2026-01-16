@@ -10,12 +10,13 @@ from simulation.movingBlockSignalling import *
 class Railroad(mesa.Model):
     """The model containing the trains signal, stations, etc."""
 
-    def __init__(self, length, signalling_control_class, dt, wait_time, sight=math.inf, verbose=False):
+    def __init__(self, length, signalling_control_class, dt, wait_time, sight=math.inf, clearance=20, verbose=False):
         super().__init__()
         self.signalling_control = signalling_control_class(self, length)
         self._step = 0
         self.trains = Train.create_agents(self, 0)
         self.sight = sight
+        self.clearance = clearance
         self.dt = dt
         self.wait_time = wait_time
         self.verbose = verbose

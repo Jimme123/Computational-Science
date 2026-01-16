@@ -5,12 +5,15 @@ from simulation.position import *
 from simulation.model import *
 from simulation.block import *
 
-def add_trains(model, length, n, train_length, train_args):
+def add_trains(model, n, train_specification):
+    length = model.signalling_control.length
+    train_length = train_specification['length']
+
     if model.type == "moving":
         starts = np.linspace(0, length, n, False)
         starts = starts[::-1]
         for i in range(n):
-            model.add_train(Position(starts[i], starts[i] + train_length, length), *train_args)
+            model.add_train(Position(starts[i], starts[i] + train_length, length), train_specification)
 
     else:
         blocks = model.signalling_control.blocks
@@ -19,7 +22,7 @@ def add_trains(model, length, n, train_length, train_args):
             if block.signal == Color.STATION:
                 continue
             start = block.position.bounds[0] + 1
-            model.add_train(Position(start, start + train_length, length), *train_args)
+            model.add_train(Position(start, start + train_length, length), train_specification)
             i -= 1
             if i == 0:
                 break
@@ -29,7 +32,7 @@ def add_trains(model, length, n, train_length, train_args):
     return True
 
 
-def test_capacity(trainless_model: Railroad, train_length, train_args, wind_up=600, test_length=3600, min_trains=1, max_trains=5, verbose=False):
+def test_capacity(trainless_model: Railroad, train_specification, wind_up=600, test_length=3600, min_trains=1, max_trains=5, verbose=False):
     n = 1
     length = trainless_model.signalling_control.length
     result = []
@@ -37,7 +40,7 @@ def test_capacity(trainless_model: Railroad, train_length, train_args, wind_up=6
     for n in range(min_trains, max_trains + 1):
         model: Railroad = copy.deepcopy(trainless_model)
         # Add n trains to the model
-        if add_trains(model, length, n, train_length, train_args) == False:
+        if add_trains(model, n, train_specification) == False:
             break
 
         for i in range(wind_up):

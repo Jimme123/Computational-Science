@@ -1,9 +1,11 @@
 import numpy as np
+import math
 
 from simulation.model import Railroad
 from simulation.staticBlockSignalling import *
 from simulation.movingBlockSignalling import *
 from simulation.position import *
+from simulation.train import *
 
 from tools import *
 from visualize import *
@@ -40,37 +42,41 @@ def blocks_from_distances(model, rail_length, distances, station_size, block_siz
 
 
 
+def generate_metro(signalling_type="static",
+                    sight=math.inf,
+                    dt=1,
+                    wait_time=40,
+                    verbose=False,
+                    block_size=500,
+                    station_size=15):
 
-signalling_class = StaticBlockSignalling
-signalling_type = "static"
+    if signalling_type == "static":
+        signalling_class = StaticBlockSignalling
+    elif signalling_type == "moving":
+        signalling_class = MovingBlockSignalling
+    else:
+        raise ValueError(f"unknown signalling type {signalling_type}")
 
-#signalling_class = MovingBlockSignalling
-#signalling_type = "moving"
+    rail_length = 9600
 
-rail_length = 9600
-sight = 50
-dt = 1
-wait_time = 40
-model = Railroad(rail_length, signalling_class, sight=sight, dt=dt, wait_time=wait_time, verbose=True)
-metro_length = 108.68
-metro_specifications = (19.4444444, 1.27, 1.35, 1.68*2*10**6, 141.5*1000)
-block_size = 500  # 156
-station_size = 15
-distances_east = [2000, 700, 500, 500, 1100]
-distances_west = distances_east[::-1]
+    model = Railroad(rail_length, signalling_class, sight=sight, dt=dt, wait_time=wait_time, verbose=False)
 
-distances = distances_east + distances_west
+    block_size = 500  # 156
+    station_size = 15
+    distances_east = [2000, 700, 500, 500, 1100]
+    distances_west = distances_east[::-1]
 
-blocks_from_distances(model, rail_length, distances, station_size, block_size, signalling_type)
-for block in model.signalling_control.blocks:
-    print(block)
+    distances = distances_east + distances_west
 
+    blocks_from_distances(model, rail_length, distances, station_size, block_size, signalling_type)
 
+    return model
 
-add_trains(model, rail_length, 12, metro_length, metro_specifications)
-
-# model.add_train(Position(rail_length - 300, rail_length - 300+metro_length, rail_length), *metro_specifications)
-
-# print(test_capacity(model, metro_length, metro_specifications, max_trains=30, verbose=True))
-
-visualize(model, 1000)
+metro_specifications = TrainSpecifications(
+    max_speed=19.4,
+    max_acceleration=1.27,
+    max_braking=1.35,
+    max_power=1.68*2*10**6,
+    weight=141.5*1000*2,
+    length=108.68
+    )

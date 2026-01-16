@@ -32,7 +32,7 @@ class MovingBlockSignalling(StaticBlockSignalling):
         current_best_distance = self.length
         current_best_block = None
         for block in self.blocks:
-            if get_distance(train.position, block.position) < current_best_distance:
+            if get_distance(train.position, block.position, False) < current_best_distance:
                 current_best_distance = get_distance(train.position, block.position)
                 current_best_block = block
         return current_best_block
