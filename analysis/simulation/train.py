@@ -4,16 +4,6 @@ from typing import TypedDict, NotRequired
 from simulation.positionalAgent import *
 from simulation.block import *
 
-class State(Enum):
-    GO = 0
-    CAUTION = 1
-    STOP = 2
-    STATION = 3
-    PASS_STATION = 4
-
-    def __str__(self):
-        return f'{self.name}'
-
 
 class TrainSpecifications(TypedDict):
     max_braking: float
@@ -22,7 +12,6 @@ class TrainSpecifications(TypedDict):
     max_power: NotRequired[float]
     weight: NotRequired[float]
     length: NotRequired[float]
-
 
 
 class Train(PositionalAgent):
@@ -37,58 +26,46 @@ class Train(PositionalAgent):
 
         self.dt = model.dt
         self.clearance = model.clearance
+        self.wait_time = model.wait_time
         self.signalling_control = self.model.signalling_control
         self.signalling_control.add_train(self)
 
         self.speed = 0
-        self.state = State.CAUTION
-        self.wait = None
+        self.speed_limit = 10
+        self.next_speed_limit = 0
+        self.station_wait = None
+
 
     def step(self):
         # Look at the signal, update the state and do stuff accordingly
         signal, distance = self.signalling_control.next_signal(self.position)
         braking, acceleration = self.acceleration_bounds()
 
-        # Handle the signals
-        if signal == Color.GREEN:
-            self.state = State.GO
-        elif signal == Color.ORANGE:
-            self.state = State.CAUTION
-        elif signal == Color.RED:
-            self.state = State.STOP
-        elif signal == Color.STATION and self.state != State.PASS_STATION:
-            self.state = State.STATION
-        elif signal == Color.STATION and self.state == State.PASS_STATION:
-            if distance > 30:
-                self.state = State.STATION
+        if signal == "unknown":
+            self.go_at(distance, self.next_speed_limit, braking, acceleration)
+            return
 
+        if signal.is_station:
+            if self.speed == 0:
+                if self.station_wait is None:
+                    self.station_wait = self.wait_time
+                else:
+                    self.station_wait = self.station_wait - self.dt
 
-        if self.state == State.GO:
-            self.go_to_speed(self.max_speed, braking, acceleration)
+        if self.station_wait is not None and self.station_wait <= 0:
+            self.go_at(distance + signal.distance_to_next_signal, signal.max_speed_next, braking, acceleration)
+        else:
+            self.go_at(distance, signal.max_speed, braking, acceleration)
 
-        elif self.state == State.CAUTION:
-            if signal == Color.UNKNOWN:
-                self.stop_at(distance, braking, acceleration)
+        dx = self.speed * self.dt
+        self.position += dx
+
+        if dx >= distance:
+            self.next_speed_limit = signal.max_speed_next
+            if not signal.is_station:
+                self.speed_limit = signal.max_speed
             else:
-                self.go_to_speed(self.max_speed, braking, acceleration)
-
-        elif self.state == State.STOP or self.state == State.STATION:
-            self.stop_at(distance, braking, acceleration)
-
-        elif self.state == State.PASS_STATION:
-            signal, distance = self.signalling_control.next_next_signal(self.position)
-            if signal == Color.RED or signal == Color.STATION:
-                self.stop_at(distance, braking, acceleration)
-            else:
-                self.go_to_speed(self.max_speed, braking, acceleration)
-
-        if self.state == State.STATION and self.speed == 0:
-            self.wait = self.wait - self.dt if self.wait is not None else self.model.wait_time
-            if self.wait <= 0:
-                self.state = State.PASS_STATION
-                self.wait = None
-
-        self.position += self.speed * self.dt
+                self.station_wait = None
 
 
     def go_to_speed(self, speed, braking, acceleration):
@@ -107,14 +84,20 @@ class Train(PositionalAgent):
             return 0
 
 
-    def stop_at(self, distance, braking, acceleration):
-        if self.brake_distance(0, 1) > distance:
+    def go_at(self, distance, speed, braking, acceleration):
+        """
+            Make the train go a certain speed some distance from now while staying under speed limitations.
+        """
+        current_max_speed = min(self.speed_limit, self.max_speed)
+        target_speed = min(speed, current_max_speed)
+
+        if self.brake_distance(target_speed, 1) > distance:
             raise Exception(f"Unable to brake in time. {self}")
 
-        if self.brake_distance(0) > distance - self.speed * self.dt - self.clearance:
-            self.go_to_speed(0, braking, acceleration)
+        if self.brake_distance(target_speed) > distance - self.speed * self.dt - self.clearance:
+            self.go_to_speed(target_speed, braking, acceleration)
         else:
-            self.go_to_speed(self.max_speed, braking, acceleration)
+            self.go_to_speed(current_max_speed, braking, acceleration)
 
 
     def acceleration_bounds(self):
@@ -127,11 +110,17 @@ class Train(PositionalAgent):
 
     def __str__(self):
         signal, distance = self.signalling_control.next_signal(self.position)
-        if self.state == State.PASS_STATION:
-            signal2, distance2 = self.signalling_control.next_next_signal(self.position)
-            return f"""{self.position}, speed: {self.speed:.1f}, state: {self.state}, next signal: {signal} in {distance:.0f}, next next signal: {signal2} in {distance2:.0f}"""
-        else:
-            return f"{self.position}, speed: {self.speed:.1f}, state: {self.state}, next signal: {signal} in {distance:.0f}"
+
+        signal_text = "unknown" if signal == "unknown" else f"{signal.max_speed:.0f}"
+        station_text = ""
+        if self.station_wait is not None and self.station_wait > 0:
+            station_text = f" at station for {self.station_wait:.0f}"
+        elif self.station_wait is not None:
+            station_text = f" leaving station"
+        elif signal.is_station:
+            station_text = " approaching station"
+
+        return f"pos: {self.position}, speed: {self.speed:.1f}, speed limit: {self.speed_limit:.0f}, next limit: {signal_text} in {distance:.0f}" + station_text
 
 
     def get_resistance(self):

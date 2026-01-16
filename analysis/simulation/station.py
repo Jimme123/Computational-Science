@@ -8,7 +8,7 @@ class Station(Block):
 
     @property
     def signal(self):
-        return Color.STATION
+        return SignalState.STATION
 
     def is_stop(self):
         return True

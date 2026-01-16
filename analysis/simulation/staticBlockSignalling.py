@@ -71,28 +71,14 @@ class StaticBlockSignalling(SignallingControl):
         block, distance = self.get_next_block(position, True)
 
         if block is None:
-            return (Color.GREEN, math.inf)
+            return (SignalState(), math.inf)
 
         signal = block.signal
 
         if distance > self.model.sight:
-            return (Color.UNKNOWN, distance)
+            return ("unknown", distance)
         else:
             return (signal, distance)
-
-
-    def next_next_signal(self, position):
-        """
-        input: train
-        output: The signal past the next signal for the train with the distance. If the signal is to far to see, it is unknown.
-                (The driver still gets the distance, because they have to memorize the signal positions.)
-
-        This function is useful when looking past station signals.
-        """
-        _, distance = self.next_signal(position)
-        position = copy.deepcopy(position)
-        position += distance
-        return self.next_signal(position)
 
 
     def block_contains_train(self, block):

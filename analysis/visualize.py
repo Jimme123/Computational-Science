@@ -2,8 +2,9 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 from matplotlib.animation import FuncAnimation
 import numpy as np
+import math
 
-from simulation.block import Color
+from simulation.block import SignalState
 
 
 def visualize(model, steps):
@@ -36,14 +37,15 @@ def visualize(model, steps):
         model.step()
 
         for block, wedge in block_patches:
-            if block.signal == Color.GREEN:
-                wedge.set_facecolor("green")
-            elif block.signal == Color.ORANGE:
-                wedge.set_facecolor("orange")
-            elif block.signal == Color.RED:
-                wedge.set_facecolor("red")
-            elif block.signal == Color.STATION:
+            if block.signal.is_station:
                 wedge.set_facecolor("black")
+            elif block.signal.max_speed_next == math.inf and block.signal.max_speed == math.inf:
+                wedge.set_facecolor("green")
+            elif block.signal.max_speed_next == 0 and block.signal.max_speed == math.inf:
+                wedge.set_facecolor("orange")
+            elif block.signal.max_speed == 0:
+                wedge.set_facecolor("red")
+
 
         for train, circle in train_patches:
             theta = (train.position.bounds[1] / rail_length) * 2 * np.pi
