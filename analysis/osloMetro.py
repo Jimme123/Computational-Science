@@ -45,7 +45,7 @@ def blocks_from_distances(model, rail_length, distances, station_size, block_siz
 def generate_metro(signalling_type="static",
                     sight=math.inf,
                     dt=1,
-                    wait_time=40,
+                    wait_time=30,
                     verbose=False,
                     block_size=500,
                     station_size=15):
@@ -59,7 +59,7 @@ def generate_metro(signalling_type="static",
 
     rail_length = 9600
 
-    model = Railroad(rail_length, signalling_class, sight=sight, dt=dt, wait_time=wait_time, verbose=False)
+    model = Railroad(rail_length, signalling_class, sight=sight, dt=dt, wait_time=wait_time, verbose=verbose)
 
     block_size = 500  # 156
     station_size = 15

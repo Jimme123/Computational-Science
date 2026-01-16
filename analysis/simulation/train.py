@@ -46,9 +46,10 @@ class Train(PositionalAgent):
 
     def step(self):
         # Look at the signal, update the state and do stuff accordingly
-        signal, distance = self.signalling_control.next_signal(self)
+        signal, distance = self.signalling_control.next_signal(self.position)
         braking, acceleration = self.acceleration_bounds()
 
+        # Handle the signals
         if signal == Color.GREEN:
             self.state = State.GO
         elif signal == Color.ORANGE:
@@ -61,23 +62,25 @@ class Train(PositionalAgent):
             if distance > 30:
                 self.state = State.STATION
 
+
         if self.state == State.GO:
             self.go_to_speed(self.max_speed, braking, acceleration)
-        elif self.state == State.CAUTION:
-            if signal == Color.UNKNOWN and self.brake_distance(0) > distance - self.speed * self.dt - self.clearance:
-                self.go_to_speed(0, braking, acceleration)
-            else:
-                self.go_to_speed(self.max_speed, braking, acceleration)
-        elif self.state == State.STOP or self.state == State.STATION:
-            if self.brake_distance(0, 1) > distance:
-                raise Exception(f"Unable to brake in time. {self}")
 
-            if self.brake_distance(0) > distance - self.speed * self.dt - self.clearance:
-                self.go_to_speed(0, braking, acceleration)
+        elif self.state == State.CAUTION:
+            if signal == Color.UNKNOWN:
+                self.stop_at(distance, braking, acceleration)
             else:
                 self.go_to_speed(self.max_speed, braking, acceleration)
+
+        elif self.state == State.STOP or self.state == State.STATION:
+            self.stop_at(distance, braking, acceleration)
+
         elif self.state == State.PASS_STATION:
-            self.go_to_speed(3, braking, acceleration)
+            signal, distance = self.signalling_control.next_next_signal(self.position)
+            if signal == Color.RED or signal == Color.STATION:
+                self.stop_at(distance, braking, acceleration)
+            else:
+                self.go_to_speed(self.max_speed, braking, acceleration)
 
         if self.state == State.STATION and self.speed == 0:
             self.wait = self.wait - self.dt if self.wait is not None else self.model.wait_time
@@ -104,6 +107,16 @@ class Train(PositionalAgent):
             return 0
 
 
+    def stop_at(self, distance, braking, acceleration):
+        if self.brake_distance(0, 1) > distance:
+            raise Exception(f"Unable to brake in time. {self}")
+
+        if self.brake_distance(0) > distance - self.speed * self.dt - self.clearance:
+            self.go_to_speed(0, braking, acceleration)
+        else:
+            self.go_to_speed(self.max_speed, braking, acceleration)
+
+
     def acceleration_bounds(self):
         if self.power is not None and self.weight is not None:
             power_limit = float(self.power) / float(self.speed * self.weight) if self.speed != 0 else math.inf
@@ -113,8 +126,12 @@ class Train(PositionalAgent):
 
 
     def __str__(self):
-        signal, distance = self.signalling_control.next_signal(self)
-        return f"{self.position}, speed: {self.speed:.1f}, state: {self.state}, next signal: {signal} in {distance:.0f}"
+        signal, distance = self.signalling_control.next_signal(self.position)
+        if self.state == State.PASS_STATION:
+            signal2, distance2 = self.signalling_control.next_next_signal(self.position)
+            return f"""{self.position}, speed: {self.speed:.1f}, state: {self.state}, next signal: {signal} in {distance:.0f}, next next signal: {signal2} in {distance2:.0f}"""
+        else:
+            return f"{self.position}, speed: {self.speed:.1f}, state: {self.state}, next signal: {signal} in {distance:.0f}"
 
 
     def get_resistance(self):

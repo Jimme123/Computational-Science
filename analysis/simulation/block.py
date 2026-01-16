@@ -34,7 +34,7 @@ class Block(PositionalAgent):
         """
             Returns signal color.
         """
-        _, next_block = self.signalling_control.get_next_block(self)
+        next_block, _ = self.signalling_control.get_next_block(self.position)
         if next_block is None:
             return Color.GREEN
         elif self.is_stop():
@@ -50,7 +50,7 @@ class Block(PositionalAgent):
             Block call this is to prevent a recursion loop where each block ask the next block for it's signal.
         """
         return self.signalling_control.block_contains_train(self)
-    
+
     def __str__(self):
         return f'{self.position}'
 

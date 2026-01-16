@@ -9,10 +9,12 @@ from tools import *
 from visualize import *
 from osloMetro import *
 
-model = generate_metro()
-print(test_capacity(model, metro_specifications, max_trains=30, verbose=True))
+model = generate_metro(signalling_type="moving", verbose=False)
 
-add_trains(model, 13, metro_specifications)
+metro_specifications['max_braking'] /= 2
+
+print(test_capacity(model, metro_specifications, min_trains=1, max_trains=25, verbose=True))
+add_trains(model, 10, metro_specifications)
 
 for i in range(3000):
     model.step()
