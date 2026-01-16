@@ -1,6 +1,5 @@
 import copy
 import numpy as np
-import random
 from scipy.stats import dirichlet
 
 from simulation.position import *
@@ -35,6 +34,30 @@ def add_trains(model, n, train_specification):
 
     return True
 
+def get_trains(number_trains, standard_specifications, dif_acc=0.5, dif_braking=0.5, acc_dist=[0, 1, 0], braking_dist=[0, 1, 0]):
+    """
+    standard_specifications: the train specifications on which the random trains are based
+    dif_acc: difference in acceleration
+    dif_braking: difference in brake
+    acc_dist: the distribution of lower, normal or higher acceleration in a list
+    braking_dist: the distribution of lower, normal or higher braking in a list
+
+    returns a list with different train_specifications
+    """
+    assert(sum(acc_dist) == 1)
+    assert(sum(braking_dist) == 1)
+
+    trains = []
+    for i in range(number_trains):
+        cur_train_specs = standard_specifications.copy()
+        # alter max_acceleration based on acceleration distribution
+        cur_train_specs["max_acceleration"] += np.random.choice([-dif_acc, 0, dif_acc], p=acc_dist)
+        # alter max_braking based on braking distribution
+        cur_train_specs["max_braking"] += np.random.choice([-dif_braking, 0, dif_braking], p=braking_dist)
+        trains.append(cur_train_specs)
+
+    return trains
+
 
 def get_distances(number_stations, station_size, block_size, rail_length, min_distance, variation):
     """
@@ -64,6 +87,7 @@ def get_distances(number_stations, station_size, block_size, rail_length, min_di
     assert(rail_length - 1 <= sum(distances) <= rail_length + 1)
 
     return distances
+
 
 def blocks_from_distances(model, rail_length, distances, station_size, block_size, signalling_type = "static"):
     """
