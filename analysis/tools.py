@@ -8,15 +8,15 @@ from simulation.block import *
 
 epsilon = 1
 
-def add_trains(model, n, train_specification):
+def add_trains(model, train_specifications):
     length = model.signalling_control.length
-    train_length = train_specification['length']
+    n = len(train_specifications)
 
     if model.type == "moving":
         starts = np.linspace(0, length, n, False)
         starts = starts[::-1]
         for i in range(n):
-            model.add_train(Position(starts[i], starts[i] + train_length, length), train_specification)
+            model.add_train(Position(starts[i], starts[i] + train_specifications[i]['length'], length), train_specifications[i])
 
     else:
         blocks = model.signalling_control.blocks
@@ -25,7 +25,7 @@ def add_trains(model, n, train_specification):
             if block.signal == Color.STATION:
                 continue
             start = block.position.bounds[0] + 1
-            model.add_train(Position(start, start + train_length, length), train_specification)
+            model.add_train(Position(start, start + train_specifications[i]['length'], length), train_specifications[i])
             i -= 1
             if i == 0:
                 break
