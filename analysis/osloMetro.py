@@ -11,37 +11,6 @@ from tools import *
 from visualize import *
 
 
-def blocks_from_distances(model, rail_length, distances, station_size, block_size, signalling_type = "static"):
-    """
-    Takes the distances between stations and other variables to get stations and blocks in model
-    """
-    # translate distances between stations into positions on line
-    positions = [0]
-    for distance in distances:
-        last_value = positions[-1]
-        positions.append(last_value + distance)
-
-    # loop over all positions
-    for i in range(len(positions) - 1):
-        model.add_station(Position(positions[i], positions[i] + station_size, rail_length))
-        if signalling_type == "static":
-            # calculate distance between this station and next station
-            distance = distances[i] - station_size
-            quotient = distance // block_size
-            current_distance = positions[i] + station_size
-            if quotient == 0:
-                model.add_block(Position(current_distance, current_distance + distance, rail_length))
-            # get spacing for the blocks with minimum block_size
-            block_spacing = np.linspace(current_distance, current_distance + distance, quotient + 1)
-            #add the blocks
-            for j in range(quotient):
-                if block_spacing[j + 1] == rail_length:  # alter last block
-                    model.add_block(Position(block_spacing[j], 0, rail_length))
-                else:
-                    model.add_block(Position(block_spacing[j], block_spacing[j + 1], rail_length))
-
-
-
 def generate_metro(signalling_type="static",
                     sight=math.inf,
                     dt=1,

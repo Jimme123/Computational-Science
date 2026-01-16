@@ -1,9 +1,13 @@
 import copy
 import numpy as np
+import random
+from scipy.stats import dirichlet
 
 from simulation.position import *
 from simulation.model import *
 from simulation.block import *
+
+epsilon = 1
 
 def add_trains(model, n, train_specification):
     length = model.signalling_control.length
@@ -30,6 +34,65 @@ def add_trains(model, n, train_specification):
             return False
 
     return True
+
+
+def get_distances(number_stations, station_size, block_size, rail_length, min_distance, variation):
+    """
+    Determines distances between stations that sum to the rail_length. takes min_distance into consideration
+
+    variation: float between 0 and 1 where 0 is no randomness and 1 is total randomness 
+    """
+    assert(min_distance >= block_size + station_size)
+    assert(number_stations < (rail_length - number_stations * station_size) / block_size)
+    assert(0 <= variation <= 1)
+    
+    # determine equally split distances
+    distance = rail_length / number_stations
+    equal_distances = [distance for i in range(number_stations)]
+
+    # random distances with minimum distances
+    min_distances = [min_distance for i in range(number_stations)]
+    remaining_length = rail_length - number_stations * min_distance
+    rand_distances = dirichlet.rvs(np.ones(number_stations), size=1) * remaining_length
+
+    # total random distances
+    total_rand_distances = min_distances + rand_distances
+
+    # distances is weighted average between equal distances and random distances
+    distances = (1 - variation) * equal_distances + variation * total_rand_distances
+
+    assert(rail_length - 1 <= sum(distances) <= rail_length + 1)
+
+    return distances
+
+def blocks_from_distances(model, rail_length, distances, station_size, block_size, signalling_type = "static"):
+    """
+    Takes the distances between stations and other variables to get stations and blocks in model
+    """
+    # translate distances between stations into positions on line
+    positions = [0]
+    for distance in distances:
+        last_value = positions[-1]
+        positions.append(last_value + distance)
+
+    # loop over all positions
+    for i in range(len(positions) - 1):
+        model.add_station(Position(positions[i], positions[i] + station_size, rail_length))
+        if signalling_type == "static":
+            # calculate distance between this station and next station
+            distance = distances[i] - station_size
+            quotient = distance // block_size
+            current_distance = positions[i] + station_size
+            if quotient == 0:
+                model.add_block(Position(current_distance, current_distance + distance, rail_length))
+            # get spacing for the blocks with minimum block_size
+            block_spacing = np.linspace(current_distance, current_distance + distance, quotient + 1)
+            #add the blocks
+            for j in range(quotient):
+                if block_spacing[j + 1] == rail_length:  # alter last block
+                    model.add_block(Position(block_spacing[j], 0, rail_length))
+                else:
+                    model.add_block(Position(block_spacing[j], block_spacing[j + 1], rail_length))
 
 
 def test_capacity(trainless_model: Railroad, train_specification, wind_up=600, test_length=3600, min_trains=1, max_trains=5, verbose=False):
