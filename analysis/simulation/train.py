@@ -107,6 +107,10 @@ class Train(PositionalAgent):
             return 0
 
 
+    def braking_distance_to_zero(self, safety_factor=0.9):
+        return (self.speed ** 2) / (2 * self.max_braking * safety_factor)
+
+
     def stop_at(self, distance, braking, acceleration):
         if self.brake_distance(0, 1) > distance:
             raise Exception(f"Unable to brake in time. {self}")

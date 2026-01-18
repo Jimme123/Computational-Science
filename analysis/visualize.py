@@ -19,6 +19,7 @@ def visualize(model, steps):
 
     train_patches = []
     block_patches = []
+    brake_patches = []
 
     for block in model.signalling_control.blocks:
         start_angle = (block.position.start / rail_length) * 360
@@ -31,6 +32,9 @@ def visualize(model, steps):
         circle = plt.Circle((0,0), 0.2, color="blue")
         train_patches.append((train, circle))
         ax.add_patch(circle)
+
+        line, = ax.plot([], [], linewidth=2.5, alpha=0.8, zorder=4)
+        brake_patches.append((train, line))
 
     def update(frame):
         model.step()
@@ -50,9 +54,26 @@ def visualize(model, steps):
             x = R * np.cos(theta)
             y = R * np.sin(theta)
             circle.center = (x, y)
+        
+        for train, line in brake_patches:
+            brake_dist = train.braking_distance_to_zero()
+            brake_dist_vis = max(brake_dist, 30)
 
-        return [w for _, w in block_patches] + [c for _, c in train_patches]
+            theta0 = (train.position.bounds[1] / rail_length) * 2 * np.pi
+            theta1 = ((train.position.bounds[1] + brake_dist) / rail_length) * 2 * np.pi
 
+            thetas = np.linspace(theta0, theta1, 40)
+            xs = R * np.cos(thetas)
+            ys = R * np.sin(thetas)
+
+            line.set_data(xs, ys)
+            line.set_color("red")
+
+        return (
+            [w for _, w in block_patches]
+            + [c for _, c in train_patches]
+            + [l for _, l in brake_patches]
+        )
     ani = FuncAnimation(fig, update, frames=steps, interval=50)
     plt.show()
     ani.save("test.mp4")
