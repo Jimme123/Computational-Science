@@ -33,6 +33,7 @@ class Train(PositionalAgent):
         self.max_speed = train_specification['max_speed']
         self.power = train_specification['max_power'] if 'power' in train_specification else None
         self.weight = train_specification['weight'] if 'weight' in train_specification else None
+        self.length = train_specification.get("length", 0)
         self.position = position
 
         self.dt = model.dt

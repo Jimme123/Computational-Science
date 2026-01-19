@@ -29,9 +29,8 @@ def visualize(model, steps):
         ax.add_patch(wedge)
 
     for train in model.trains:
-        circle = plt.Circle((0,0), 0.2, color="blue")
-        train_patches.append((train, circle))
-        ax.add_patch(circle)
+        line, = ax.plot([], [], linewidth=4, color="blue", zorder=5)
+        train_patches.append((train, line))
 
         line, = ax.plot([], [], linewidth=2.5, alpha=0.8, zorder=4)
         brake_patches.append((train, line))
@@ -49,12 +48,26 @@ def visualize(model, steps):
             elif block.signal == Color.STATION:
                 wedge.set_facecolor("black")
 
-        for train, circle in train_patches:
-            theta = (train.position.bounds[1] / rail_length) * 2 * np.pi
-            x = R * np.cos(theta)
-            y = R * np.sin(theta)
-            circle.center = (x, y)
-        
+        for train, line in train_patches:
+            start = train.position.start % rail_length
+            end = train.position.end % rail_length
+
+            theta_start = (start / rail_length) * 2 * np.pi
+            theta_end = (end / rail_length) * 2 * np.pi
+
+            if end >= start:
+                thetas = np.linspace(theta_start, theta_end, 20)
+
+            else:
+                thetas1 = np.linspace(theta_start, 2 * np.pi, 10)
+                thetas2 = np.linspace(0, theta_end, 10)
+                thetas = np.concatenate([thetas1, thetas2])
+
+            xs = R * np.cos(thetas)
+            ys = R * np.sin(thetas)
+
+            line.set_data(xs, ys)
+
         for train, line in brake_patches:
             brake_dist = train.braking_distance_to_zero()
             brake_dist_vis = max(brake_dist, 30)
@@ -71,9 +84,10 @@ def visualize(model, steps):
 
         return (
             [w for _, w in block_patches]
-            + [c for _, c in train_patches]
+            + [l for _, l in train_patches]
             + [l for _, l in brake_patches]
         )
+
     ani = FuncAnimation(fig, update, frames=steps, interval=50)
     plt.show()
     ani.save("test.mp4")
