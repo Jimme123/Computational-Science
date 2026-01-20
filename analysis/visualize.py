@@ -30,11 +30,11 @@ def visualize(model, steps):
         ax.add_patch(wedge)
 
     for train in model.trains:
-        line, = ax.plot([], [], linewidth=4, color="blue", zorder=5)
+        line, = ax.plot([], [], linewidth=8, color="blue", zorder=5)
         line.set_solid_capstyle('butt')
         train_patches.append((train, line))
 
-        line, = ax.plot([], [], linewidth=2.5, alpha=0.8, zorder=4)
+        line, = ax.plot([], [], linewidth=6, alpha=1, zorder=4)
         line.set_solid_capstyle('butt')
         brake_patches.append((train, line))
 
@@ -48,7 +48,7 @@ def visualize(model, steps):
                 wedge.set_facecolor("red")
             elif block.signal.max_speed_next == 0:
                 wedge.set_facecolor("orange")
-            elif block.signal.max_speed_next == math.inf and block.signal.max_speed == math.inf:
+            else:
                 wedge.set_facecolor("green")
 
 
@@ -77,7 +77,7 @@ def visualize(model, steps):
             ys = R * np.sin(thetas)
 
             line.set_data(xs, ys)
-            line.set_color("red")
+            line.set_color('#00e2d3')
 
         return (
             [w for _, w in block_patches]

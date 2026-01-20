@@ -9,10 +9,7 @@ from tools import *
 from visualize import *
 from osloMetro import *
 
-model = generate_metro(signalling_type="moving", verbose=True)
-
-metro_specifications['max_braking'] /= 2
-metro_specifications['length'] += 100
+model = generate_metro(signalling_type="static", verbose=True)
 
 add_trains(model, 10, metro_specifications)
 
