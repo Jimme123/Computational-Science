@@ -83,7 +83,7 @@ def get_distances(number_stations, station_size, block_size, rail_length, min_di
     total_rand_distances = min_distances + rand_distances[0]
 
     # distances is weighted average between equal distances and random distances
-    distances = (1 - variation) * equal_distances + variation * total_rand_distances
+    distances = [(1 - variation) * a + variation * b for a, b in zip(equal_distances, total_rand_distances)]
 
     assert(rail_length - 1 <= sum(distances) <= rail_length + 1)
 
