@@ -5,6 +5,7 @@ from scipy.stats import dirichlet
 from simulation.position import *
 from simulation.model import *
 from simulation.block import *
+from trainSpecifications import *
 
 epsilon = 1
 
@@ -25,7 +26,7 @@ def add_trains(model, train_specifications):
             if block.signal == Color.STATION:
                 continue
             start = block.position.bounds[0] + 1
-            model.add_train(Position(start, start + train_specifications[i]['length'], length), train_specifications[i])
+            model.add_train(Position(start, start + train_specifications[i - 1]['length'], length), train_specifications[i - 1])
             i -= 1
             if i == 0:
                 break
@@ -34,7 +35,7 @@ def add_trains(model, train_specifications):
 
     return True
 
-def get_trains(number_trains, standard_specifications, dif_acc=0.5, dif_braking=0.5, acc_dist=[0, 1, 0], braking_dist=[0, 1, 0]):
+def get_trains(number_trains, standard_specifications=sng_specifications, dif_acc=0.5, dif_braking=0.5, acc_dist=[0, 1, 0], braking_dist=[0, 1, 0]):
     """
     standard_specifications: the train specifications on which the random trains are based
     dif_acc: difference in acceleration
@@ -127,7 +128,8 @@ def test_capacity(trainless_model: Railroad, train_specification, wind_up=600, t
     for n in range(min_trains, max_trains + 1):
         model: Railroad = copy.deepcopy(trainless_model)
         # Add n trains to the model
-        if add_trains(model, n, train_specification) == False:
+        trains_specifications = get_trains(n, train_specification)
+        if add_trains(model, trains_specifications) == False:
             break
 
         for i in range(wind_up):
