@@ -23,7 +23,7 @@ def add_trains(model, train_specifications):
         blocks = model.signalling_control.blocks
         i = n
         for block in blocks:
-            if block.signal == Color.STATION:
+            if block.signal.is_station:
                 continue
             start = block.position.bounds[0] + 1
             model.add_train(Position(start, start + train_specifications[i - 1]['length'], length), train_specifications[i - 1])
@@ -95,12 +95,13 @@ def blocks_from_distances(model, rail_length, distances, station_size, block_siz
 
     # loop over all positions
     for i in range(len(positions) - 1):
-        model.add_station(Position(positions[i], positions[i] + station_size, rail_length))
+        model.add_block(Position(positions[i], positions[i] + 150, rail_length), 40/3.6)
+        model.add_station(Position(positions[i] + 150, positions[i] + 150 + station_size, rail_length))
         if signalling_type == "static":
             # calculate distance between this station and next station
-            distance = distances[i] - station_size
+            distance = distances[i] - station_size - 150
             quotient = int(distance // block_size)
-            current_distance = positions[i] + station_size
+            current_distance = positions[i] + station_size + 150
             if quotient == 0:
                 model.add_block(Position(current_distance, current_distance + distance, rail_length))
             # get spacing for the blocks with minimum block_size
@@ -111,6 +112,7 @@ def blocks_from_distances(model, rail_length, distances, station_size, block_siz
                     model.add_block(Position(block_spacing[j], 0, rail_length))
                 else:
                     model.add_block(Position(block_spacing[j], block_spacing[j + 1], rail_length))
+
 
 
 def test_capacity(trainless_model: Railroad, trains=[sng_specifications], train_distribution=[1], wind_up=600, test_length=3600, min_trains=1, max_trains=5, verbose=False):
@@ -142,3 +144,53 @@ def test_capacity(trainless_model: Railroad, trains=[sng_specifications], train_
         if verbose:
             print(f"for {n}, capacity is {capacity:.1f}")
     return np.array(result)
+
+
+def measure_station_travel_times_real_time(model, metro_specifications, max_steps=20000):
+    train = model.trains[0]
+
+    dt = metro_specifications.get("dt", 1.0)
+
+    blocks = model.signalling_control.blocks
+    stations = [b for b in blocks if b.signal == Color.STATION]
+    stations.sort(key=lambda b: b.position.start)
+
+    station_indices = {id(s): i for i, s in enumerate(stations)}
+
+    last_station_id = None
+    last_time = None
+    travel_times = []
+
+    for step in range(max_steps):
+        model.step()
+        pos = train.position.bounds[1]
+
+        for station in stations:
+            if station.position.start <= pos <= station.position.end:
+                sid = id(station)
+
+                if last_station_id is None:
+                    last_station_id = sid
+                    last_time = step
+                    break
+
+                if sid != last_station_id:
+                    steps_taken = step - last_time
+                    time_seconds = steps_taken * dt
+
+                    travel_times.append(time_seconds)
+
+                    print(
+                        f"Van station {station_indices[last_station_id]} "
+                        f"naar station {station_indices[sid]}: "
+                        f"{time_seconds:.1f} s"
+                    )
+
+                    last_station_id = sid
+                    last_time = step
+
+                    if len(travel_times) >= len(stations):
+                        return travel_times
+                break
+
+    return travel_times

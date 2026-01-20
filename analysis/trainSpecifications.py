@@ -1,4 +1,5 @@
 from tools import *
+from simulation.train import TrainSpecifications
 
 metro_specifications = TrainSpecifications(
     max_speed=19.4,
