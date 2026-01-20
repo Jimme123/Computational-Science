@@ -9,11 +9,11 @@ from tools import *
 from visualize import *
 from osloMetro import *
 
-model = generate_metro(signalling_type="moving", verbose=False)
+model = generate_metro(signalling_type="moving", verbose=True)
 
 metro_specifications['max_braking'] /= 2
+metro_specifications['length'] += 100
 
-print(test_capacity(model, metro_specifications, min_trains=1, max_trains=5, verbose=True))
 add_trains(model, 10, metro_specifications)
 
 def measure_station_travel_times_real_time(model, metro_specifications, max_steps=20000):
@@ -65,10 +65,10 @@ def measure_station_travel_times_real_time(model, metro_specifications, max_step
 
     return travel_times
 
-times = measure_station_travel_times_real_time(model, metro_specifications)
+# times = measure_station_travel_times_real_time(model, metro_specifications)
 
-print("\nTijd tussen stations:")
-for i, t in enumerate(times):
-    print(f"Traject {i + 1}: {t:.1f} s ({t/60:.2f} min)")
+# print("\nTijd tussen stations:")
+# for i, t in enumerate(times):
+#     print(f"Traject {i + 1}: {t:.1f} s ({t/60:.2f} min)")
 
-visualize(model, 1000)
+visualize(model, 500)

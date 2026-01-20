@@ -30,9 +30,11 @@ def visualize(model, steps):
 
     for train in model.trains:
         line, = ax.plot([], [], linewidth=4, color="blue", zorder=5)
+        line.set_solid_capstyle('butt')
         train_patches.append((train, line))
 
         line, = ax.plot([], [], linewidth=2.5, alpha=0.8, zorder=4)
+        line.set_solid_capstyle('butt')
         brake_patches.append((train, line))
 
     def update(frame):
@@ -52,17 +54,10 @@ def visualize(model, steps):
             start = train.position.start % rail_length
             end = train.position.end % rail_length
 
-            theta_start = (start / rail_length) * 2 * np.pi
-            theta_end = (end / rail_length) * 2 * np.pi
+            theta0 = (train.position.bounds[0] / rail_length) * 2 * np.pi
+            theta1 = ((train.position.bounds[0] + train.position.length) / rail_length) * 2 * np.pi
 
-            if end >= start:
-                thetas = np.linspace(theta_start, theta_end, 20)
-
-            else:
-                thetas1 = np.linspace(theta_start, 2 * np.pi, 10)
-                thetas2 = np.linspace(0, theta_end, 10)
-                thetas = np.concatenate([thetas1, thetas2])
-
+            thetas = np.linspace(theta0, theta1, 40)
             xs = R * np.cos(thetas)
             ys = R * np.sin(thetas)
 
