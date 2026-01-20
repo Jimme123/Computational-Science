@@ -67,6 +67,9 @@ def get_distances(number_stations, station_size, block_size, rail_length, min_di
     assert(min_distance >= block_size + station_size)
     assert(number_stations < (rail_length - number_stations * station_size) / block_size)
     assert(0 <= variation <= 1)
+
+    if number_stations == 0:
+        return [rail_length]
     
     # determine equally split distances
     distance = rail_length / number_stations
@@ -92,6 +95,18 @@ def blocks_from_distances(model, rail_length, distances, station_size, block_siz
     """
     Takes the distances between stations and other variables to get stations and blocks in model
     """
+
+    if len(distances) == 1:
+        if signalling_type == "static":
+            quotient = int(rail_length // block_size)
+            block_spacing = np.linspace(0, rail_length, quotient + 1)
+            for j in range(quotient):
+                if block_spacing[j + 1] == rail_length:  # alter last block
+                    model.add_block(Position(block_spacing[j], 0, rail_length))
+                else:
+                    model.add_block(Position(block_spacing[j], block_spacing[j + 1], rail_length))
+        return
+                
     # translate distances between stations into positions on line
     positions = [0]
     for distance in distances:
