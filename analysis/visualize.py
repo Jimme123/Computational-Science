@@ -66,7 +66,7 @@ def visualize(model, steps):
             line.set_data(xs, ys)
 
         for train, line in brake_patches:
-            brake_dist = train.braking_distance_to_zero()
+            brake_dist = train.brake_distance(0, 1)
             brake_dist_vis = max(brake_dist, 30)
 
             theta0 = (train.position.bounds[1] / rail_length) * 2 * np.pi

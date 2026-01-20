@@ -9,7 +9,6 @@ from tools import *
 from visualize import *
 from osloMetro import *
 
-<<<<<<< HEAD
 model = generate_metro(signalling_type="moving", verbose=True)
 
 metro_specifications['max_braking'] /= 2
@@ -73,12 +72,3 @@ def measure_station_travel_times_real_time(model, metro_specifications, max_step
 #     print(f"Traject {i + 1}: {t:.1f} s ({t/60:.2f} min)")
 
 visualize(model, 500)
-=======
-rail_length = 4000
-model = generate_metro(verbose=False, signalling_type="static", sight=40)
-
-test_capacity(model, train_specification=metro_specifications, verbose=True, min_trains=1, max_trains=20)
-
-add_trains(model, 15, metro_specifications)
-visualize(model, 1500)
->>>>>>> e44994c594c265417afaaad52e7832eb3679aef6
