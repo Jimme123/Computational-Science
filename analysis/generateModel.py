@@ -19,11 +19,8 @@ def generate_model(signalling_type="static",
                     min_station_distance=515,
                     distances_variation=0,
                     num_trains=5,
-                    train_specifications=sng_specifications,
-                    dif_acc=0.5,
-                    dif_braking=0.5,
-                    acc_dist=[0, 1, 0],
-                    braking_dist=[0, 1, 0]
+                    train_specifications=[sng_specifications],
+                    train_distribution=[1]
                     ):
     # make sure the distance between stations is greater then the braking distance at max speed 
 
@@ -46,7 +43,7 @@ def generate_model(signalling_type="static",
     blocks_from_distances(model, rail_length, distances, station_size, block_size, signalling_type)
     
     
-    trains = get_trains(num_trains, train_specifications, dif_acc, dif_braking, acc_dist, braking_dist)
+    trains = get_trains(num_trains, train_specifications, train_distribution)
     add_trains(model, trains)
 
     return model

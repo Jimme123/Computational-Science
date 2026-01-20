@@ -35,26 +35,19 @@ def add_trains(model, train_specifications):
 
     return True
 
-def get_trains(number_trains, standard_specifications=sng_specifications, dif_acc=0.5, dif_braking=0.5, acc_dist=[0, 1, 0], braking_dist=[0, 1, 0]):
+def get_trains(number_trains, trains_specifications, train_distribution):
     """
-    standard_specifications: the train specifications on which the random trains are based
-    dif_acc: difference in acceleration
-    dif_braking: difference in brake
-    acc_dist: the distribution of lower, normal or higher acceleration in a list
-    braking_dist: the distribution of lower, normal or higher braking in a list
+    trains_specifications: list of different trainSpecifications
+    train_distribution: the distribution with which the trains should be chosen
 
-    returns a list with different train_specifications
+    returns a list with train_specifications
     """
-    assert(sum(acc_dist) == 1)
-    assert(sum(braking_dist) == 1)
+    assert(sum(train_distribution) == 1)
+    assert(len(trains_specifications) == len(train_distribution))
 
     trains = []
     for i in range(number_trains):
-        cur_train_specs = standard_specifications.copy()
-        # alter max_acceleration based on acceleration distribution
-        cur_train_specs["max_acceleration"] += np.random.choice([-dif_acc, 0, dif_acc], p=acc_dist)
-        # alter max_braking based on braking distribution
-        cur_train_specs["max_braking"] += np.random.choice([-dif_braking, 0, dif_braking], p=braking_dist)
+        cur_train_specs = trains_specifications[np.random.choice(range(len(trains_specifications)), p=train_distribution)].copy()
         trains.append(cur_train_specs)
 
     return trains
@@ -120,7 +113,7 @@ def blocks_from_distances(model, rail_length, distances, station_size, block_siz
                     model.add_block(Position(block_spacing[j], block_spacing[j + 1], rail_length))
 
 
-def test_capacity(trainless_model: Railroad, train_specification, wind_up=600, test_length=3600, min_trains=1, max_trains=5, verbose=False):
+def test_capacity(trainless_model: Railroad, trains=[sng_specifications], train_distribution=[1], wind_up=600, test_length=3600, min_trains=1, max_trains=5, verbose=False):
     n = 1
     length = trainless_model.signalling_control.length
     result = []
@@ -128,7 +121,7 @@ def test_capacity(trainless_model: Railroad, train_specification, wind_up=600, t
     for n in range(min_trains, max_trains + 1):
         model: Railroad = copy.deepcopy(trainless_model)
         # Add n trains to the model
-        trains_specifications = get_trains(n, train_specification)
+        trains_specifications = get_trains(n, trains, train_distribution)
         if add_trains(model, trains_specifications) == False:
             break
 

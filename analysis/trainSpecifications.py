@@ -28,10 +28,10 @@ sng_specifications = TrainSpecifications(
     )
 
 freight_train_specifications = TrainSpecifications(
-    max_speed= 44.44
-    max_acceleration=0.0668
-    max_braking=0.9
-    max_power=6400*10**3
-    weight=2155*10**3
+    max_speed=44.44,
+    max_acceleration=0.0668,
+    max_braking=0.9,
+    max_power=6400*10**3,
+    weight=2155*10**3,
     length=575.5
-)
+    )
