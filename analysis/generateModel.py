@@ -36,7 +36,7 @@ def generate_model(signalling_type="static",
     blocks_from_distances(model, rail_length, distances, station_size, block_size, signalling_type)
     
     
-    trains = get_trains(num_trains, train_specifications, train_distribution)
-    add_trains(model, trains)
+    # trains = get_trains(num_trains, train_specifications, train_distribution)
+    # add_trains(model, trains)
 
     return model
