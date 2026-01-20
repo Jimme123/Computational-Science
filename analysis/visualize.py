@@ -39,12 +39,12 @@ def visualize(model, steps):
         for block, wedge in block_patches:
             if block.signal.is_station:
                 wedge.set_facecolor("black")
-            elif block.signal.max_speed_next == math.inf and block.signal.max_speed == math.inf:
-                wedge.set_facecolor("green")
-            elif block.signal.max_speed_next == 0 and block.signal.max_speed == math.inf:
-                wedge.set_facecolor("orange")
             elif block.signal.max_speed == 0:
                 wedge.set_facecolor("red")
+            elif block.signal.max_speed_next == 0:
+                wedge.set_facecolor("orange")
+            elif block.signal.max_speed_next == math.inf and block.signal.max_speed == math.inf:
+                wedge.set_facecolor("green")
 
 
         for train, circle in train_patches:

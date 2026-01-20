@@ -85,3 +85,6 @@ class Station(Block):
 
     def speed(self):
         return 0
+
+    def __str__(self):
+        return f'station {self.position}'
