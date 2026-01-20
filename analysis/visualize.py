@@ -77,7 +77,7 @@ def visualize(model, steps):
             ys = R * np.sin(thetas)
 
             line.set_data(xs, ys)
-            line.set_color("red")
+            line.set_color("purple")
 
         return (
             [w for _, w in block_patches]
