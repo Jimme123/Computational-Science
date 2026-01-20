@@ -25,7 +25,15 @@ def generate_model(signalling_type="static",
                     acc_dist=[0, 1, 0],
                     braking_dist=[0, 1, 0]
                     ):
-                    
+    # make sure the distance between stations is greater then the braking distance at max speed 
+
+    if braking_dist[0] > 0:
+        assert(min_station_distance > (train_specifications['max_speed']**2) / (2 * 0.9 * (train_specifications['max_braking'] - dif_braking)))
+    if braking_dist[1] > 0:
+        assert(min_station_distance > (train_specifications['max_speed']**2) / (2 * 0.9 * (train_specifications['max_braking'])))
+    if braking_dist[2] > 0:
+        assert(min_station_distance > (train_specifications['max_speed']**2) / (2 * 0.9 * (train_specifications['max_braking'] + dif_braking)))
+
     if signalling_type == "static":
         signalling_class = StaticBlockSignalling
     elif signalling_type == "moving":
@@ -36,6 +44,7 @@ def generate_model(signalling_type="static",
     model = Railroad(rail_length, signalling_class, sight=sight, dt=dt, wait_time=wait_time, verbose=False)
     distances = get_distances(num_stations, station_size, block_size, rail_length, min_station_distance, distances_variation)
     blocks_from_distances(model, rail_length, distances, station_size, block_size, signalling_type)
+    
     
     trains = get_trains(num_trains, train_specifications, dif_acc, dif_braking, acc_dist, braking_dist)
     add_trains(model, trains)
