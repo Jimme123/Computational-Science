@@ -102,12 +102,13 @@ def blocks_from_distances(model, rail_length, distances, station_size, block_siz
 
     # loop over all positions
     for i in range(len(positions) - 1):
-        model.add_station(Position(positions[i], positions[i] + station_size, rail_length))
+        model.add_block(Position(positions[i], positions[i] + 150, rail_length), 40/3.6)
+        model.add_station(Position(positions[i] + 150, positions[i] + 150 + station_size, rail_length))
         if signalling_type == "static":
             # calculate distance between this station and next station
-            distance = distances[i] - station_size
-            quotient = int(distance // block_size)
-            current_distance = positions[i] + station_size
+            distance = distances[i] - station_size - 150
+            quotient = distance // block_size
+            current_distance = positions[i] + station_size + 150
             if quotient == 0:
                 model.add_block(Position(current_distance, current_distance + distance, rail_length))
             # get spacing for the blocks with minimum block_size
@@ -118,6 +119,7 @@ def blocks_from_distances(model, rail_length, distances, station_size, block_siz
                     model.add_block(Position(block_spacing[j], 0, rail_length))
                 else:
                     model.add_block(Position(block_spacing[j], block_spacing[j + 1], rail_length))
+
 
 
 def test_capacity(trainless_model: Railroad, train_specification, wind_up=600, test_length=3600, min_trains=1, max_trains=5, verbose=False):
