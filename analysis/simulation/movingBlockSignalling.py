@@ -1,4 +1,5 @@
 from simulation.staticBlockSignalling import *
+from simulation.block import *
 
 
 class MovingBlockSignalling(StaticBlockSignalling):
@@ -11,6 +12,6 @@ class MovingBlockSignalling(StaticBlockSignalling):
         train, train_distance = self.get_next_object(self.trains, position)
 
         if train_distance <= signal_distance:
-            return (Color.RED, train_distance)
+            return (SignalState(0), train_distance)
         else:
             return (signal, signal_distance)

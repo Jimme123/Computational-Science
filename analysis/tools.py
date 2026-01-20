@@ -19,7 +19,7 @@ def add_trains(model, n, train_specification):
         blocks = model.signalling_control.blocks
         i = n
         for block in blocks:
-            if block.signal == Color.STATION:
+            if block.signal.is_station:
                 continue
             start = block.position.bounds[0] + 1
             model.add_train(Position(start, start + train_length, length), train_specification)

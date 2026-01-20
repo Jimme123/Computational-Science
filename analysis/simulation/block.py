@@ -9,57 +9,68 @@
 """
 
 import mesa
+import math
 from enum import Enum
 
 from simulation.positionalAgent import *
 
-class Color(Enum):
-    UNKNOWN = 0
-    GREEN = 1
-    ORANGE = 2
-    RED = 3
-    STATION = 4
+class SignalState:
+    def __init__(self, max_speed=math.inf, max_speed_next=math.inf, distance_to_next_signal=0, is_station=False):
+        self.max_speed = max_speed
+        self.max_speed_next = max_speed_next
+        self.is_station = is_station
+        self.distance_to_next_signal = distance_to_next_signal
+        if is_station:
+            assert(max_speed == 0)
+
+    def make_station(self):
+        self.is_station = True
+        self.max_speed = 0
 
     def __str__(self):
-        return f'{self.name}'
+        if self.is_station:
+            return f"Station, next_signal: {self.max_speed_next}"
+        else:
+            return f"signal: {self.max_speed}, next_signal: {self.max_speed_next}"
+
 
 class Block(PositionalAgent):
-    def __init__(self, model, position):
+    def __init__(self, model, position, max_speed = math.inf):
         super().__init__(model, position)
         self.signalling_control = self.model.signalling_control
         self.signalling_control.add_block(self)
+        self.max_speed = max_speed
 
     @property
     def signal(self):
         """
-            Returns signal color.
+            Returns the signal.
         """
         next_block, _ = self.signalling_control.get_next_block(self.position)
-        if next_block is None:
-            return Color.GREEN
-        elif self.is_stop():
-            return Color.RED
-        elif next_block.is_stop():
-            return Color.ORANGE
-        else:
-            return Color.GREEN
 
-    def is_stop(self):
+        if next_block is None:
+            return SignalState(self.speed())
+        else:
+            distance = get_distance(self.position, next_block.position) + self.position.length
+            return SignalState(self.speed(), next_block.speed(), distance)
+
+    def speed(self):
         """
-            Returns if this signal has a stop.
-            Block call this is to prevent a recursion loop where each block ask the next block for it's signal.
+            Returns the speed with which this signal can be passed.
         """
-        return self.signalling_control.block_contains_train(self)
+        if self.signalling_control.block_contains_train(self):
+            return 0
+        else:
+            return self.max_speed
 
     def __str__(self):
         return f'{self.position}'
+
 
 class Station(Block):
     """
         This just sends a station signal.
         This signals that the train should stop before this block, wait for a bit and then ignore the signal.
-        Notice that if a train is wholly contained in this station,
-        it might cause a collision because the departing train ignores the signal.
     """
 
     def __init__(self, model, position):
@@ -68,7 +79,12 @@ class Station(Block):
 
     @property
     def signal(self):
-        return Color.STATION
+        signal_information = super().signal
+        signal_information.make_station()
+        return signal_information
 
-    def is_stop(self):
-        return True
+    def speed(self):
+        return 0
+
+    def __str__(self):
+        return f'station {self.position}'
