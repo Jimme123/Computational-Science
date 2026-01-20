@@ -23,8 +23,13 @@ def add_trains(model, train_specifications):
         blocks = model.signalling_control.blocks
         i = n
         for block in blocks:
+            print(block)
             if block.signal.is_station:
                 continue
+            # If the block is to small for the train continue
+            if train_specifications[i - 1]["length"] > block.position.length > 0:
+                continue
+            
             start = block.position.bounds[0] + 1
             model.add_train(Position(start, start + train_specifications[i - 1]['length'], length), train_specifications[i - 1])
             i -= 1

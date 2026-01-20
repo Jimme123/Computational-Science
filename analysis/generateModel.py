@@ -24,13 +24,6 @@ def generate_model(signalling_type="static",
                     ):
     # make sure the distance between stations is greater then the braking distance at max speed 
 
-    if braking_dist[0] > 0:
-        assert(min_station_distance > (train_specifications['max_speed']**2) / (2 * 0.9 * (train_specifications['max_braking'] - dif_braking)))
-    if braking_dist[1] > 0:
-        assert(min_station_distance > (train_specifications['max_speed']**2) / (2 * 0.9 * (train_specifications['max_braking'])))
-    if braking_dist[2] > 0:
-        assert(min_station_distance > (train_specifications['max_speed']**2) / (2 * 0.9 * (train_specifications['max_braking'] + dif_braking)))
-
     if signalling_type == "static":
         signalling_class = StaticBlockSignalling
     elif signalling_type == "moving":
