@@ -12,6 +12,7 @@ class SignallingControl:
         self.blocks = []
 
     def add_train(self, train):
+        # check if new train overlaps with existing train
         for other_train in self.trains:
             if overlap(train.position, other_train.position):
                 raise Exception("New train overlaps with existing train")

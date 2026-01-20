@@ -14,6 +14,7 @@ class StaticBlockSignalling(SignallingControl):
 
 
     def add_train(self, train):
+        # check if blocks that new train occupies are already occupied
         occupied_blocks = self.blocks_occupied_train(train)
         for block in occupied_blocks:
             if self.block_contains_train(block):
@@ -29,7 +30,7 @@ class StaticBlockSignalling(SignallingControl):
     def blocks_occupied_train(self, train):
         """
         input: train
-        output: list of blocks where the train is
+        output: list of blocks train occupies
         """
         blocks_occupied = []
         for block in self.blocks:
@@ -44,6 +45,7 @@ class StaticBlockSignalling(SignallingControl):
             So objects overlapping with the position are excluded.
             If strict is true, objects which are a distance of zero from the agent are also excluded.
         """
+        # keep track of minimal distance to the object and of object
         min_distance = math.inf
         min_obj = None
         for obj in objects:
@@ -57,7 +59,7 @@ class StaticBlockSignalling(SignallingControl):
 
     def get_next_block(self, position, strict = False):
         """
-            See get_next_position
+            See get_next_object
         """
         return self.get_next_object(self.blocks, position, strict)
 
