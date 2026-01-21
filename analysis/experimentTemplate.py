@@ -8,7 +8,6 @@ from visualize import *
 from generateModel import *
 
 sight = math.inf
-dt=1
 wait_time=40
 verbose=False
 block_size=1500
@@ -17,23 +16,26 @@ num_stations=5
 station_size=15
 min_station_distance=1515
 distances_variation=0
-num_trains=5
 train_specifications=[sng_specifications]
 train_distribution=[1]
 
 
-static_model = generate_model("static", sight, dt, wait_time, verbose, block_size,
+static_model = generate_model("static", sight, 1, wait_time, verbose, block_size,
                                 rail_length, num_stations, station_size,
-                                min_station_distance, distances_variation, num_trains,
+                                min_station_distance, distances_variation, 0,
                                 train_specifications, train_distribution, True)
 
-moving_model = generate_model("moving", sight, dt, wait_time, verbose, block_size,
+moving_model = generate_model("moving", sight, 1, wait_time, verbose, block_size,
                                 rail_length, num_stations, station_size,
-                                min_station_distance, distances_variation, num_trains,
+                                min_station_distance, distances_variation, 0,
                                 train_specifications, train_distribution, True)
 
-print(test_capacity(static_model, max_trains=30, verbose=True))
-print(test_capacity(moving_model, max_trains=30, verbose=True))
+print("Static block model:")
+test_capacity(static_model, trains=train_specifications, train_distribution=train_distribution,
+                     max_trains=30,verbose=True)
+print("Moving block model:")
+test_capacity(moving_model, trains=train_specifications, train_distribution=train_distribution,
+                     max_trains=30, verbose=True)
 
 visualize(static_model, 500, "Static Block Circular Railway Simulation")
 visualize(moving_model, 500, "Moving Block Circular Railway Simulation")

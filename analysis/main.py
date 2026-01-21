@@ -11,7 +11,7 @@ from osloMetro import *
 from generateModel import *
 
 model = generate_model(signalling_type="static", 
-                       distances_variation=0,
+                       distances_variation=1,
                        train_specifications=[sng_specifications, virm_specifications, freight_train_specifications],
                        num_trains=2,
                        num_stations=5,
@@ -19,7 +19,7 @@ model = generate_model(signalling_type="static",
                        min_station_distance=1165,
                        train_distribution=[0, 0, 1]
                        )
-print(test_capacity(model, max_trains=30, verbose=True))
+# print(test_capacity(model, max_trains=30, verbose=True))
 
 # add_trains(model, 10, metro_specifications)
 
@@ -31,4 +31,4 @@ print(test_capacity(model, max_trains=30, verbose=True))
 for i in range(0, 500):
     model.step()
 
-visualize(model, 500)
+visualize(model, 500, "Circular Railway Simulation")
