@@ -62,6 +62,8 @@ class Train(PositionalAgent):
 
             if self.station_wait is not None and self.station_wait <= 0:  # can depart from the station\
                 # alter the speed based on current circumstances
+                print(signal)
+                print(distance + signal.distance_to_next_signal, signal.max_speed_next, braking, acceleration)
                 self.go_at(distance + signal.distance_to_next_signal, signal.max_speed_next, braking, acceleration)
             else:
                 # alter the speed based on current circumstances
