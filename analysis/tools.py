@@ -114,13 +114,13 @@ def blocks_from_distances(model, rail_length, distances, station_size, block_siz
 
     # loop over all positions
     for i in range(len(positions) - 1):
-        model.add_block(Position(positions[i], positions[i] + 150, rail_length), 40/3.6)
-        model.add_station(Position(positions[i] + 150, positions[i] + 150 + station_size, rail_length))
+        model.add_block(Position(positions[i], positions[i] + station_size rail_length), 40/3.6)
+        model.add_station(Position(positions[i] + station_size, positions[i] + station_size + 1, rail_length))
         if signalling_type == "static":
             # calculate distance between this station and next station
-            distance = distances[i] - station_size - 150
+            distance = distances[i] - station_size - 1
             quotient = int(distance // block_size)
-            current_distance = positions[i] + station_size + 150
+            current_distance = positions[i] + station_size + 1
             if quotient == 0:
                 model.add_block(Position(current_distance, current_distance + distance, rail_length))
             # get spacing for the blocks with minimum block_size
