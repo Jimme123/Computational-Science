@@ -1,6 +1,8 @@
 venv
 __pycache__
 tmp.txt
-test.mp4
-test.avi
+*.mp4
+!videos/*.mp4
+*.avi
+!videos/*.mp4
 .DS_Store

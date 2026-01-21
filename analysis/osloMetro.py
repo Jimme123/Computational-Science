@@ -17,7 +17,7 @@ def generate_metro(signalling_type="static",
                     wait_time=30,
                     verbose=False,
                     block_size=500,
-                    station_size=15):
+                    station_size=150):
 
     if signalling_type == "static":
         signalling_class = StaticBlockSignalling
@@ -30,8 +30,6 @@ def generate_metro(signalling_type="static",
 
     model = Railroad(rail_length, signalling_class, sight=sight, dt=dt, wait_time=wait_time, verbose=verbose)
 
-    block_size = 500  # 156
-    station_size = 15
     distances_east = [2000, 700, 500, 500, 1100]
     distances_west = distances_east[::-1]
 
