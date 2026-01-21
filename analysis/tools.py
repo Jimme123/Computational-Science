@@ -169,7 +169,7 @@ def blocks_from_distances(model, rail_length, distances, station_size, block_siz
 
     # loop over all positions
     for i in range(len(positions) - 1):
-        model.add_block(Position(positions[i], positions[i] + station_size rail_length), 40/3.6)
+        model.add_block(Position(positions[i], positions[i] + station_size, rail_length), 40/3.6)
         model.add_station(Position(positions[i] + station_size, positions[i] + station_size + 1, rail_length))
         if signalling_type == "static":
             # calculate distance between this station and next station
