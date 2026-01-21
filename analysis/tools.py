@@ -165,7 +165,7 @@ def test_capacity(trainless_models: [Railroad], trains=[sng_specifications], tra
             capacities.append(capacity_both)
         result.append([n, capacities])
         if verbose:
-            print(f"for {n}, capacity is {capacities:.1f}")
+            print(f"for {n}, capacity is {capacities}")
     return np.array(result)
 
 
