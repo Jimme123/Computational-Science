@@ -146,7 +146,8 @@ def test_capacity(trainless_models: [Railroad], trains=[sng_specifications], tra
                 model: Railroad = copy.deepcopy(trainless_model)
                 # Add n trains to the model
                 if add_trains(model, trains_specifications) == False:
-                    break
+                    capacity_both.append(0)
+                    continue
 
                 for i in range(wind_up // model.dt):
                     model.step()
@@ -166,7 +167,7 @@ def test_capacity(trainless_models: [Railroad], trains=[sng_specifications], tra
         result.append([n, capacities])
         if verbose:
             print(f"for {n}, capacity is {capacities}")
-    return np.array(result)
+    return result
 
 
 def measure_station_travel_times_real_time(model, metro_specifications, max_steps=20000):

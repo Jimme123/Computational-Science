@@ -15,9 +15,10 @@ rail_length=15000
 num_stations=5
 station_size=300
 min_station_distance=1815
-distances_variation=0
-train_specifications=[sng_specifications]
-train_distribution=[1]
+distances_variation=1
+train_specifications=[sng_specifications, virm_specifications]
+train_distribution=[0.5, 0.5]
+
 
 
 static_model = generate_model("static", sight, 1, wait_time, verbose, block_size,
