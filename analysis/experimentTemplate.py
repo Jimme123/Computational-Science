@@ -10,7 +10,7 @@ from generateModel import *
 sight = math.inf
 wait_time=40
 verbose=False
-block_size=1000
+block_size=900
 rail_length=10000
 num_stations=5
 station_size=0
@@ -33,6 +33,6 @@ moving_model = generate_model("moving", sight, 1, wait_time, verbose, block_size
                                 train_specifications, train_distribution, False,
                                 False)
 
-print(test_capacity_distances_and_trains([static_model, moving_model], num_stations, station_size, block_size, rail_length, min_station_distance, distances_variation, repetitions,
-                                   trains=train_specifications, train_distribution=train_distribution, max_trains=30))
+test_capacity_distances_and_trains([static_model, moving_model], num_stations, station_size, block_size, rail_length, min_station_distance, distances_variation, repetitions,
+                                   trains=train_specifications, train_distribution=train_distribution, max_trains=7, min_trains=5))
 

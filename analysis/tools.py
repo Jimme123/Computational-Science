@@ -84,6 +84,7 @@ def get_distances(number_stations, station_size, block_size, rail_length, min_di
     # distances is weighted average between equal distances and random distances
     distances = [(1 - variation) * a + variation * b for a, b in zip(equal_distances, total_rand_distances)]
 
+
     assert(rail_length - 1 <= sum(distances) <= rail_length + 1)
 
     return distances
@@ -127,27 +128,27 @@ def blocks_from_distances(model, rail_length, distances, station_size, block_siz
             block_spacing = np.linspace(current_distance, current_distance + distance, quotient + 1)
             #add the blocks
             for j in range(quotient):
-                if block_spacing[j + 1] == rail_length:  # alter last block
+                if block_spacing[j + 1] >= rail_length:  # alter last block
                     model.add_block(Position(block_spacing[j], 0, rail_length))
                 else:
                     model.add_block(Position(block_spacing[j], block_spacing[j + 1], rail_length))
 
 
-def test_capacity_distances_and_trains(empty_models: [Railroad], num_stations, station_size, block_size, rail_length, 
-                                       min_station_distance, distances_variation, repetitions, trains, train_distribution, max_trains):
+def test_capacity_distances_and_trains(empty_models: [Railroad], num_stations, station_size, block_size, rail_length,
+                                       min_station_distance, distances_variation, repetitions, trains, train_distribution, max_trains, min_trains):
     """
     Tests the capacity of a trainless and blockless model by varying over the distances
     """
     result = []
     for i in range(repetitions):
-        distances = get_distances(num_stations, station_size, block_size, rail_length, 
+        distances = get_distances(num_stations, station_size, block_size, rail_length,
                                        min_station_distance, distances_variation)
         models = []
         for empty_model in empty_models:
             model: Railroad = copy.deepcopy(empty_model)
             blocks_from_distances(model, rail_length, distances, station_size, block_size, model.type)
             models.append(model)
-        capacities = test_capacity_trains(models, trains, train_distribution, max_trains=max_trains, verbose=True, repetitions=1)
+        capacities = test_capacity_trains(models, trains, train_distribution, max_trains=max_trains, min_trains=min_trains, verbose=True, repetitions=1)
         result.append([i, capacities])
     return result
 
@@ -158,7 +159,7 @@ def test_capacity_trains(trainless_models: [Railroad], trains=[sng_specification
 
     Returns a list of lists, the lists in the list are of the form [n, capacities] where n
     is the number of trains and capacities is a list of tuples with the capacity of the different
-    trainless_models 
+    trainless_models
     """
     n = 1
     result = []
