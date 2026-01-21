@@ -30,12 +30,6 @@ moving_model = generate_model("moving", sight, 1, wait_time, verbose, block_size
                                 min_station_distance, distances_variation, 0,
                                 train_specifications, train_distribution, True)
 
-print("Static block model:")
-test_capacity(static_model, trains=train_specifications, train_distribution=train_distribution,
+test_capacity([static_model, moving_model], trains=train_specifications, train_distribution=train_distribution,
                      max_trains=30,verbose=True)
-print("Moving block model:")
-test_capacity(moving_model, trains=train_specifications, train_distribution=train_distribution,
-                     max_trains=30, verbose=True)
 
-visualize(static_model, 500, "Static Block Circular Railway Simulation")
-visualize(moving_model, 500, "Moving Block Circular Railway Simulation")
