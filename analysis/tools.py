@@ -7,7 +7,6 @@ from simulation.model import *
 from simulation.block import *
 from trainSpecifications import *
 
-
 def add_trains(model, train_specifications):
     length = model.signalling_control.length
     n = len(train_specifications)
@@ -133,7 +132,7 @@ def blocks_from_distances(model, rail_length, distances, station_size, block_siz
                     model.add_block(Position(block_spacing[j], block_spacing[j + 1], rail_length))
 
 
-def test_capacity(trainless_model: Railroad, trains=[sng_specifications], train_distribution=[1], wind_up=600, test_length=3600, min_trains=1, max_trains=5, repetitions, verbose=False):
+def test_capacity(trainless_model: Railroad, trains=[sng_specifications], train_distribution=[1], wind_up=600, test_length=3600, min_trains=1, max_trains=5, repetitions=1, verbose=False):
     n = 1
     length = trainless_model.signalling_control.length
     result = []
