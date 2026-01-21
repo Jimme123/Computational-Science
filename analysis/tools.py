@@ -5,7 +5,7 @@ from simulation.position import *
 from simulation.model import *
 from simulation.block import *
 
-def measure_station_travel_times_real_time(model, metro_specifications, max_steps=20000):
+def measure_station_travel_times_real_time(model, metro_specifications, max_steps=20000, verbose=False):
     train = model.trains[0]
 
     dt = metro_specifications.get("dt", 1.0)
@@ -52,6 +52,11 @@ def measure_station_travel_times_real_time(model, metro_specifications, max_step
                         return travel_times
                 break
 
+    if verbose:
+        print("\nTijd tussen stations:")
+        for i, t in enumerate(times):
+            print(f"Traject {i + 1}: {t:.1f} s ({t/60:.2f} min)")
+
     return travel_times
 
 
@@ -93,19 +98,19 @@ def test_capacity(trainless_model: Railroad, train_specification, wind_up=600, t
         if add_trains(model, n, train_specification) == False:
             break
 
-        for i in range(wind_up):
+        for i in range(wind_up // model.dt):
             model.step()
 
         passes = 0
         was_occupied = model.signalling_control.block_contains_train(model.signalling_control.blocks[0])
-        for i in range(test_length):
+        for i in range(test_length // model.dt):
             model.step()
             occupied = model.signalling_control.block_contains_train(model.signalling_control.blocks[0])
             if occupied and not was_occupied:
                 passes += 1
             was_occupied = occupied
 
-        capacity = float(passes) / float(test_length) * 60**2
+        capacity = float(passes) / (float(test_length)) * 60**2
         result.append([n, capacity])
         if verbose:
             print(f"for {n}, capacity is {capacity:.1f}")
