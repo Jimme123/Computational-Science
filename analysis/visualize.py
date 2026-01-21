@@ -7,7 +7,7 @@ import math
 from simulation.block import SignalState
 
 
-def visualize(model, steps):
+def visualize(model, steps, title):
     rail_length = model.signalling_control.length
 
     R = 5
@@ -16,7 +16,7 @@ def visualize(model, steps):
     ax.set_ylim(-R-1, R+1)
     ax.set_aspect('equal')
     ax.axis('off')
-    ax.set_title("Circular Railway Simulation")
+    ax.set_title(title)
 
     train_patches = []
     block_patches = []
@@ -77,7 +77,7 @@ def visualize(model, steps):
             ys = R * np.sin(thetas)
 
             line.set_data(xs, ys)
-            line.set_color("red")
+            line.set_color("purple")
 
         return (
             [w for _, w in block_patches]
@@ -87,4 +87,4 @@ def visualize(model, steps):
 
     ani = FuncAnimation(fig, update, frames=steps, interval=50)
     plt.show()
-    ani.save("test.mp4")
+    ani.save(f"{title}.mp4")

@@ -40,8 +40,6 @@ def overlap(position_a, position_b):
     """
     Determines if the positions a and b have overlap when in a circle track
     """
-    #start_a, end_a = position_a.bounds
-    #start_b, end_b = position_b.bounds
     segments_a = get_segments(position_a)
     segments_b = get_segments(position_b)
 

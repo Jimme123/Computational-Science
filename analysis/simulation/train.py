@@ -39,37 +39,45 @@ class Train(PositionalAgent):
 
     def step(self):
         # Look at the signal, update the state and do stuff accordingly
+
         signal, distance = self.signalling_control.next_signal(self.position)
         braking, acceleration = self.acceleration_bounds()
 
-        if signal == "unknown":
+        if signal == "unknown":  # nex signal is too far ahead to see
             self.go_at(distance, self.next_speed_limit, braking, acceleration)
         else:
-            if signal.is_station:
+            if signal.is_station:  # entering a station
                 if self.speed == 0:
-                    if self.station_wait is None:
+                    if self.station_wait is None:  # start waiting
                         self.station_wait = self.wait_time
-                    else:
+                    else:  # has waited another dt
                         self.station_wait = self.station_wait - self.dt
 
-            if self.station_wait is not None and self.station_wait <= 0:
+            if self.station_wait is not None and self.station_wait <= 0:  # can depart from the station\
+                # alter the speed based on current circumstances
                 self.go_at(distance + signal.distance_to_next_signal, signal.max_speed_next, braking, acceleration)
             else:
+                # alter the speed based on current circumstances
                 self.go_at(distance, signal.max_speed, braking, acceleration)
 
+        # alter position based on current speed
         dx = self.speed * self.dt
         self.position += dx
 
-        if dx >= distance:
+        if dx >= distance:  # enters new block or passed a station
             self.next_speed_limit = signal.max_speed_next
             if not signal.is_station:
-                self.speed_limit = signal.max_speed
-            else:
+                self.speed_limit = signal.max_speed  # alter speed limit depending on next signal
+            else:  # exits station
                 self.speed_limit = math.inf
                 self.station_wait = None
 
 
     def go_to_speed(self, speed, braking, acceleration):
+        """
+        alters the current speed (self.speed) to get closer to the input speed based
+        on the braking and acceleration values 
+        """
         assert(0 <= speed <= self.max_speed)
 
         if self.speed > speed:
@@ -79,6 +87,9 @@ class Train(PositionalAgent):
 
 
     def brake_distance(self, speed, safety_factor = 0.9):
+        """
+        determine the braking distance to go from the current speed (self.speed) to speed
+        """
         if self.speed > speed:
             return (self.speed - speed)*(self.speed + speed) / (2 * self.max_braking * safety_factor)
         else:
