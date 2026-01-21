@@ -113,7 +113,8 @@ def blocks_from_distances(model, rail_length, distances, station_size, block_siz
 
     # loop over all positions
     for i in range(len(positions) - 1):
-        model.add_block(Position(positions[i], positions[i] + station_size, rail_length), 40/3.6)
+        if station_size:
+            model.add_block(Position(positions[i], positions[i] + station_size, rail_length), 40/3.6)
         model.add_station(Position(positions[i] + station_size, positions[i] + station_size + 1, rail_length))
         if signalling_type == "static":
             # calculate distance between this station and next station
@@ -132,7 +133,33 @@ def blocks_from_distances(model, rail_length, distances, station_size, block_siz
                     model.add_block(Position(block_spacing[j], block_spacing[j + 1], rail_length))
 
 
-def test_capacity(trainless_models: [Railroad], trains=[sng_specifications], train_distribution=[1], wind_up=600, test_length=3600, min_trains=1, max_trains=5, repetitions=10, verbose=False):
+def test_capacity_distances_and_trains(empty_models: [Railroad], num_stations, station_size, block_size, rail_length, 
+                                       min_station_distance, distances_variation, repetitions, trains, train_distribution, max_trains):
+    """
+    Tests the capacity of a trainless and blockless model by varying over the distances
+    """
+    result = []
+    for i in range(repetitions):
+        distances = get_distances(num_stations, station_size, block_size, rail_length, 
+                                       min_station_distance, distances_variation)
+        models = []
+        for empty_model in empty_models:
+            model: Railroad = copy.deepcopy(empty_model)
+            blocks_from_distances(model, rail_length, distances, station_size, block_size, model.type)
+            models.append(model)
+        capacities = test_capacity_trains(models, trains, train_distribution, max_trains=max_trains, verbose=True, repetitions=1)
+        result.append([i, capacities])
+    return result
+
+
+def test_capacity_trains(trainless_models: [Railroad], trains=[sng_specifications], train_distribution=[1], wind_up=600, test_length=3600, min_trains=1, max_trains=5, repetitions=10, verbose=False):
+    """
+    Tests the capacity of a trainless model when given a set of trains and their distribution
+
+    Returns a list of lists, the lists in the list are of the form [n, capacities] where n
+    is the number of trains and capacities is a list of tuples with the capacity of the different
+    trainless_models 
+    """
     n = 1
     result = []
 

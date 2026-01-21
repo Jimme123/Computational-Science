@@ -21,7 +21,8 @@ def generate_model(signalling_type="static",
                     num_trains=5,
                     train_specifications=[sng_specifications],
                     train_distribution=[1],
-                    empty=False
+                    trains=True,
+                    blocks=True
                     ):
     # make sure the distance between stations is greater then the braking distance at max speed 
 
@@ -33,10 +34,12 @@ def generate_model(signalling_type="static",
         raise ValueError(f"unknown signalling type {signalling_type}")
     
     model = Railroad(rail_length, signalling_class, sight=sight, dt=dt, wait_time=wait_time, verbose=False)
-    distances = get_distances(num_stations, station_size, block_size, rail_length, min_station_distance, distances_variation)
-    blocks_from_distances(model, rail_length, distances, station_size, block_size, signalling_type)
     
-    if not empty:
+    if blocks:
+        distances = get_distances(num_stations, station_size, block_size, rail_length, min_station_distance, distances_variation)
+        blocks_from_distances(model, rail_length, distances, station_size, block_size, signalling_type)
+        
+    if trains:
         trains = get_trains(num_trains, train_specifications, train_distribution)
         add_trains(model, trains)
 
