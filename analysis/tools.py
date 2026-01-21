@@ -133,38 +133,39 @@ def blocks_from_distances(model, rail_length, distances, station_size, block_siz
                     model.add_block(Position(block_spacing[j], block_spacing[j + 1], rail_length))
 
 
-def test_capacity(trainless_model: Railroad, trains=[sng_specifications], train_distribution=[1], wind_up=600, test_length=3600, min_trains=1, max_trains=5, repetitions, verbose=False):
+def test_capacity(trainless_models: [Railroad], trains=[sng_specifications], train_distribution=[1], wind_up=600, test_length=3600, min_trains=1, max_trains=5, repetitions=10, verbose=False):
     n = 1
-    length = trainless_model.signalling_control.length
     result = []
 
     for n in range(min_trains, max_trains + 1):
         capacities = []
         for i in range(repetitions):
-            model: Railroad = copy.deepcopy(trainless_model)
-            # Add n trains to the model
             trains_specifications = get_trains(n, trains, train_distribution)
-            if add_trains(model, trains_specifications) == False:
-                break
+            capacity_both = []
+            for trainless_model in trainless_models:
+                model: Railroad = copy.deepcopy(trainless_model)
+                # Add n trains to the model
+                if add_trains(model, trains_specifications) == False:
+                    break
 
-            for i in range(wind_up // model.dt):
-                model.step()
+                for i in range(wind_up // model.dt):
+                    model.step()
 
-            passes = 0
-            was_occupied = model.signalling_control.block_contains_train(model.signalling_control.blocks[0])
-            for i in range(test_length // model.dt):
-                model.step()
-                occupied = model.signalling_control.block_contains_train(model.signalling_control.blocks[0])
-                if occupied and not was_occupied:
-                    passes += 1
-                was_occupied = occupied
+                passes = 0
+                was_occupied = model.signalling_control.block_contains_train(model.signalling_control.blocks[0])
+                for i in range(test_length // model.dt):
+                    model.step()
+                    occupied = model.signalling_control.block_contains_train(model.signalling_control.blocks[0])
+                    if occupied and not was_occupied:
+                        passes += 1
+                    was_occupied = occupied
 
-            capacity = float(passes) / (float(test_length)) * 60**2
-            capacities.append(capacity)
-        capacity = sum(capacities) / repetitions
-        result.append([n, capacity])
+                capacity = float(passes) / (float(test_length)) * 60**2
+                capacity_both.append(capacity)
+            capacities.append(capacity_both)
+        result.append([n, capacities])
         if verbose:
-            print(f"for {n}, capacity is {capacity:.1f}")
+            print(f"for {n}, capacity is {capacities:.1f}")
     return np.array(result)
 
 
