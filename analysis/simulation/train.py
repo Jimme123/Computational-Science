@@ -6,24 +6,31 @@ from simulation.block import *
 
 
 class TrainSpecifications(TypedDict):
-    max_braking: float
-    max_acceleration: float
-    max_speed: float
-    max_power: NotRequired[float]
-    weight: NotRequired[float]
-    length: NotRequired[float]
+    max_braking: float # m/s^2
+    max_acceleration: NotRequired[float] # m/s^2
+    max_speed: float # m/s
+    max_power: NotRequired[float] # watt
+    weight: NotRequired[float] # kg
+    length: NotRequired[float] # m
+    tractive_effort: NotRequired[float] # Newton
 
 
 class Train(PositionalAgent):
     def __init__(self, model, position, train_specification: TrainSpecifications):
         super().__init__(model, position)
         self.max_braking = train_specification['max_braking']
-        self.max_acceleration = train_specification['max_acceleration']
+        self.max_acceleration = train_specification['max_acceleration'] if 'max_acceleration' in train_specification else None
         self.max_speed = train_specification['max_speed']
-        self.power = train_specification['max_power'] if 'power' in train_specification else None
+        self.power = train_specification['max_power'] if 'max_power' in train_specification else None
         self.weight = train_specification['weight'] if 'weight' in train_specification else None
-        self.length = train_specification.get("length", 0)
+        self.tractive_effort = train_specification['tractive_effort'] if 'tractive_effort' in train_specification else None
         self.position = position
+
+        if self.max_acceleration is None and \
+           (self.power is None or
+            self.weight is None or
+            self.tractive_effort is None):
+            raise ValueError(f"Train did not get enough information to calculate acceleration. Specification: {train_specification}")
 
         self.speed = 0
         self.speed_limit = 10
@@ -39,7 +46,7 @@ class Train(PositionalAgent):
 
     def step(self):
         # Look at the signal, update the state and do stuff accordingly
-
+        signal: "unknown" | SignalState
         signal, distance = self.signalling_control.next_signal(self.position)
         braking, acceleration = self.acceleration_bounds()
 
@@ -76,7 +83,7 @@ class Train(PositionalAgent):
     def go_to_speed(self, speed, braking, acceleration):
         """
         alters the current speed (self.speed) to get closer to the input speed based
-        on the braking and acceleration values 
+        on the braking and acceleration values
         """
         assert(0 <= speed <= self.max_speed)
 
@@ -124,8 +131,13 @@ class Train(PositionalAgent):
 
     def acceleration_bounds(self):
         if self.power is not None and self.weight is not None:
-            power_limit = float(self.power) / float(self.speed * self.weight) if self.speed != 0 else math.inf
-            return self.max_braking, min(power_limit, self.max_acceleration)
+            force = float(self.power) / float(self.speed) if self.speed != 0 else math.inf
+            if self.tractive_effort is not None:
+                force = min(self.tractive_effort, force)
+            acceleration = force / self.weight
+            if self.max_acceleration is not None:
+                return self.max_braking, min(acceleration, self.max_acceleration)
+            return self.max_braking, acceleration
         else:
             return self.max_braking, self.max_acceleration
 

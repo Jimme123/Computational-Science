@@ -7,7 +7,6 @@ from simulation.model import *
 from simulation.block import *
 from trainSpecifications import *
 
-
 def add_trains(model, train_specifications):
     length = model.signalling_control.length
     n = len(train_specifications)
