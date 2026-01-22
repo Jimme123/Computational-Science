@@ -1,3 +1,7 @@
+"""
+A positional mesa agent
+"""
+
 import mesa
 
 from simulation.position import *

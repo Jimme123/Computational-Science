@@ -1,3 +1,8 @@
+"""
+Containts the position class and multiple helper functions related to the
+position
+"""
+
 class Position:
     """
         Contains the position of an object with length in a circle.

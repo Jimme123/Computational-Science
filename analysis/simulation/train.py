@@ -1,3 +1,7 @@
+"""
+Contains the train class. The train requests the next signal from the
+signalling control and behaves accordingly
+"""
 import enum
 import math
 from typing import TypedDict, NotRequired
@@ -45,7 +49,10 @@ class Train(PositionalAgent):
 
 
     def step(self):
-        # Look at the signal, update the state and do stuff accordingly
+        """
+        Receive the signal and distance to the signal from the signalling
+        control and alters the state of the train accordingly (speed, position etc)
+        """
         signal: "unknown" | SignalState
         signal, distance = self.signalling_control.next_signal(self.position)
         braking, acceleration = self.acceleration_bounds()

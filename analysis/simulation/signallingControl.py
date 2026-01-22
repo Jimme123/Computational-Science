@@ -1,3 +1,6 @@
+"""
+Base class for signalling control. Keeps track of all blocks and trains
+"""
 import mesa
 
 from simulation.positionalAgent import *

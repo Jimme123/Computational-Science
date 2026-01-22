@@ -1,3 +1,6 @@
+"""
+Contains station class
+"""
 import mesa
 
 from block import *

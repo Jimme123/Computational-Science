@@ -1,11 +1,13 @@
 """
-    A block is a piece of track in which only one train can be at a time.
-    The block starts with a signal. This signal can be
-     - red      if the block a train
-     - orange   if the train has to stop at the next signal
-     - green    if the train can continue at full speed
-     - station  this is how we implement a station. This signals that the train should stop before this block,
-                wait for a bit and then ignore the signal.
+    Contains the following classes
+
+    SignalState: contains all the information in a signal
+
+    Block: A block on the track that represents a point where a signal is and
+    can give signals
+
+    Station: a train has to wait a specific time for this sort of block
+
 """
 
 import mesa
