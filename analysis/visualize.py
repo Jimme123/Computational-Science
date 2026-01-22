@@ -40,6 +40,8 @@ def visualize(model, steps, title):
 
     def update(frame):
         model.step()
+        rail_circle = patches.Circle((0, 0), R, edgecolor='gray', facecolor='none', linewidth=2, zorder=0)
+        ax.add_patch(rail_circle)
 
         for block, wedge in block_patches:
             if block.signal.is_station:
