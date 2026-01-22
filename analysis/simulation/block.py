@@ -29,7 +29,7 @@ class SignalState:
 
     def __str__(self):
         if self.is_station:
-            return f"Station, next_signal: {self.max_speed_next}"
+            return f"Station, next_signal: {self.max_speed_next} in {self.distance_to_next_signal}"
         else:
             return f"signal: {self.max_speed}, next_signal: {self.max_speed_next}"
 
@@ -51,7 +51,10 @@ class Block(PositionalAgent):
         if next_block is None:
             return SignalState(self.speed())
         else:
-            distance = get_distance(self.position, next_block.position) + self.position.length
+            if next_block == self:
+                distance = self.position.rail_length
+            else:
+                distance = get_distance(self.position, next_block.position) + self.position.length
             return SignalState(self.speed(), next_block.speed(), distance)
 
     def speed(self):

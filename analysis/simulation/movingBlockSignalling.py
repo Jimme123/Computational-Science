@@ -14,4 +14,7 @@ class MovingBlockSignalling(StaticBlockSignalling):
         if train_distance <= signal_distance:
             return (SignalState(0), train_distance)
         else:
+            if signal.distance_to_next_signal > train_distance:
+                signal.distance_to_next_signal = train_distance
+                signal.max_speed_next = 0
             return (signal, signal_distance)
