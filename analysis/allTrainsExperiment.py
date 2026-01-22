@@ -39,8 +39,8 @@ result_wide = test_capacity_trains([static_model, moving_model], train_specifica
                               train_distribution, min_trains=min_trains,
                               max_trains=max_trains, repetitions=1)
 
-max_trains_static = max(result_wide, lambda x: x[1][0][0])[0]
-max_trains_moving = max(result_wide, lambda x: x[1][0][1])[0]
+max_trains_static = max(result_wide, key=lambda x: x[1][0][0])[0]
+max_trains_moving = max(result_wide, key=lambda x: x[1][0][1])[0]
 
 result_static = test_capacity_trains([static_model], train_specifications,
                               train_distribution, min_trains=max_trains_static-1,
