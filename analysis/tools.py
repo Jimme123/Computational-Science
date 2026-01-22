@@ -12,8 +12,11 @@ def add_trains(model, train_specifications):
     n = len(train_specifications)
 
     if model.type == "moving":
+        max_train_length = max(train_specifications, key=lambda x:x['length'])['length']
+        if length / n <= max_train_length:
+            return False
+
         starts = np.linspace(0, length, n, False)
-        starts = starts[::-1]
         for i in range(n):
             model.add_train(Position(starts[i], starts[i] + train_specifications[i]['length'], length), train_specifications[i])
 
@@ -166,7 +169,7 @@ def test_capacity_trains(trainless_models: [Railroad], trains=[sng_specification
 
     for n in range(min_trains, max_trains + 1):
         capacities = []
-        for i in range(repetitions):
+        for _ in range(repetitions):
             trains_specifications = get_trains(n, trains, train_distribution)
             capacity_both = []
             for trainless_model in trainless_models:
@@ -180,10 +183,11 @@ def test_capacity_trains(trainless_models: [Railroad], trains=[sng_specification
                     model.step()
 
                 passes = 0
-                was_occupied = model.signalling_control.block_contains_train(model.signalling_control.blocks[0])
+                check = Position(0, 1, model.signalling_control.length)
+                was_occupied = model.signalling_control.position_contains_train(check)
                 for i in range(test_length // model.dt):
                     model.step()
-                    occupied = model.signalling_control.block_contains_train(model.signalling_control.blocks[0])
+                    occupied = model.signalling_control.position_contains_train(check)
                     if occupied and not was_occupied:
                         passes += 1
                     was_occupied = occupied

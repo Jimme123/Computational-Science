@@ -17,7 +17,7 @@ class StaticBlockSignalling(SignallingControl):
         # check if blocks that new train occupies are already occupied
         occupied_blocks = self.blocks_occupied_train(train)
         for block in occupied_blocks:
-            if self.block_contains_train(block):
+            if self.position_contains_train(block.position):
                 raise Exception("Block already contains train")
 
         super().add_train(train)
@@ -83,12 +83,12 @@ class StaticBlockSignalling(SignallingControl):
             return (signal, distance)
 
 
-    def block_contains_train(self, block):
+    def position_contains_train(self, position):
         """
-        input: block
-        output: true if a train is in the block, false otherwise
+        input: position
+        output: true if a train overlaps the position, false otherwise
         """
         for train in self.trains:
-            if overlap(train.position, block.position):
+            if overlap(train.position, position):
                 return True
         return False

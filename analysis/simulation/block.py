@@ -58,7 +58,7 @@ class Block(PositionalAgent):
         """
             Returns the speed with which this signal can be passed.
         """
-        if self.signalling_control.block_contains_train(self):
+        if self.signalling_control.position_contains_train(self.position):
             return 0
         else:
             return self.max_speed
