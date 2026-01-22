@@ -45,9 +45,10 @@ class StaticBlockSignalling(SignallingControl):
             So objects overlapping with the position are excluded.
             If strict is true, objects which are a distance of zero from the agent are also excluded.
         """
-        # keep track of minimal distance to the object and of object
+        # keep track of minimal distance to the object and that object
         min_distance = math.inf
         min_obj = None
+        # loop over all objects
         for obj in objects:
             distance = get_distance(position, obj.position, False)
             if distance < min_distance and (not strict or 0 < distance):

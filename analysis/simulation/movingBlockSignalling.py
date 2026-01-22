@@ -11,10 +11,11 @@ class MovingBlockSignalling(StaticBlockSignalling):
         signal, signal_distance = super().next_signal(position)
         train, train_distance = self.get_next_object(self.trains, position)
 
-        if train_distance <= signal_distance:
-            return (SignalState(0), train_distance)
-        else:
-            if signal.distance_to_next_signal > train_distance:
+        if train_distance <= signal_distance:  # train is closest
+            return (SignalState(0), train_distance)  # add red signal at end of next train
+        else:  # next signal is closest
+            if signal.distance_to_next_signal > train_distance:  # train is closer than next signal
+                # alter the signal
                 signal.distance_to_next_signal = train_distance
                 signal.max_speed_next = 0
             return (signal, signal_distance)

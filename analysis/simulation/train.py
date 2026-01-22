@@ -104,6 +104,10 @@ class Train(PositionalAgent):
 
 
     def speed_bound(self, distance, speed, braking):
+        """
+        Calculates the speed the train needs to go at now to be at the input
+        speed after the input distance.
+        """
         if distance < 0:
             return speed
         else:
@@ -113,23 +117,32 @@ class Train(PositionalAgent):
     def go_at(self, distance, speed, braking, acceleration):
         """
             Make the train go as fast as possible while being able to go a certain speed some distance from now.
+            
+            speed: speed at which to pass signal in given distance
         """
         current_max_speed = min(self.speed_limit, self.max_speed)
         if self.speed > current_max_speed:
             raise Exception(f"speeding {self}")
 
         target_speed = min(speed, current_max_speed)
+        # get maximum speed at which to go to be at target_speed in distance - clearance
         upper_envelope = self.speed_bound(distance - self.clearance, target_speed, braking)
 
         if upper_envelope < self.speed - braking * self.dt:
             raise Exception(f"Unable to brake in time. {self}")
+        # with braking the speed is 0
         elif speed == 0 and self.speed < braking * self.dt and distance < 2 * self.clearance:
             self.speed = 0
+        # alter speed according to laws
         else:
             self.speed = min(upper_envelope, self.speed + acceleration * self.dt, current_max_speed)
 
 
     def acceleration_bounds(self):
+        """
+        Calculate the max braking and max acceleration using laws of physics
+        and available data of train
+        """
         if self.power is not None and self.weight is not None:
             force = float(self.power) / float(self.speed) if self.speed != 0 else math.inf
             if self.tractive_effort is not None:

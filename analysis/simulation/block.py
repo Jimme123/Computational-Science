@@ -15,13 +15,14 @@ from enum import Enum
 from simulation.positionalAgent import *
 
 class SignalState:
-    def __init__(self, max_speed=math.inf, max_speed_next=math.inf, distance_to_next_signal=0, is_station=False):
-        self.max_speed = max_speed
-        self.max_speed_next = max_speed_next
+    def __init__(self, max_speed=math.inf, max_speed_next=math.inf,
+                 distance_to_next_signal=0, is_station=False):
+        self.max_speed = max_speed  # speed at which train can pass this signal
+        self.max_speed_next = max_speed_next  # speed at which train can pass next signal
         self.is_station = is_station
         self.distance_to_next_signal = distance_to_next_signal
         if is_station:
-            assert(max_speed == 0)
+            assert (max_speed == 0)
 
     def make_station(self):
         self.is_station = True
@@ -29,32 +30,35 @@ class SignalState:
 
     def __str__(self):
         if self.is_station:
-            return f"Station, next_signal: {self.max_speed_next} in {self.distance_to_next_signal}"
+            return f"Station, next_signal: {self.max_speed_next} in \
+            {self.distance_to_next_signal}"
         else:
             return f"signal: {self.max_speed}, next_signal: {self.max_speed_next}"
 
 
 class Block(PositionalAgent):
-    def __init__(self, model, position, max_speed = math.inf):
+    def __init__(self, model, position, max_speed=math.inf):
         super().__init__(model, position)
         self.signalling_control = self.model.signalling_control
         self.signalling_control.add_block(self)
-        self.max_speed = max_speed
+        self.max_speed = max_speed  # speed at which train can pass this block
 
     @property
     def signal(self):
         """
-            Returns the signal.
+            Returns a signal state
         """
         next_block, _ = self.signalling_control.get_next_block(self.position)
 
-        if next_block is None:
+        if next_block is None:  
             return SignalState(self.speed())
         else:
             if next_block == self:
                 distance = self.position.rail_length
             else:
                 distance = get_distance(self.position, next_block.position) + self.position.length
+            # return max speed in current block, next block and distance
+            # between blocks
             return SignalState(self.speed(), next_block.speed(), distance)
 
     def speed(self):

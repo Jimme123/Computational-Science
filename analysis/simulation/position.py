@@ -29,6 +29,13 @@ class Position:
 
 
 def get_segments(position):
+    """
+    input: position
+    output: the bounds of the position if the position does not overlap
+    with the start/end of the rail track else the position is split up
+    into the part until the end of the track and the part starting at
+    the start
+    """
     start, end = position.bounds
     if end > start:
         return [(start, end)]
@@ -40,11 +47,14 @@ def overlap(position_a, position_b):
     """
     Determines if the positions a and b have overlap when in a circle track
     """
+    # split the position up into segments
     segments_a = get_segments(position_a)
     segments_b = get_segments(position_b)
 
+    # check if overlap happens for all possible combinations of segments
     for start_a, end_a in segments_a:
         for start_b, end_b in segments_b:
+            # check if overlap
             if start_a <= start_b <= end_a or\
                 start_a <= end_b <= end_a or \
                 (start_b <= start_a and end_a <= end_b):
