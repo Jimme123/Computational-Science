@@ -12,7 +12,6 @@ def visualize(model, steps, title):
 
     R = 5
     fig, ax = plt.subplots(figsize=(6,6))
-    dpi = 240
     ax.set_xlim(-R-1, R+1)
     ax.set_ylim(-R-1, R+1)
     ax.set_aspect('equal')
@@ -38,11 +37,13 @@ def visualize(model, steps, title):
         line, = ax.plot([], [], linewidth=6, alpha=1, zorder=4)
         line.set_solid_capstyle('butt')
         brake_patches.append((train, line))
+    rail_circle = patches.Circle(
+        (0, 0), R, edgecolor='gray', facecolor='none', linewidth=2, zorder=0
+    )
+    ax.add_patch(rail_circle)
 
     def update(frame):
         model.step()
-        rail_circle = patches.Circle((0, 0), R, edgecolor='gray', facecolor='none', linewidth=2, zorder=0)
-        ax.add_patch(rail_circle)
 
         for block, wedge in block_patches:
             if block.signal.is_station:
