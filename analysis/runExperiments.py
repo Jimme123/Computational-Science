@@ -7,7 +7,7 @@ import allTrainsExperiment
 # import sprinterExperiment
 
 experiment_results = {
-    "all mixed": allTrainsExperiment.result,
+    {"all mixed": {"wide": allTrainsExperiment.result_wide, "static": allTrainsExperiment.result_static, "moving": allTrainsExperiment.result_moving}},
 #     "intercities": intercityExperiment.result,
 #     "sprinters": sprinterExperiment.result,
 #     "intercities and sprinters": passengerTrainExperiment.result,
