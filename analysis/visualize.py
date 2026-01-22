@@ -12,6 +12,7 @@ def visualize(model, steps, title):
 
     R = 5
     fig, ax = plt.subplots(figsize=(6,6))
+    dpi = 240
     ax.set_xlim(-R-1, R+1)
     ax.set_ylim(-R-1, R+1)
     ax.set_aspect('equal')
