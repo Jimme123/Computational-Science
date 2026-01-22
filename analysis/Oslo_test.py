@@ -1,6 +1,7 @@
 import osloMetro
 from tools import *
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 static_model = osloMetro.generate_metro("static", station_size=0)
@@ -15,18 +16,33 @@ for entry in result:
     static = entry[1][0][0]
     moving = entry[1][0][1]
     static_capacities.append(static)
+    moving_capacities.append(moving)
 
 max_static = max(static_capacities)
 max_moving = max(moving_capacities)
+oslo_max_static = 28
+oslo_max_moving = 40
+
 print("Max static:", max_static)
 print("Max moving:", max_moving)
 
-labels = ['Static', 'Moving']
-values = [max_static, max_moving]
 
+
+groups = ['Oslo', 'Simulatie']
+static_values = [oslo_max_static, max_static]
+moving_values = [oslo_max_moving, max_moving]
+width = 0.2
+in_group_spacing = 0.05
+group_spacing = 1
+
+x = np.arange(len(groups)) 
 plt.figure()
-plt.bar(labels, values)
+plt.bar(x - (width/2 + in_group_spacing), static_values, width, label='Static', color='red')
+plt.bar(x + (width/2 + in_group_spacing), moving_values, width, label='Moving', color='blue')
+
 plt.ylabel('Max capacity')
-plt.title('JooiJooijOijo')
+plt.xticks(x, groups)
+plt.title('Vergelijking Oslo vs Simulatie')
+plt.legend()
 
 plt.show()
