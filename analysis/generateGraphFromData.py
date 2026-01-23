@@ -8,55 +8,66 @@ with open("result.json", 'r') as fp:
 
 groups = [key for key in data.keys()]
 
-data_to_plot = []
-trains_plotted = []
-medians = {'static': [], 'moving': []}
+no_station_groups = groups[0:2]
+with_station_groups = groups[2:5]
 
-for experiment in groups:
-    result = data[experiment]
-    for signalling_type in ['static', 'moving']:
-        max_data = max(result[signalling_type], key=lambda x: reduce(lambda s, x: s + x[0], x[1], 0))
-        trains_plotted.append(max_data[0])
-        unwrapped_data = [c[0] for c in max_data[1]]
-        data_to_plot.append(unwrapped_data)
-        medians[signalling_type].append(np.median(unwrapped_data))
+def prepare_data(selected_groups):
+    data_to_plot = []
+    medians = {'static': [], 'moving': []}
+    for experiment in selected_groups:
+        result = data[experiment]
+        for signalling_type in ['static', 'moving']:
+            max_data = max(result[signalling_type], key=lambda x: reduce(lambda s, x: s + x[0], x[1], 0))
+            unwrapped_data = [c[0] for c in max_data[1]]
+            data_to_plot.append(unwrapped_data)
+            medians[signalling_type].append(np.median(unwrapped_data))
+    return data_to_plot, medians
 
+data_no_station, medians_no_station = prepare_data(no_station_groups)
+data_with_station, medians_with_station = prepare_data(with_station_groups)
 
 width = 0.2
 in_group_spacing = 0.12
 group_spacing = 0.8
-center_x = np.arange(len(groups))
-bar_right_x = center_x+in_group_spacing
-bar_left_x = center_x-in_group_spacing
-box_x = np.sort(np.concat([bar_left_x, bar_right_x]))
+fig, axs = plt.subplots(
+    1, 2, figsize=(14, 6),
+    gridspec_kw={'width_ratios': [0.85, 1.15]}
+)
 
-plt.figure()
-fig = plt.gcf()
+for idx, (ax, group_set, data_set, medians_set, title) in enumerate(zip(
+    axs,
+    [no_station_groups, with_station_groups],
+    [data_no_station, data_with_station],
+    [medians_no_station, medians_with_station],
+    ["No Station", "With Station"]
+)):
+    center_x = np.arange(len(group_set)) * group_spacing
+    bar_right_x = center_x + in_group_spacing
+    bar_left_x = center_x - in_group_spacing
+    box_x = np.sort(np.concatenate([bar_left_x, bar_right_x]))
 
-plt.boxplot(data_to_plot, positions=box_x, widths=width)
-plt.bar(bar_left_x, medians['static'], width=width, label="static", color='cornflowerblue')
-plt.bar(bar_right_x, medians['moving'], width=width, label="moving", color='indianred')
+    ax.boxplot(data_set, positions=box_x, widths=width)
+    ax.bar(bar_left_x, medians_set['static'], width=width, label="static", color='cornflowerblue')
+    ax.bar(bar_right_x, medians_set['moving'], width=width, label="moving", color='indianred')
 
-# for x, y, trains in zip(box_x, data_to_plot, trains_plotted):
-#     plt.text(x, max(y)+2, f"{trains} trains", rotation=90, horizontalalignment='center', verticalalignment='bottom')
+    for i in range(len(group_set)):
+        y = max(data_set[2*i] + data_set[2*i+1])
+        rel_diff = medians_set['moving'][i] / medians_set['static'][i] - 1
+        ax.text(center_x[i], y + 2, f"{int(rel_diff*100)}% increase", rotation=90,
+                horizontalalignment='center', verticalalignment='bottom')
 
-for i in range(len(groups)):
-    y = max(*data_to_plot[2*i], *data_to_plot[2*i+1])
-    rel_diff = medians['moving'][i] / medians['static'][i] - 1
-    plt.text(center_x[i], y+2, f"{int(rel_diff*100)}% increase", rotation=90, horizontalalignment='center', verticalalignment='bottom')
+    ax.set_xticks(center_x)
+    ax.set_xticklabels(group_set)
+    ax.set_title(title)
 
-plt.ylim(0, 250)
-plt.ylabel('Max capacity')
-plt.xticks(center_x, groups)
+    if idx == 0:
+        ax.set_ylim(0, 225)
+        ax.set_ylabel('Max capacity')
+        ax.legend(loc='upper left')
+    else:
+        ax.set_ylim(0, 60)
 
-under_fig = -8
-plt.plot([center_x[0], center_x[1]], [under_fig] * 2, clip_on=False, color="black")
-plt.plot([center_x[2], center_x[4]], [under_fig] * 2, clip_on=False, color="black")
-plt.text((center_x[0] + center_x[1]) / 2, under_fig - 2, "no station", horizontalalignment="center", verticalalignment="top")
-plt.text((center_x[2] + center_x[4]) / 2, under_fig - 2, "with station", horizontalalignment="center", verticalalignment="top")
-
-
-plt.title('Moving vs Static')
-plt.legend()
-
-plt.savefig("../plots/Situations.png", bbox_inches="tight", dpi=300)
+plt.suptitle("Moving vs Static", fontsize=16)
+plt.tight_layout()
+plt.savefig("../plots/Situations.png", dpi=300)
+plt.show()
