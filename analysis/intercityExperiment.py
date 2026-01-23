@@ -10,15 +10,17 @@ from generateModel import *
 sight = math.inf
 wait_time=40
 verbose=False
-block_size=900
-rail_length=10000
+block_size=1150
+rail_length=20000
 num_stations=5
 station_size=0
 min_station_distance=block_size+station_size
-distances_variation=1
-train_specifications=[sng_specifications]
+distances_variation=0
+train_specifications=[virm_specifications]
 train_distribution=[1]
 repetitions = 10
+min_trains = 1
+max_trains = 35
 
 
 static_model = generate_model("static", sight, 1, wait_time, verbose, block_size,
@@ -47,3 +49,5 @@ result_static = test_capacity_trains([static_model], train_specifications,
 result_moving = test_capacity_trains([moving_model], train_specifications,
                               train_distribution, min_trains=max_trains_moving-1,
                               max_trains=max_trains_moving+1, repetitions=repetitions)
+
+
