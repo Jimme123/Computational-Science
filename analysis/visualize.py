@@ -8,12 +8,13 @@ from simulation.block import SignalState
 
 
 def visualize(model, steps, title):
+    """Visualizes a railroad model with blocks, stations, signals, and trains."""
     rail_length = model.signalling_control.length
 
-    R = 5
+    radius = 5
     fig, ax = plt.subplots(figsize=(6,6))
-    ax.set_xlim(-R-1, R+1)
-    ax.set_ylim(-R-1, R+1)
+    ax.set_xlim(-radius-1, radius+1)
+    ax.set_ylim(-radius-1, radius+1)
     ax.set_aspect('equal')
     ax.axis('off')
     ax.set_title(title)
@@ -22,13 +23,15 @@ def visualize(model, steps, title):
     block_patches = []
     brake_patches = []
 
+    # Initialize blocks
     for block in model.signalling_control.blocks:
         start_angle = (block.position.start / rail_length) * 360
         end_angle = (block.position.end / rail_length) * 360
-        wedge = patches.Wedge(center=(0,0), r=R, theta1=start_angle, theta2=end_angle, width=0.5, facecolor="green")
+        wedge = patches.Wedge(center=(0,0), r=radius, theta1=start_angle, theta2=end_angle, width=0.5, facecolor="green")
         block_patches.append((block, wedge))
         ax.add_patch(wedge)
 
+    # Initialize trains and brake distance
     for train in model.trains:
         line, = ax.plot([], [], linewidth=8, color="blue", zorder=5)
         line.set_solid_capstyle('butt')
@@ -38,9 +41,11 @@ def visualize(model, steps, title):
         line.set_solid_capstyle('butt')
         brake_patches.append((train, line))
 
+    # Update function for animation
     def update(frame):
         model.step()
 
+        # Update block colors based on signals
         for block, wedge in block_patches:
             if block.signal.is_station:
                 wedge.set_facecolor("black")
@@ -51,7 +56,7 @@ def visualize(model, steps, title):
             else:
                 wedge.set_facecolor("green")
 
-
+        # Update train positions
         for train, line in train_patches:
             start = train.position.start % rail_length
             end = train.position.end % rail_length
@@ -60,11 +65,12 @@ def visualize(model, steps, title):
             theta1 = ((train.position.bounds[0] + train.position.length) / rail_length) * 2 * np.pi
 
             thetas = np.linspace(theta0, theta1, 40)
-            xs = R * np.cos(thetas)
-            ys = R * np.sin(thetas)
+            xs = radius * np.cos(thetas)
+            ys = radius * np.sin(thetas)
 
             line.set_data(xs, ys)
 
+        # Update brake distance visualization
         for train, line in brake_patches:
             brake_dist = train.brake_distance(0, 1)
             brake_dist_vis = max(brake_dist, 30)
@@ -73,8 +79,8 @@ def visualize(model, steps, title):
             theta1 = ((train.position.bounds[1] + brake_dist) / rail_length) * 2 * np.pi
 
             thetas = np.linspace(theta0, theta1, 40)
-            xs = R * np.cos(thetas)
-            ys = R * np.sin(thetas)
+            xs = radius * np.cos(thetas)
+            ys = radius * np.sin(thetas)
 
             line.set_data(xs, ys)
             line.set_color('#00e2d3')
