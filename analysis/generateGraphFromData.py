@@ -23,7 +23,7 @@ for experiment in groups:
 
 
 width = 0.2
-in_group_spacing = 0.1
+in_group_spacing = 0.12
 group_spacing = 0.8
 center_x = np.arange(len(groups))
 bar_right_x = center_x+in_group_spacing
