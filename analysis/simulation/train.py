@@ -33,7 +33,7 @@ class Train(PositionalAgent):
             raise ValueError(f"Train did not get enough information to calculate acceleration. Specification: {train_specification}")
 
         self.speed = 0
-        self.speed_limit = 10
+        self.speed_limit = math.inf
         self.next_speed_limit = 0
         self.station_wait = None
 

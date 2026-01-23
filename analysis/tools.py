@@ -41,19 +41,19 @@ def add_trains(model, train_specifications):
     return True
 
 
-def get_trains(number_trains, trains_specifications, train_distribution):
+def get_trains(number_trains, train_specifications, train_distribution):
     """
-    trains_specifications: list of different trainSpecifications
+    train_specifications: list of different trainSpecifications
     train_distribution: the distribution with which the trains should be chosen
 
     returns a list with train_specifications
     """
     assert(sum(train_distribution) == 1)
-    assert(len(trains_specifications) == len(train_distribution))
+    assert(len(train_specifications) == len(train_distribution))
 
     trains = []
     for i in range(number_trains):
-        cur_train_specs = trains_specifications[np.random.choice(range(len(trains_specifications)), p=train_distribution)].copy()
+        cur_train_specs = train_specifications[np.random.choice(range(len(train_specifications)), p=train_distribution)].copy()
         trains.append(cur_train_specs)
 
     return trains

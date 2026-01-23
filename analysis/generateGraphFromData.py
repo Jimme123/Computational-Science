@@ -45,7 +45,7 @@ for i in range(len(groups)):
     rel_diff = medians['moving'][i] / medians['static'][i] - 1
     plt.text(center_x[i], y+2, f"{int(rel_diff*100)}% increase", rotation=90, horizontalalignment='center', verticalalignment='bottom')
 
-plt.ylim(0, 90)
+plt.ylim(0, 250)
 plt.ylabel('Max capacity')
 plt.xticks(center_x, groups)
 
@@ -60,4 +60,3 @@ plt.title('Moving vs Static')
 plt.legend()
 
 plt.savefig("../plots/Situations.png", bbox_inches="tight", dpi=300)
-plt.show()
