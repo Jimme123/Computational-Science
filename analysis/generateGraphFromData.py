@@ -30,7 +30,7 @@ width = 0.2
 in_group_spacing = 0.12
 group_spacing = 0.8
 fig, axs = plt.subplots(
-    1, 2, figsize=(14, 6),
+    1, 2, figsize=(12, 7),
     gridspec_kw={'width_ratios': [0.85, 1.15]}
 )
 
@@ -57,17 +57,17 @@ for idx, (ax, group_set, data_set, medians_set, title) in enumerate(zip(
                 horizontalalignment='center', verticalalignment='bottom')
 
     ax.set_xticks(center_x)
-    ax.set_xticklabels(group_set)
-    ax.set_title(title)
+    ax.set_xticklabels(group_set, fontsize=14)
+    ax.set_title(title, fontsize=15)
 
     if idx == 0:
         ax.set_ylim(0, 225)
-        ax.set_ylabel('Max capacity')
+        ax.set_ylabel('Max capacity', fontsize=14)
         ax.legend(loc='upper left')
     else:
         ax.set_ylim(0, 60)
 
-plt.suptitle("Moving vs Static", fontsize=16)
+plt.suptitle("Moving vs Static", fontsize=18)
 plt.tight_layout()
 plt.savefig("../plots/Situations.png", dpi=300)
 plt.show()
