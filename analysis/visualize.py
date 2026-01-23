@@ -40,6 +40,10 @@ def visualize(model, steps, title):
         line, = ax.plot([], [], linewidth=6, alpha=1, zorder=4)
         line.set_solid_capstyle('butt')
         brake_patches.append((train, line))
+    rail_circle = patches.Circle(
+        (0, 0), R, edgecolor='gray', facecolor='none', linewidth=2, zorder=0
+    )
+    ax.add_patch(rail_circle)
 
     # Update function for animation
     def update(frame):
@@ -93,4 +97,5 @@ def visualize(model, steps, title):
 
     ani = FuncAnimation(fig, update, frames=steps, interval=50)
     plt.show()
-    ani.save(f"{title}.mp4")
+    ani.save(f"{title}.mp4", fps=30)
+

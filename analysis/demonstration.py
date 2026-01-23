@@ -9,7 +9,7 @@ from generateModel import *
 
 sight = math.inf
 wait_time=180
-verbose=True
+verbose=False
 block_size=1000
 rail_length=7000
 num_stations=1

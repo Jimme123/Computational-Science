@@ -10,14 +10,14 @@ from visualize import *
 from osloMetro import *
 from generateModel import *
 
-model = generate_model(signalling_type="static",
+model = generate_model(signalling_type="moving",
                        distances_variation=1,
                        train_specifications=[sng_specifications, virm_specifications, freight_train_specifications],
                        num_trains=2,
                        num_stations=5,
                        block_size=1150,
-                       min_station_distance=1165,
-                       train_distribution=[0, 0, 1]
+                       min_station_distance=1300,
+                       train_distribution=[1, 0, 0]
                        )
 # print(test_capacity(model, max_trains=30, verbose=True))
 
