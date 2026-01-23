@@ -1,3 +1,7 @@
+"""
+Contains the visualize function to display a railroad model with trains, blocks, stations, and signals.
+Shows block colors, train positions, and braking distances, and can animate/save the result.
+"""
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 from matplotlib.animation import FuncAnimation
@@ -40,9 +44,8 @@ def visualize(model, steps, title):
         line, = ax.plot([], [], linewidth=6, alpha=1, zorder=4)
         line.set_solid_capstyle('butt')
         brake_patches.append((train, line))
-    rail_circle = patches.Circle(
-        (0, 0), R, edgecolor='gray', facecolor='none', linewidth=2, zorder=0
-    )
+
+    rail_circle = patches.Circle((0, 0), radius, edgecolor='gray', facecolor='none', linewidth=2, zorder=0)
     ax.add_patch(rail_circle)
 
     # Update function for animation
