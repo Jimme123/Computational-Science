@@ -25,14 +25,25 @@ static_model = generate_model("static", sight, 1, wait_time, verbose, block_size
                                 rail_length, num_stations, station_size,
                                 min_station_distance, distances_variation, 0,
                                 train_specifications, train_distribution, False,
-                                False)
+                                True)
 
 moving_model = generate_model("moving", sight, 1, wait_time, verbose, block_size,
                                 rail_length, num_stations, station_size,
                                 min_station_distance, distances_variation, 0,
                                 train_specifications, train_distribution, False,
-                                False)
+                                True)
 
-test_capacity_distances_and_trains([static_model, moving_model], num_stations, station_size, block_size, rail_length, min_station_distance, distances_variation, repetitions,
-                                   trains=train_specifications, train_distribution=train_distribution, max_trains=7, min_trains=5))
+result_wide = test_capacity_trains([static_model, moving_model], train_specifications,
+                              train_distribution, min_trains=min_trains,
+                              max_trains=max_trains, repetitions=1)
 
+max_trains_static = max(result_wide, key=lambda x: x[1][0][0])[0]
+max_trains_moving = max(result_wide, key=lambda x: x[1][0][1])[0]
+
+result_static = test_capacity_trains([static_model], train_specifications,
+                              train_distribution, min_trains=max_trains_static-1,
+                              max_trains=max_trains_static+1, repetitions=repetitions)
+
+result_moving = test_capacity_trains([moving_model], train_specifications,
+                              train_distribution, min_trains=max_trains_moving-1,
+                              max_trains=max_trains_moving+1, repetitions=repetitions)

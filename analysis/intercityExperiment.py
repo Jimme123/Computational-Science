@@ -18,7 +18,7 @@ min_station_distance=block_size+station_size
 distances_variation=0
 train_specifications=[virm_specifications]
 train_distribution=[1]
-repetitions = 1
+repetitions = 10
 min_trains = 1
 max_trains = 35
 
