@@ -13,8 +13,9 @@ verbose=False
 block_size=1150
 rail_length=20000
 num_stations=5
-station_size=0
-min_station_distance=block_size+station_size
+station_size_static=0
+station_size_moving=250
+min_station_distance=block_size + max(station_size_static, station_size_moving)
 distances_variation=0
 train_specifications=[virm_specifications]
 train_distribution=[1]
@@ -24,13 +25,13 @@ max_trains = 35
 
 
 static_model = generate_model("static", sight, 1, wait_time, verbose, block_size,
-                                rail_length, num_stations, station_size,
+                                rail_length, num_stations, station_size_static,
                                 min_station_distance, distances_variation, 0,
                                 train_specifications, train_distribution, False,
                                 True)
 
 moving_model = generate_model("moving", sight, 1, wait_time, verbose, block_size,
-                                rail_length, num_stations, station_size,
+                                rail_length, num_stations, station_size_moving,
                                 min_station_distance, distances_variation, 0,
                                 train_specifications, train_distribution, False,
                                 True)
