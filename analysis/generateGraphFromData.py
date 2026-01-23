@@ -49,10 +49,11 @@ plt.ylim(0, 90)
 plt.ylabel('Max capacity')
 plt.xticks(center_x, groups)
 
-under_fig = -0.12
-plt.plot([center_x[0], center_x[1]], [y, y], clip_on=False)
-plt.text((center_x[0] + center_x[1]) / 2, under_fig, "no station")
-plt.text((center_x[2] + center_x[4]) / 2, under_fig, "with station")
+under_fig = -8
+plt.plot([center_x[0], center_x[1]], [under_fig] * 2, clip_on=False, color="black")
+plt.plot([center_x[2], center_x[4]], [under_fig] * 2, clip_on=False, color="black")
+plt.text((center_x[0] + center_x[1]) / 2, under_fig - 2, "no station", horizontalalignment="center", verticalalignment="top")
+plt.text((center_x[2] + center_x[4]) / 2, under_fig - 2, "with station", horizontalalignment="center", verticalalignment="top")
 
 
 plt.title('Moving vs Static')
