@@ -8,8 +8,8 @@ class Position:
         Contains the position of an object with length in a circle.
     """
     def __init__(self, start, end, rail_length):
-        assert(start < rail_length)
-        assert(end < rail_length)
+        assert(0 <= start < rail_length)
+        assert(0 <= end < rail_length)
         self.start = start
         self.end = end
         self.rail_length = rail_length

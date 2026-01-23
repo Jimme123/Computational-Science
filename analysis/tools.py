@@ -12,8 +12,11 @@ def add_trains(model, train_specifications):
     n = len(train_specifications)
 
     if model.type == "moving":
+        max_train_length = max(train_specifications, key=lambda x:x['length'])['length']
+        if length / n <= max_train_length:
+            return False
+
         starts = np.linspace(0, length, n, False)
-        starts = starts[::-1]
         for i in range(n):
             model.add_train(Position(starts[i], starts[i] + train_specifications[i]['length'], length), train_specifications[i])
 
@@ -84,6 +87,7 @@ def get_distances(number_stations, station_size, block_size, rail_length, min_di
     # distances is weighted average between equal distances and random distances
     distances = [(1 - variation) * a + variation * b for a, b in zip(equal_distances, total_rand_distances)]
 
+
     assert(rail_length - 1 <= sum(distances) <= rail_length + 1)
 
     return distances
@@ -127,19 +131,45 @@ def blocks_from_distances(model, rail_length, distances, station_size, block_siz
             block_spacing = np.linspace(current_distance, current_distance + distance, quotient + 1)
             #add the blocks
             for j in range(quotient):
-                if block_spacing[j + 1] == rail_length:  # alter last block
+                if block_spacing[j + 1] >= rail_length:  # alter last block
                     model.add_block(Position(block_spacing[j], 0, rail_length))
                 else:
                     model.add_block(Position(block_spacing[j], block_spacing[j + 1], rail_length))
 
 
-def test_capacity(trainless_models: [Railroad], trains=[sng_specifications], train_distribution=[1], wind_up=600, test_length=3600, min_trains=1, max_trains=5, repetitions=10, verbose=False):
+def test_capacity_distances_and_trains(empty_models: [Railroad], num_stations, station_size, block_size, rail_length,
+                                       min_station_distance, distances_variation, repetitions, trains, train_distribution, max_trains, min_trains):
+    """
+    Tests the capacity of a trainless and blockless model by varying over the distances
+    """
+    result = []
+    for i in range(repetitions):
+        distances = get_distances(num_stations, station_size, block_size, rail_length,
+                                       min_station_distance, distances_variation)
+        models = []
+        for empty_model in empty_models:
+            model: Railroad = copy.deepcopy(empty_model)
+            blocks_from_distances(model, rail_length, distances, station_size, block_size, model.type)
+            models.append(model)
+        capacities = test_capacity_trains(models, trains, train_distribution, max_trains=max_trains, min_trains=min_trains, verbose=True, repetitions=1)
+        result.append([i, capacities])
+    return result
+
+
+def test_capacity_trains(trainless_models: [Railroad], trains=[sng_specifications], train_distribution=[1], wind_up=600, test_length=3600, min_trains=1, max_trains=5, repetitions=10, verbose=False):
+    """
+    Tests the capacity of a trainless model when given a set of trains and their distribution
+
+    Returns a list of lists, the lists in the list are of the form [n, capacities] where n
+    is the number of trains and capacities is a list of tuples with the capacity of the different
+    trainless_models
+    """
     n = 1
     result = []
 
     for n in range(min_trains, max_trains + 1):
         capacities = []
-        for i in range(repetitions):
+        for _ in range(repetitions):
             trains_specifications = get_trains(n, trains, train_distribution)
             capacity_both = []
             for trainless_model in trainless_models:
@@ -153,10 +183,11 @@ def test_capacity(trainless_models: [Railroad], trains=[sng_specifications], tra
                     model.step()
 
                 passes = 0
-                was_occupied = model.signalling_control.block_contains_train(model.signalling_control.blocks[0])
+                check = Position(0, 1, model.signalling_control.length)
+                was_occupied = model.signalling_control.position_contains_train(check)
                 for i in range(test_length // model.dt):
                     model.step()
-                    occupied = model.signalling_control.block_contains_train(model.signalling_control.blocks[0])
+                    occupied = model.signalling_control.position_contains_train(check)
                     if occupied and not was_occupied:
                         passes += 1
                     was_occupied = occupied
