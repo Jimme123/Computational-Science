@@ -39,8 +39,8 @@ group_spacing = 0.7
 
 x = np.arange(len(groups)) * group_spacing
 plt.figure()
-plt.bar(x - (width/2 + in_group_spacing), static_values, width, label='Static', color='indianred')
-plt.bar(x + (width/2 + in_group_spacing), moving_values, width, label='Moving', color='cornflowerblue')
+plt.bar(x - (width/2 + in_group_spacing), static_values, width, label='Static', color='cornflowerblue')
+plt.bar(x + (width/2 + in_group_spacing), moving_values, width, label='Moving', color='indianred')
 
 plt.ylabel('Max capacity', fontsize=14)
 plt.xticks(x, groups, fontsize=14)
