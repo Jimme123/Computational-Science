@@ -11,7 +11,7 @@ sight = math.inf
 wait_time=180
 verbose=True
 block_size=1000
-rail_length=7000
+rail_length=3500
 num_stations=1
 station_size=0
 min_station_distance=1815
@@ -20,10 +20,9 @@ distances_variation=0
 for signalling_type in ["static", "moving"]:
     model = generate_model(signalling_type, sight, 1, wait_time, verbose, block_size,
                                     rail_length, num_stations, station_size,
-                                    min_station_distance, distances_variation, empty=True)
-
-    model.add_train(Position(0, 100, rail_length), sng_specifications)
-    model.add_train(Position(3000, 3100, rail_length), sng_specifications)
+                                    min_station_distance, distances_variation)
+    print("he?", model.trains)
+    add_trains(model, [sng_specifications]*2)
 
     for i in range(2000):
         model.step()
