@@ -22,6 +22,9 @@ class Railroad(mesa.Model):
         self.verbose = verbose
         self.type = "static" if signalling_control_class == StaticBlockSignalling else "moving"
 
+        if self.type == "moving":
+            assert(self.sight == math.inf)
+
 
     def step(self):
         """Advance the model by one step. Print the details if verbose is on."""

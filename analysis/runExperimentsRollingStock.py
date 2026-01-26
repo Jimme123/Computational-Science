@@ -38,6 +38,6 @@ for key, value in experiment_definitions.items():
     wide, static, moving = run_experiment(**value)
     experiment_results[key] = {"wide": wide, "static": static, "moving": moving}
 
-fp = open("result.json", "w")
+fp = open("rollingstock_result.json", "w")
 json.dump(experiment_results, fp)
 fp.close()

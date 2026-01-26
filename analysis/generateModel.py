@@ -33,7 +33,7 @@ def generate_model(signalling_type="static",
     else:
         raise ValueError(f"unknown signalling type {signalling_type}")
 
-    model = Railroad(rail_length, signalling_class, sight=sight, dt=dt, wait_time=wait_time, verbose=False)
+    model = Railroad(rail_length, signalling_class, sight=sight, dt=dt, wait_time=wait_time, verbose=verbose)
 
     if blocks:
         distances = get_distances(num_stations, station_size, block_size, rail_length, min_station_distance, distances_variation)

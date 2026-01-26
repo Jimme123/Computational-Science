@@ -3,7 +3,7 @@ from functools import reduce
 import matplotlib.pyplot as plt
 import numpy as np
 
-with open("result.json", 'r') as fp:
+with open("rollingstock_result.json", 'r') as fp:
     data = json.load(fp)
 
 groups = [key for key in data.keys()]
@@ -17,7 +17,7 @@ def prepare_data(selected_groups):
     for experiment in selected_groups:
         result = data[experiment]
         for signalling_type in ['static', 'moving']:
-            max_data = max(result[signalling_type], key=lambda x: reduce(lambda s, x: s + x[0], x[1], 0))
+            max_data = max(result[signalling_type], key=lambda x: reduce(lambda s, t: s + t[0], x[1], 0))
             unwrapped_data = [c[0] for c in max_data[1]]
             data_to_plot.append(unwrapped_data)
             medians[signalling_type].append(np.median(unwrapped_data))
@@ -69,5 +69,5 @@ for idx, (ax, group_set, data_set, medians_set, title) in enumerate(zip(
 
 plt.suptitle("Moving vs Static", fontsize=18)
 plt.tight_layout()
-plt.savefig("../plots/Situations.png", dpi=300)
+plt.savefig("../plots/rolling_stock.png", dpi=300)
 plt.show()

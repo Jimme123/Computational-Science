@@ -6,11 +6,17 @@ import json
 
 experiment_definitions_model = {
     "sight": [
-        {"sight": 40},
-        {"sight": 100},
-        {"sight": 200},
-        {"sight": 300},
-        {"sight": math.inf}
+        {"sight": 40,
+         "run_moving": False,
+         "verbose": True},
+        {"sight": 100,
+         "run_moving": False},
+        {"sight": 200,
+         "run_moving": False},
+        {"sight": 300,
+         "run_moving": False},
+        {"sight": math.inf,
+         "run_moving": False}
     ],
 
     "num_stations": [
@@ -53,6 +59,9 @@ for variable_name, options in experiment_definitions_model.items():  # options i
         result[option[variable_name]] = wide
     experiment_results[variable_name] = result
 
+fp = open("result_variables_tmp.json", "w")
+json.dump(experiment_results, fp)
+fp.close()
 
 for variable_name, options in experiment_definitions_train.items():  # options is a list of ints
     print(f'running {variable_name}')
