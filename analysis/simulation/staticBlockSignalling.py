@@ -76,7 +76,6 @@ class StaticBlockSignalling(SignallingControl):
             return (SignalState(), math.inf)
 
         signal = block.signal
-
         if distance > self.model.sight:
             return ("unknown", distance)
         else:

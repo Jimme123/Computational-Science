@@ -20,8 +20,7 @@ distances_variation=0
 for signalling_type in ["static", "moving"]:
     model = generate_model(signalling_type, sight, 1, wait_time, verbose, block_size,
                                     rail_length, num_stations, station_size,
-                                    min_station_distance, distances_variation)
-    print("he?", model.trains)
+                                    min_station_distance, distances_variation, trains=False)
     add_trains(model, [sng_specifications]*2)
 
     for i in range(2000):
