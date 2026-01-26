@@ -13,7 +13,7 @@ def add_trains(model, train_specifications):
 
     if model.type == "moving":
         max_train_length = max(train_specifications, key=lambda x:x['length'])['length']
-        if length / n <= max_train_length:
+        if length / n <= max_train_length:  # not enough space for trains
             return False
 
         starts = np.linspace(0, length, n, False)
@@ -53,6 +53,7 @@ def get_trains(number_trains, train_specifications, train_distribution):
 
     trains = []
     for i in range(number_trains):
+        # get random trains specification based on train distribution
         cur_train_specs = train_specifications[np.random.choice(range(len(train_specifications)), p=train_distribution)].copy()
         trains.append(cur_train_specs)
 
@@ -98,8 +99,9 @@ def blocks_from_distances(model, rail_length, distances, station_size, block_siz
     Takes the distances between stations and other variables to get stations and blocks in model
     """
 
-    if len(distances) == 0:
+    if len(distances) == 0:  # no stations
         if signalling_type == "static":
+            # add evenly spaced blocks over complete track
             quotient = int(rail_length // block_size)
             block_spacing = np.linspace(0, rail_length, quotient + 1)
             for j in range(quotient):
@@ -143,7 +145,7 @@ def test_capacity_distances_and_trains(empty_models: [Railroad], num_stations, s
     Tests the capacity of a trainless and blockless model by varying over the distances
     """
     result = []
-    for i in range(repetitions):
+    for i in range(repetitions):  # loop over different distances
         distances = get_distances(num_stations, station_size, block_size, rail_length,
                                        min_station_distance, distances_variation)
         models = []
@@ -172,6 +174,8 @@ def test_capacity_trains(trainless_models: [Railroad], trains=[sng_specification
         for _ in range(repetitions):
             trains_specifications = get_trains(n, trains, train_distribution)
             capacity_both = []
+
+            # get capacity for number of trains for all models
             for trainless_model in trainless_models:
                 model: Railroad = copy.deepcopy(trainless_model)
                 # Add n trains to the model
@@ -179,9 +183,11 @@ def test_capacity_trains(trainless_models: [Railroad], trains=[sng_specification
                     capacity_both.append(0)
                     continue
 
+                # wind up to let trains space optimally
                 for i in range(wind_up // model.dt):
                     model.step()
 
+                # calculate capacity
                 passes = 0
                 check = Position(0, 1, model.signalling_control.length)
                 was_occupied = model.signalling_control.position_contains_train(check)
@@ -202,6 +208,9 @@ def test_capacity_trains(trainless_models: [Railroad], trains=[sng_specification
 
 
 def measure_station_travel_times_real_time(model, metro_specifications, max_steps=20000):
+    """
+    Measure travel time between stations in real time.
+    """
     train = model.trains[0]
 
     dt = metro_specifications.get("dt", 1.0)
@@ -221,7 +230,7 @@ def measure_station_travel_times_real_time(model, metro_specifications, max_step
         pos = train.position.bounds[1]
 
         for station in stations:
-            if station.position.start <= pos <= station.position.end:
+            if station.position.start <= pos <= station.position.end:  # train at station
                 sid = id(station)
 
                 if last_station_id is None:
@@ -229,7 +238,8 @@ def measure_station_travel_times_real_time(model, metro_specifications, max_step
                     last_time = step
                     break
 
-                if sid != last_station_id:
+                if sid != last_station_id:  # entered new station
+                    # calculate travel time
                     steps_taken = step - last_time
                     time_seconds = steps_taken * dt
 
@@ -241,9 +251,11 @@ def measure_station_travel_times_real_time(model, metro_specifications, max_step
                         f"{time_seconds:.1f} s"
                     )
 
+                    # update
                     last_station_id = sid
                     last_time = step
 
+                    # passed all stations
                     if len(travel_times) >= len(stations):
                         return travel_times
                 break
