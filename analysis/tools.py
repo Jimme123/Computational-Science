@@ -66,8 +66,6 @@ def get_distances(number_stations, station_size, block_size, rail_length, min_di
 
     variation: float between 0 and 1 where 0 is no randomness and 1 is total randomness
     """
-    assert(min_distance >= block_size + station_size)
-    assert(number_stations < (rail_length - number_stations * station_size) / block_size)
     assert(0 <= variation <= 1)
 
     if number_stations == 0:
@@ -98,6 +96,8 @@ def blocks_from_distances(model, rail_length, distances, station_size, block_siz
     """
     Takes the distances between stations and other variables to get stations and blocks in model
     """
+    if signalling_type == "static":
+        assert(min(distances) >= block_size + station_size)
 
     if len(distances) == 0:  # no stations
         if signalling_type == "static":
