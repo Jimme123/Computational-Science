@@ -1,6 +1,9 @@
 import enum
 import math
+from copy import copy
 from typing import TypedDict, NotRequired
+
+
 from simulation.positionalAgent import *
 from simulation.block import *
 
@@ -69,16 +72,26 @@ class Train(PositionalAgent):
 
         # alter position based on current speed
         dx = self.speed * self.dt
-        self.position += dx
 
         if dx >= distance:  # enters new block or passed a station
-            self.next_speed_limit = signal.max_speed_next
             if not signal.is_station:
                 self.speed_limit = signal.max_speed  # alter speed limit depending on next signal
             else:  # exits station
                 self.speed_limit = math.inf
                 self.station_wait = None
 
+            if dx >= signal.distance_to_next_signal + distance: # Passed two signals
+                tmp_pos = copy(self.position)
+                tmp_pos += distance
+                next_signal, _ = self.signalling_control.next_signal(tmp_pos)
+
+                self.next_speed_limit = next_signal.max_speed_next
+                self.speed_limit = next_signal.max_speed
+            else:
+                self.next_speed_limit = signal.max_speed_next
+
+
+        self.position += dx
 
     def go_to_speed(self, speed, braking, acceleration):
         """

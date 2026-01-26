@@ -7,8 +7,7 @@ import json
 experiment_definitions_model = {
     "sight": [
         {"sight": 40,
-         "run_moving": False,
-         "verbose": True},
+         "run_moving": False},
         {"sight": 100,
          "run_moving": False},
         {"sight": 200,
@@ -52,9 +51,9 @@ experiment_definitions_train = {
 experiment_results = {}
 
 for variable_name, options in experiment_definitions_model.items():  # options is list of dicts
-    print(f'running {variable_name}')
     result = {}
     for option in options:  # option is dict
+        print(f"Running {option}")
         wide = run_experiment(**option, run_repetitions=False)
         result[option[variable_name]] = wide
     experiment_results[variable_name] = result
@@ -64,10 +63,10 @@ json.dump(experiment_results, fp)
 fp.close()
 
 for variable_name, options in experiment_definitions_train.items():  # options is a list of ints
-    print(f'running {variable_name}')
     result = {}
     train = sng_specifications.deepcopy()
     for option in options:
+        print(f"Running {option}")
         train[variable_name] = option
         wide = run_experiment(train_specifications=[train], run_repetitions=False)
         result[option] = wide

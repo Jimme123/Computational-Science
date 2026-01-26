@@ -41,10 +41,6 @@ def run_experiment(
                                         train_specifications, train_distribution, False,
                                         True))
 
-
-    add_trains(models[0], [sng_specifications]*5)
-    visualize(models[0], 1000, "test")
-
     result_wide = test_capacity_trains(models, train_specifications,
                                 train_distribution, min_trains=min_trains,
                                 max_trains=max_trains, repetitions=1)
