@@ -18,8 +18,7 @@ experiment_definitions_model = {
         {"num_stations": 2},
         {"num_stations": 5},
         {"num_stations": 10},
-        {"num_stations": 20,
-         "block_size": 900}
+        {"num_stations": 15}
     ],
 
     "block_size": [
@@ -43,18 +42,10 @@ experiment_definitions_train = {
     "max_speed": [10, 20, 30, 40, 50]
 }
 
-experiment_definition = {
-    "num_stations": [
-        {"num_stations": 20,
-          "block_size": 800},
-        {"num_stations": 10},
-    ]
-}
-
 
 experiment_results = {}
 
-for variable_name, options in experiment_definition.items():  # options is list of dicts
+for variable_name, options in experiment_definitions_model.items():  # options is list of dicts
     print(f'running {variable_name}')
     result = {}
     for option in options:  # option is dict
