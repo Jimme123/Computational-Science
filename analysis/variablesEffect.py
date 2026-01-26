@@ -54,15 +54,15 @@ for variable_name, options in experiment_definitions_model.items():  # options i
     experiment_results[variable_name] = result
 
 
-# for variable_name, options in experiment_definitions_train.items():  # options is a list of ints
-#     print(f'running {variable_name}')
-#     result = {}
-#     train = sng_specifications.deepcopy()
-#     for option in options:
-#         train[variable_name] = option
-#         wide = run_experiment(train_specifications=[train], run_repetitions=False)
-#         result[option] = wide
-#     experiment_results[variable_name] = result
+for variable_name, options in experiment_definitions_train.items():  # options is a list of ints
+    print(f'running {variable_name}')
+    result = {}
+    train = sng_specifications.deepcopy()
+    for option in options:
+        train[variable_name] = option
+        wide = run_experiment(train_specifications=[train], run_repetitions=False)
+        result[option] = wide
+    experiment_results[variable_name] = result
 
 fp = open("result_variables.json", "w")
 json.dump(experiment_results, fp)
