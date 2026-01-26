@@ -3,6 +3,7 @@ from tools import *
 
 def run_experiment(
     sight = math.inf,
+    dt=1,
     wait_time=40,
     verbose=False,
     block_size=1150,
@@ -22,13 +23,13 @@ def run_experiment(
     if min_station_distance is None:
         min_station_distance = block_size + max(station_size_static, station_size_moving)
 
-    static_model = generate_model("static", sight, 1, wait_time, verbose, block_size,
+    static_model = generate_model("static", sight, dt, wait_time, verbose, block_size,
                                 rail_length, num_stations, station_size_static,
                                 min_station_distance, distances_variation, 0,
                                 train_specifications, train_distribution, False,
                                 True)
 
-    moving_model = generate_model("moving", sight, 1, wait_time, verbose, block_size,
+    moving_model = generate_model("moving", sight, dt, wait_time, verbose, block_size,
                                     rail_length, num_stations, station_size_moving,
                                     min_station_distance, distances_variation, 0,
                                     train_specifications, train_distribution, False,
