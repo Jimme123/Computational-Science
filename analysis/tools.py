@@ -181,12 +181,8 @@ def test_capacity_trains(trainless_models: [Railroad], trains=[sng_specification
                     capacity_both.append(0)
                     continue
 
-<<<<<<< HEAD
-                for i in range(wind_up // model.dt):
-=======
                 # wind up to let trains space optimally
                 for i in range(int(wind_up / model.dt)):
->>>>>>> a97b7bedd79c0e8b3fb9e8f92a8ae7d313a22fe0
                     model.step()
 
                 passes = 0
