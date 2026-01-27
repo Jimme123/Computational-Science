@@ -3,10 +3,10 @@ import math
 from simulation.model import Railroad
 from simulation.staticBlockSignalling import *
 from simulation.movingBlockSignalling import *
-from tools import *
-from trainSpecifications import *
+from simulation.tools import *
 
 
+<<<<<<< HEAD:analysis/generateModel.py
 def generate_model(signalling_type="static",
                     sight=math.inf,
                     dt=1,
@@ -23,6 +23,24 @@ def generate_model(signalling_type="static",
                     train_distribution=[1],
                     trains=True,
                     blocks=True
+=======
+def generate_model(signalling_type,
+                    sight,
+                    dt,
+                    wait_time,
+                    verbose,
+                    block_size,
+                    rail_length,
+                    num_stations,
+                    station_size,
+                    min_station_distance,
+                    distances_variation,
+                    num_trains,
+                    train_specifications,
+                    train_distribution,
+                    trains,
+                    blocks
+>>>>>>> 56578579ec793e6d6e4dafe6daf0bddec878a5e0:analysis/simulation/generateModel.py
                     ):
     # make sure the distance between stations is greater then the braking distance at max speed
 

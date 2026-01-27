@@ -5,7 +5,6 @@ from scipy.stats import dirichlet
 from simulation.position import *
 from simulation.model import *
 from simulation.block import *
-from trainSpecifications import *
 
 def add_trains(model, train_specifications):
     length = model.signalling_control.length
@@ -158,7 +157,7 @@ def test_capacity_distances_and_trains(empty_models: [Railroad], num_stations, s
     return result
 
 
-def test_capacity_trains(trainless_models: [Railroad], trains=[sng_specifications], train_distribution=[1], wind_up=600, test_length=3600, min_trains=1, max_trains=5, repetitions=10, verbose=False):
+def test_capacity_trains(trainless_models: [Railroad], trains, train_distribution=[1], wind_up=600, test_length=3600, min_trains=1, max_trains=5, repetitions=10, verbose=False):
     """
     Tests the capacity of a trainless model when given a set of trains and their distribution
 

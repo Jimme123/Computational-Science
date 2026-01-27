@@ -7,8 +7,8 @@ from simulation.movingBlockSignalling import *
 from simulation.position import *
 from simulation.train import *
 
-from tools import *
-from visualize import *
+from simulation.tools import *
+from simulation.visualize import *
 
 
 def generate_metro(signalling_type="static",

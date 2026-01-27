@@ -1,5 +1,5 @@
 import osloMetro
-from tools import *
+from simulation.tools import *
 import matplotlib.pyplot as plt
 import numpy as np
 

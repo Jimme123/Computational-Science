@@ -3,7 +3,7 @@ Contains station class
 """
 import mesa
 
-from block import *
+from simulation.block import *
 
 class Station(Block):
     def __init__(self, model, position):
