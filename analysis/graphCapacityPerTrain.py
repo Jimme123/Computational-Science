@@ -1,7 +1,7 @@
 import json
 import matplotlib.pyplot as plt
 
-with open("result.json", 'r') as fp:
+with open("rollingstock_result.json", 'r') as fp:
     data = json.load(fp)
 
 sprinter_data = data["sprinter"]
