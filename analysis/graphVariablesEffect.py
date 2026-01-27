@@ -44,6 +44,7 @@ for variable_name, plot_data in data_to_plot.items():
     ax.set_title(f"Capacity over {variable_name}")
     ax.grid(True)
     ax.set_ylim(bottom=0)
+axs[-1, -1].axis('off')
 
 ax.legend()
 fig.suptitle("Influence of variables", fontsize=15)
