@@ -1,7 +1,7 @@
-from generateModel import *
-from tools import *
+from simulation.generateModel import *
+from simulation.tools import *
 from trainSpecifications import sng_specifications
-from visualize import *
+from simulation.visualize import *
 
 def run_experiment(
     sight = math.inf,

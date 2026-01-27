@@ -3,7 +3,7 @@ from functools import reduce
 import matplotlib.pyplot as plt
 import numpy as np
 
-with open("result_variables.json", 'r') as fp:
+with open("results/result_variables.json", 'r') as fp:
     data = json.load(fp)
 
 # Prepare data
