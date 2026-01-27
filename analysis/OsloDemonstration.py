@@ -1,6 +1,7 @@
 import osloMetro
-from tools import *
-from visualize import *
+from trainSpecifications import *
+from simulation.tools import *
+from simulation.visualize import *
 import matplotlib.pyplot as plt
 import numpy as np
 
