@@ -96,7 +96,7 @@ def blocks_from_distances(model, rail_length, distances, station_size, block_siz
     """
     Takes the distances between stations and other variables to get stations and blocks in model
     """
-    if signalling_type == "static":
+    if signalling_type == "static" and len(distances) > 0:
         assert(min(distances) >= block_size + station_size)
 
     if len(distances) == 0:  # no stations
@@ -184,21 +184,21 @@ def test_capacity_trains(trainless_models: [Railroad], trains=[sng_specification
                     continue
 
                 # wind up to let trains space optimally
-                for i in range(wind_up // model.dt):
+                for i in range(int(wind_up / model.dt)):
                     model.step()
 
                 # calculate capacity
                 passes = 0
                 check = Position(0, 1, model.signalling_control.length)
                 was_occupied = model.signalling_control.position_contains_train(check)
-                for i in range(test_length // model.dt):
+                for i in range(int(test_length / model.dt)):
                     model.step()
                     occupied = model.signalling_control.position_contains_train(check)
                     if occupied and not was_occupied:
                         passes += 1
                     was_occupied = occupied
 
-                capacity = float(passes) / (float(test_length)) * 60**2
+                capacity = float(passes) / float(test_length) * 60**2
                 capacity_both.append(capacity)
             capacities.append(capacity_both)
         result.append([n, capacities])

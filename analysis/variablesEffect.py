@@ -1,4 +1,5 @@
 import math
+import copy
 from trainSpecifications import *
 from runExperiment import *
 
@@ -18,6 +19,24 @@ experiment_definitions_model = {
          "run_moving": False}
     ],
 
+    "sight_no_station": [
+        {"sight": 40,
+         "num_stations": 0,
+         "run_moving": False},
+        {"sight": 100,
+         "num_stations": 0,
+         "run_moving": False},
+        {"sight": 200,
+         "num_stations": 0,
+         "run_moving": False},
+        {"sight": 300,
+         "num_stations": 0,
+         "run_moving": False},
+        {"sight": math.inf,
+         "num_stations": 0,
+         "run_moving": False}
+    ],
+
     "num_stations": [
         {"num_stations": 0},
         {"num_stations": 2},
@@ -27,11 +46,16 @@ experiment_definitions_model = {
     ],
 
     "block_size": [
-        {"block_size": 750},
-        {"block_size": 1150},
-        {"block_size": 1500},
-        {"block_size": 2000},
-        {"block_size": 3000}
+        {"block_size": 3900/5,
+         "run_moving": False},
+        {"block_size": 3900/4,
+         "run_moving": False},
+        {"block_size": 3900/3,
+         "run_moving": False},
+        {"block_size": 3900/2,
+         "run_moving": False},
+        {"block_size": 3900,
+         "run_moving": False}
     ],
 
     "dt": [
@@ -57,21 +81,20 @@ for variable_name, options in experiment_definitions_model.items():  # options i
         wide = run_experiment(**option, run_repetitions=False)
         result[option[variable_name]] = wide
     experiment_results[variable_name] = result
+    fp = open("result_variables.json", "w")
+    json.dump(experiment_results, fp)
+    fp.close()
 
-fp = open("result_variables_tmp.json", "w")
-json.dump(experiment_results, fp)
-fp.close()
 
 for variable_name, options in experiment_definitions_train.items():  # options is a list of ints
     result = {}
-    train = sng_specifications.deepcopy()
+    train = copy.deepcopy(sng_specifications)
     for option in options:
         print(f"Running {option}")
         train[variable_name] = option
         wide = run_experiment(train_specifications=[train], run_repetitions=False)
         result[option] = wide
     experiment_results[variable_name] = result
-
-fp = open("result_variables.json", "w")
-json.dump(experiment_results, fp)
-fp.close()
+    fp = open("result_variables.json", "w")
+    json.dump(experiment_results, fp)
+    fp.close()
