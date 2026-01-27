@@ -6,24 +6,6 @@ from simulation.movingBlockSignalling import *
 from simulation.tools import *
 
 
-<<<<<<< HEAD:analysis/generateModel.py
-def generate_model(signalling_type="static",
-                    sight=math.inf,
-                    dt=1,
-                    wait_time=40,
-                    verbose=False,
-                    block_size=1500,
-                    rail_length=15000,
-                    num_stations=5,
-                    station_size=150,
-                    min_station_distance=1515,
-                    distances_variation=0,
-                    num_trains=5,
-                    train_specifications=[sng_specifications],
-                    train_distribution=[1],
-                    trains=True,
-                    blocks=True
-=======
 def generate_model(signalling_type,
                     sight,
                     dt,
@@ -40,7 +22,6 @@ def generate_model(signalling_type,
                     train_distribution,
                     trains,
                     blocks
->>>>>>> 56578579ec793e6d6e4dafe6daf0bddec878a5e0:analysis/simulation/generateModel.py
                     ):
     # make sure the distance between stations is greater then the braking distance at max speed
 
