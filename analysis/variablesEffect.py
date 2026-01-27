@@ -61,7 +61,10 @@ experiment_definitions_model = {
     "dt": [
         {"dt": 0.1},
         {"dt": 1},
-        {"dt": 2}
+        {"dt": 2},
+        {"dt": 5},
+        {"dt":10},
+        {"dt":15}
     ]
 }
 
@@ -81,6 +84,7 @@ for variable_name, options in experiment_definitions_model.items():  # options i
         wide = run_experiment(**option, run_repetitions=False)
         result[option[variable_name]] = wide
     experiment_results[variable_name] = result
+
     fp = open("result_variables.json", "w")
     json.dump(experiment_results, fp)
     fp.close()
@@ -95,6 +99,7 @@ for variable_name, options in experiment_definitions_train.items():  # options i
         wide = run_experiment(train_specifications=[train], run_repetitions=False)
         result[option] = wide
     experiment_results[variable_name] = result
+
     fp = open("result_variables.json", "w")
     json.dump(experiment_results, fp)
     fp.close()

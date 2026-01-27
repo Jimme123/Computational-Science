@@ -22,6 +22,10 @@ for measurement in sprinter_data['wide']:
 plt.figure(figsize=(10,6))
 plt.plot(num_trains, static_capacity, label="Max Static Capacity", marker='o', color="cornflowerblue")
 plt.plot(num_trains, moving_capacity, label="Max Moving Capacity", marker='x', color="indianred")
+# Hardcoded lines to indicate Level off
+plt.plot([8, 8], [-10, 100], marker='', linestyle='dashed', color="cornflowerblue")
+plt.plot([12, 12], [-10, 100], marker='', linestyle='dashed', color="indianred")
+plt.ylim(0, 45)
 plt.xlabel("Number of trains", fontsize=15)
 plt.ylabel("Capacity", fontsize=15)
 plt.title("Capacity per Number of Trains", fontsize=15)
