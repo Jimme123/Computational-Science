@@ -1,3 +1,6 @@
+"""
+The model with the trains, blocks and signalling control
+"""
 import mesa
 import math
 

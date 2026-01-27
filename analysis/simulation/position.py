@@ -1,3 +1,7 @@
+"""
+Containts the position class and multiple helper functions related to the
+position
+"""
 class Position:
     """
         Contains the position of an object with length in a circle.
@@ -29,6 +33,13 @@ class Position:
 
 
 def get_segments(position):
+    """
+    input: position
+    output: the bounds of the position if the position does not overlap
+    with the start/end of the rail track else the position is split up
+    into the part until the end of the track and the part starting at
+    the start
+    """
     start, end = position.bounds
     if end > start:
         return [(start, end)]

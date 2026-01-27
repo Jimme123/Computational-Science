@@ -1,3 +1,7 @@
+"""
+Moving block signalling class that bases the signalling on the distances
+between trains and stations
+"""
 from simulation.staticBlockSignalling import *
 from simulation.block import *
 

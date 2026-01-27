@@ -1,3 +1,7 @@
+"""
+Static block signalling class that bases the signalling on the occupation of
+fixed blocks on the track
+"""
 import mesa
 import math
 import copy

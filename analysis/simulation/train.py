@@ -1,3 +1,7 @@
+"""
+Contains the train class. The train requests the next signal from the
+signalling control and behaves accordingly
+"""
 import enum
 import math
 from copy import copy
@@ -48,7 +52,10 @@ class Train(PositionalAgent):
 
 
     def step(self):
-        # Look at the signal, update the state and do stuff accordingly
+        """
+        Receive the signal and distance to the signal from the signalling
+        control and alters the state of the train accordingly (speed, position etc)
+        """
         signal: "unknown" | SignalState
         signal, distance = self.signalling_control.next_signal(self.position)
         braking, acceleration = self.acceleration_bounds()
@@ -117,6 +124,10 @@ class Train(PositionalAgent):
 
 
     def speed_bound(self, distance, speed, braking):
+        """
+        Calculates the speed the train needs to go at now to be at the input
+        speed after the input distance.
+        """
         if distance < 0:
             return speed
         else:
@@ -126,6 +137,8 @@ class Train(PositionalAgent):
     def go_at(self, distance, speed, braking, acceleration):
         """
             Make the train go as fast as possible while being able to go a certain speed some distance from now.
+
+            speed: speed at which to pass signal in given distance
         """
         current_max_speed = min(self.speed_limit, self.max_speed)
         if self.speed > current_max_speed:
@@ -143,6 +156,10 @@ class Train(PositionalAgent):
 
 
     def acceleration_bounds(self):
+        """
+        Calculate the max braking and max acceleration using laws of physics
+        and available data of train
+        """
         if self.power is not None and self.weight is not None:
             force = float(self.power) / float(self.speed) if self.speed != 0 else math.inf
             if self.tractive_effort is not None:

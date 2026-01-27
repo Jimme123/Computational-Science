@@ -1,3 +1,6 @@
+"""
+Contains station class
+"""
 import mesa
 
 from simulation.block import *

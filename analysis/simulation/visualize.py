@@ -1,3 +1,7 @@
+"""
+Contains the visualize function to display a railroad model with trains, blocks, stations, and signals.
+Shows block colors, train positions, and braking distances, and can animate/save the result.
+"""
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 from matplotlib.animation import FuncAnimation
@@ -8,6 +12,7 @@ from simulation.block import SignalState
 
 
 def visualize(model, steps, title):
+    """Visualizes a railroad model with blocks, stations, signals, and trains."""
     rail_length = model.signalling_control.length
 
     R = 5
@@ -22,6 +27,7 @@ def visualize(model, steps, title):
     block_patches = []
     brake_patches = []
 
+    # Initialize blocks
     for block in model.signalling_control.blocks:
         start_angle = (block.position.start / rail_length) * 360
         end_angle = (block.position.end / rail_length) * 360
@@ -29,6 +35,7 @@ def visualize(model, steps, title):
         block_patches.append((block, wedge))
         ax.add_patch(wedge)
 
+    # Initialize trains and brake distance
     for train in model.trains:
         line, = ax.plot([], [], linewidth=8, color="blue", zorder=5)
         line.set_solid_capstyle('butt')
@@ -38,9 +45,11 @@ def visualize(model, steps, title):
         line.set_solid_capstyle('butt')
         brake_patches.append((train, line))
 
+    # Update function for animation
     def update(frame):
         model.step()
 
+        # Update block colors based on signals
         for block, wedge in block_patches:
             if block.signal.is_station:
                 wedge.set_facecolor("black")
@@ -51,7 +60,7 @@ def visualize(model, steps, title):
             else:
                 wedge.set_facecolor("green")
 
-
+        # Update train positions
         for train, line in train_patches:
             start = train.position.start % rail_length
             end = train.position.end % rail_length
@@ -65,6 +74,7 @@ def visualize(model, steps, title):
 
             line.set_data(xs, ys)
 
+        # Update brake distance visualization
         for train, line in brake_patches:
             brake_dist = train.brake_distance(0, 1)
             brake_dist_vis = max(brake_dist, 30)
