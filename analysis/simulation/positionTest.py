@@ -1,6 +1,6 @@
 import unittest
 
-from position import *
+from simulation.position import *
 
 class Tests(unittest.TestCase):
     def test_position(self):
