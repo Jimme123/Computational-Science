@@ -208,7 +208,7 @@ def test_capacity_trains(trainless_models: [Railroad], trains, train_distributio
 
 def measure_station_travel_times_real_time(model, train_specifications, max_steps=20000, station_names=None, verbose=False):
     """
-    Measure travel time between stations in real time.
+    Measure travel time between stations in real time. This includes waiting at stations.
 
         model: a trainless model
         station_names: a list of names for each station.
