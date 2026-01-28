@@ -45,6 +45,12 @@ def visualize(model, steps, title):
         line.set_solid_capstyle('butt')
         brake_patches.append((train, line))
 
+    # add circle
+    rail_circle = patches.Circle(
+        (0, 0), R, edgecolor='gray', facecolor='none', linewidth=2, zorder=0
+    )
+    ax.add_patch(rail_circle)
+
     # Update function for animation
     def update(frame):
         model.step()
