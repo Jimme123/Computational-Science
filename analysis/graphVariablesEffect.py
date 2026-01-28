@@ -24,6 +24,7 @@ for variable_name, experiment in data.items():
             data_to_plot[variable_name]['y']['moving'].append([None])
 
 
+# Plot the data
 fig, axs = plt.subplots(2, 4, figsize=(12, 7))
 
 i = 0

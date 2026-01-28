@@ -82,7 +82,10 @@ for variable_name, options in experiment_definitions_model.items():  # options i
     for option in options:  # option is dict
         print(f"Running {option}")
         wide = run_experiment(**option, run_repetitions=False)
-        result[option[variable_name]] = wide
+        if variable_name == "sight_no_station":
+            result[option["sight"]] = wide
+        else:
+            result[option[variable_name]] = wide
     experiment_results[variable_name] = result
 
     fp = open("results/result_variables.json", "w")
