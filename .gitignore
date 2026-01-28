@@ -4,5 +4,5 @@ tmp.txt
 *.mp4
 !videos/*.mp4
 *.avi
-!videos/*.mp4
+!videos/*.avi
 .DS_Store
