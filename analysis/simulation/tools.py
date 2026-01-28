@@ -206,52 +206,59 @@ def test_capacity_trains(trainless_models: [Railroad], trains, train_distributio
     return result
 
 
-def measure_station_travel_times_real_time(model, metro_specifications, max_steps=20000):
+def measure_station_travel_times_real_time(model, train_specifications, max_steps=20000, station_names=None, verbose=False):
     """
     Measure travel time between stations in real time.
+
+        model: a trainless model
+        station_names: a list of names for each station.
     """
+    dt = model.dt
+
+    add_trains(model, [train_specifications])
     train = model.trains[0]
 
-    dt = metro_specifications.get("dt", 1.0)
-
     blocks = model.signalling_control.blocks
-    stations = [b for b in blocks if b.signal == Color.STATION]
+    stations = [b for b in blocks if b.signal.is_station]
     stations.sort(key=lambda b: b.position.start)
 
-    station_indices = {id(s): i for i, s in enumerate(stations)}
+    if station_names is None:
+        station_names = [f"station {i}" for i in range(len(stations))]
+    assert(len(station_names) == len(stations))
 
-    last_station_id = None
+    last_station = None
     last_time = None
     travel_times = []
 
     for step in range(max_steps):
         model.step()
-        pos = train.position.bounds[1]
 
         for station in stations:
-            if station.position.start <= pos <= station.position.end:  # train at station
-                sid = id(station)
+            if overlap(train.position, station.position):  # train at station
 
-                if last_station_id is None:
-                    last_station_id = sid
+                if last_station is None:
+                    last_station = station
                     last_time = step
                     break
 
-                if sid != last_station_id:  # entered new station
+                elif station != last_station:  # entered new station
                     # calculate travel time
                     steps_taken = step - last_time
                     time_seconds = steps_taken * dt
 
                     travel_times.append(time_seconds)
 
-                    print(
-                        f"Van station {station_indices[last_station_id]} "
-                        f"naar station {station_indices[sid]}: "
-                        f"{time_seconds:.1f} s"
-                    )
+                    last_index = stations.index(last_station)
+                    index = stations.index(station)
+
+                    if verbose:
+                        print(
+                            f"{f"From {station_names[last_index]} to {station_names[index]}: ":<50}"
+                            f"{time_seconds:.1f} s"
+                        )
 
                     # update
-                    last_station_id = sid
+                    last_station = station
                     last_time = step
 
                     # passed all stations
