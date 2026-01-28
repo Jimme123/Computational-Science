@@ -10,6 +10,7 @@ Then install the packages
 ```
 pip install -r requirements.txt
 ```
+To generate videos you need to have `ffmpeg` installed on your system.
 
 ## Files
 **All file paths assume that the python files are run from the directory analysis.**  
@@ -55,6 +56,4 @@ python OsloDemonstration.py
 ## Known bugs
 
 When creating a model with moving block signalling a single station with a length, the trains wait infinitely long at the station.
-
-
 
