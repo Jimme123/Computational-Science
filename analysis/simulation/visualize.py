@@ -102,5 +102,5 @@ def visualize(model, steps, title):
         )
 
     ani = FuncAnimation(fig, update, frames=steps, interval=50)
-    plt.show()
+#    plt.show()
     ani.save(f"../videos/{title}.mp4")
